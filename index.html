@@ -97,6 +97,16 @@
   #rangePill { gap:8px }
   #rangePill .input { padding:6px 10px }
   #rangePill .btn { padding:8px 10px }
+
+  /* === Recap styles === */
+  .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .recap{display:grid;gap:10px;grid-template-columns:repeat(4,minmax(0,1fr));margin:6px 0 0}
+  .recap-item{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--ring);border-radius:12px;padding:12px}
+  .recap-item .label{font-size:12px;color:var(--muted)}
+  .recap-item .value{font-weight:800;font-variant-numeric:tabular-nums}
+  @media(max-width:900px){.recap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:600px){.recap{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -124,17 +134,17 @@
         <input class="input" id="date" type="date"/>
       </div>
       <div>
-        <label>Pemasukan Harian (Rp)</label>
-        <input class="input mono" id="harian" type="number" min="0" step="100" placeholder="0"/>
-        <div class="mini subtle">*Diisi otomatis dari tabel rincian di bawah.</div>
+        <label class="visually-hidden">Pemasukan Harian (Rp)</label>
+        <input class="input mono" id="harian" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
+        <div class="mini subtle visually-hidden">*Diisi otomatis dari tabel rincian di bawah.</div>
       </div>
       <div>
-        <label>Pemasukan Jajanan (Rp)</label>
-        <input class="input mono" id="jajanan" type="number" min="0" step="100" placeholder="0"/>
+        <label class="visually-hidden">Pemasukan Jajanan (Rp)</label>
+        <input class="input mono" id="jajanan" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
       </div>
       <div>
-        <label>Pemasukan Jasa &amp; Aksesoris (Rp)</label>
-        <input class="input mono" id="jasa" type="number" min="0" step="100" placeholder="0"/>
+        <label class="visually-hidden">Pemasukan Jasa &amp; Aksesoris (Rp)</label>
+        <input class="input mono" id="jasa" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
       </div>
     </div>
 
@@ -142,8 +152,8 @@
 
     <div class="grid g3">
       <div>
-        <label>Pemasukan Sewa PS (Rp)</label>
-        <input class="input mono" id="sewa" type="number" min="0" step="100" placeholder="0"/>
+        <label class="visually-hidden">Pemasukan Sewa PS (Rp)</label>
+        <input class="input mono" id="sewa" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
       </div>
       <div>
         <label>Catatan (opsional)</label>
@@ -279,6 +289,15 @@
           <span class="mini subtle">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
         </div>
 
+        <div class="spacer"></div>
+
+        <!-- Recap ringkas di atas TOTAL KESELURUHAN -->
+        <div class="recap" id="recapBar">
+          <div class="recap-item"><div class="label">Pemasukan Harian</div><div class="value mono" id="recapHarian">Rp 0</div></div>
+          <div class="recap-item"><div class="label">Pemasukan Jajanan</div><div class="value mono" id="recapJajanan">Rp 0</div></div>
+          <div class="recap-item"><div class="label">Pemasukan Jasa &amp; Aksesoris</div><div class="value mono" id="recapJasa">Rp 0</div></div>
+          <div class="recap-item"><div class="label">Pemasukan Sewa PS</div><div class="value mono" id="recapSewa">Rp 0</div></div>
+        </div>
         <div class="spacer"></div>
         <div class="subcard">
           <div class="pad">
@@ -431,8 +450,22 @@
     // ===== Grand Total live
     window.sumGrandLive = function(){
       var g = cleanNum($('#harian').value)+cleanNum($('#jajanan').value)+cleanNum($('#jasa').value)+cleanNum($('#sewa').value);
-      $('#grandTotal').textContent = fmtIDR(g);
+      $('#grandTotal').textContent = fmtIDR(g); updateRecap();
     };
+
+    function updateRecap(){
+      var fmt = fmtIDR;
+      var h = cleanNum($('#harian').value);
+      var j = cleanNum($('#jajanan').value);
+      var ja = cleanNum($('#jasa').value);
+      var s = cleanNum($('#sewa').value);
+      var _h=$('#recapHarian'), _j=$('#recapJajanan'), _ja=$('#recapJasa'), _s=$('#recapSewa');
+      if(_h) _h.textContent = fmt(h);
+      if(_j) _j.textContent = fmt(j);
+      if(_ja) _ja.textContent = fmt(ja);
+      if(_s) _s.textContent = fmt(s);
+    }
+
 
     // ====== Tables builders & sum
     // RINCIAN HARIAN
@@ -460,7 +493,7 @@
     }
     function sumRincian(){
       var sum=0; $all('.rincian-harga').forEach(function(inp){ sum+=cleanNum(inp.value); });
-      $('#rincianTotal').textContent=fmtIDR(sum); $('#harian').value=sum; if(window.sumGrandLive) window.sumGrandLive();
+      $('#rincianTotal').textContent=fmtIDR(sum); $('#harian').value=sum; if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); updateRecap();
     }
     function wireRincianEvents(){
       $all('#rincianTable tbody tr').forEach(function(tr){
@@ -502,7 +535,7 @@
     }
     function sumJajanan3x10(){
       var tot=0; $all('.j3-harga').forEach(function(i){ tot+=cleanNum(i.value); });
-      $('#jajananTotal3x10').textContent=fmtIDR(tot); $('#jajanan').value=tot; if(window.sumGrandLive) window.sumGrandLive();
+      $('#jajananTotal3x10').textContent=fmtIDR(tot); $('#jajanan').value=tot; if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); updateRecap();
     }
     document.addEventListener('click', function(e){ if(e.target && e.target.id==='jajanan3x10Clear'){ $all('#jajananTable3x10 input, #jajananTable3x10 select').forEach(function(i){ i.value=''; }); sumJajanan3x10(); } });
 
@@ -522,7 +555,7 @@
     }
     function sumJasa2x5(){
       var tot=0; $all('.jasa-price').forEach(function(i){ tot+=cleanNum(i.value); });
-      $('#jasaTotal2x5').textContent=fmtIDR(tot); $('#jasa').value=tot; if(window.sumGrandLive) window.sumGrandLive();
+      $('#jasaTotal2x5').textContent=fmtIDR(tot); $('#jasa').value=tot; if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); updateRecap();
     }
     document.addEventListener('click', function(e){ if(e.target && e.target.id==='jasa2x5Clear'){ $all('#jasaTable2x5 input, #jasaTable2x5 select').forEach(function(i){ i.value=''; }); sumJasa2x5(); } });
 
@@ -557,7 +590,7 @@
     }
     function sumSewa3x10(){
       var tot=0; $all('.sewa-harga').forEach(function(i){ tot+=cleanNum(i.value); });
-      $('#sewaTotal3x10').textContent=fmtIDR(tot); $('#sewa').value=tot; if(window.sumGrandLive) window.sumGrandLive();
+      $('#sewaTotal3x10').textContent=fmtIDR(tot); $('#sewa').value=tot; if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); updateRecap();
     }
     document.addEventListener('click', function(e){ if(e.target && e.target.id==='sewa3x10Clear'){ $all('#sewaTable3x10 input, #sewaTable3x10 select').forEach(function(i){ i.value=''; }); sumSewa3x10(); } });
 
@@ -631,7 +664,7 @@
         tr.querySelector('.sewa-harga').value = d.harga || '';
       });
       sumSewa3x10();
-      if(window.sumGrandLive) window.sumGrandLive();
+      if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
     }
 
     // ===== Inline editable cells
@@ -702,7 +735,7 @@
               $('#sewa').value = cleanNum(e.sewa);
               $('#catatan').value = e.catatan || '';
               applyDetails(e.details || null);
-              if(window.sumGrandLive) window.sumGrandLive();
+              if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
               window.scrollTo({top:0,behavior:'smooth'});
             };
             td.appendChild(edit);
@@ -725,7 +758,7 @@
       var monthList=state.entries.filter(function(x){ return monthKey(x.date)===monthPick; });
       var monthSum=calcSums(monthList).total; var allSum=calcSums(state.entries).total;
       $('#monthTotal').textContent=fmtIDR(monthSum); $('#allTotal').textContent=fmtIDR(allSum);
-      if(window.sumGrandLive) window.sumGrandLive();
+      if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
     }
 
     // ===== Add or Update entry from form
@@ -759,7 +792,7 @@
       $('#date').value=todayStr();
       $all('#rincianTable input, #jajananTable3x10 input, #jajananTable3x10 select, #jasaTable2x5 input, #jasaTable2x5 select, #sewaTable3x10 input, #sewaTable3x10 select').forEach(function(i){ i.value=''; });
       $('#rincianTotal').textContent=fmtIDR(0); $('#jajananTotal3x10').textContent=fmtIDR(0); $('#jasaTotal2x5').textContent=fmtIDR(0); $('#sewaTotal3x10').textContent=fmtIDR(0);
-      if(window.sumGrandLive) window.sumGrandLive();
+      if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
     }
 
     // ===== CSV (aggregates only)
@@ -804,7 +837,7 @@
 
     // ===== Events
     $('#addBtn').addEventListener('click', function(){ try{ addOrUpdateEntry(); }catch(err){ alert('Gagal menyimpan: '+err.message); } });
-    ['harian','jajanan','jasa','sewa'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ if(window.sumGrandLive) window.sumGrandLive(); }); });
+    ['harian','jajanan','jasa','sewa'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); }); });
     ['harian','jajanan','jasa','sewa','catatan'].forEach(function(id){ $('#'+id).addEventListener('keydown', function(e){ if(e.key==='Enter'){ addOrUpdateEntry(); }}); });
     $('#monthFilter').addEventListener('change', function(e){ state.filter=e.target.value; render(); });
     $('#exportBtn').addEventListener('click', exportCSV);
@@ -984,7 +1017,8 @@
 
     sumRincian(); sumJajanan3x10(); sumJasa2x5(); sumSewa3x10();
     render();
-    if(window.sumGrandLive) window.sumGrandLive();
+    updateRecap();
+    if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
   });
 })();
 </script>
