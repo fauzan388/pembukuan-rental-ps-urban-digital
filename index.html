@@ -172,6 +172,225 @@
   appearance: none;
 }
 
+
+/* ===== Modal ===== */
+.modal-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:saturate(120%) blur(2px);
+  z-index:9998;
+}
+.modal{
+  position:fixed; inset:0; display:grid; place-items:center; z-index:9999;
+}
+.modal[hidden], .modal-backdrop[hidden]{ display:none !important; }
+
+.modal > *{
+  width:min(560px, calc(100% - 32px));
+  background:var(--card);
+  color:var(--text);
+  border:1px solid var(--ring);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+}
+
+.modal-header{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:14px 16px; border-bottom:1px solid var(--ring);
+}
+.modal-title{ font-weight:800; font-size:16px; }
+.modal-close{
+  background:transparent; border:1px solid var(--ring); color:var(--text);
+  border-radius:10px; padding:6px 10px; cursor:pointer;
+}
+
+.modal-body{ padding:16px; font-size:14px; }
+.modal-footer{
+  padding:14px 16px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid var(--ring);
+}
+
+/* ===== Modal Animations ===== */
+.modal-backdrop{
+  opacity: 0;
+  transition: opacity .18s ease-out;
+}
+.modal-backdrop.is-visible{
+  opacity: 1;
+}
+
+/* Panel animasi: muncul naik sedikit + fade */
+.modal > *{
+  transform: translateY(8px) scale(.98);
+  opacity: 0;
+  transition: transform .22s ease-out, opacity .22s ease-out, box-shadow .22s ease-out;
+}
+.modal.is-visible > *{
+  transform: none;
+  opacity: 1;
+}
+
+
+  /* === Form action row (Add / Cancel) === */
+  .actions-row{display:flex;gap:10px;width:100%;justify-content:flex-end}
+  .actions-row.editing{justify-content:space-between}
+  .actions-row .btn{min-width:120px}
+  .actions-row.editing .btn{flex:1;max-width:220px}
+  #cancelEditBtn{order:0}
+  #addBtn{order:1}
+
+
+  .actions-row.editing #cancelEditBtn {
+    flex: 0 0 auto;
+    max-width: none;
+    padding: 0 16px;
+  }
+
+
+/* === Daily Graph styles === */
+.graph-tooltip {
+  position: absolute;
+  pointer-events: none;
+  font-size: 12px;
+  background: var(--card2);
+  color: var(--text);
+  border: 1px solid var(--ring);
+  border-radius: 8px;
+  padding: 6px 8px;
+  box-shadow: var(--shadow);
+  transform: translate(-50%, -120%);
+  white-space: nowrap;
+  z-index: 10;
+}
+#graphCard.pulse {
+  box-shadow: 0 0 0 0 rgba(110,168,254,.8);
+  animation: pulseCard 1.2s ease-out 2;
+}
+@keyframes pulseCard {
+  0% { box-shadow: 0 0 0 0 rgba(110,168,254,.7); }
+  100% { box-shadow: 0 0 0 18px rgba(110,168,254,0); }
+}
+
+/* === Compact spacing for graph === */
+#graphCard {
+  padding: 8px 12px !important;
+}
+#graphCard .mini.subtle {
+  font-size: 11px !important;
+}
+#graphCard canvas {
+  height: 180px !important;
+}
+.spacer {
+  height: 8px !important;
+}
+
+/* === Fix Harga column in Jasa & Aksesoris table === */
+#jasaTable2x5 td:last-child,
+#jasaTable2x5 th:last-child {
+  min-width: 100px;
+  text-align: right;
+}
+#jasaTable2x5 input.jasa-price {
+  text-align: right;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* === Clean & stable layout for Jasa & Aksesoris table === */
+#jasaTable2x5{
+  table-layout: fixed;              /* prevent jitter */
+}
+#jasaTable2x5 th, #jasaTable2x5 td{
+  vertical-align: middle;
+}
+#jasaTable2x5 td:nth-child(4), #jasaTable2x5 th:nth-child(4){
+  text-align: right;
+}
+#jasaTable2x5 input.jasa-price{
+  text-align: right;
+  width: 100%;
+  padding-right: 8px;
+}
+#jasaTable2x5 .jasa-note{
+  width: 100%;
+}
+#jasaTable2x5 .jasa-type{
+  width: 100%;
+}
+
+/* Keep other tables unaffected */
+
+/* === Proportional layout for Jasa & Aksesoris table === */
+#jasaTable2x5{
+  table-layout: fixed;
+  width: 100%;
+}
+#jasaTable2x5 th, #jasaTable2x5 td{
+  vertical-align: middle;
+}
+#jasaTable2x5 td:nth-child(4), #jasaTable2x5 th:nth-child(4){
+  text-align: right;
+}
+#jasaTable2x5 input.jasa-price{
+  text-align: right;
+  width: 100%;
+  padding-right: 8px;
+}
+#jasaTable2x5 .jasa-note{
+  width: 100%;
+}
+#jasaTable2x5 .jasa-type{
+  width: 100%;
+}
+
+/* === Match proportions to Rincian Pemasukan Jajanan === */
+#jasaTable2x5{
+  table-layout: fixed;
+  width: 100%;
+}
+#jasaTable2x5 th, #jasaTable2x5 td{
+  vertical-align: middle;
+}
+#jasaTable2x5 td:nth-child(4), #jasaTable2x5 th:nth-child(4){
+  text-align: right;
+}
+#jasaTable2x5 input.jasa-price{
+  text-align: right;
+  width: 100%;
+  padding-right: 8px;
+}
+#jasaTable2x5 .jasa-note{
+  width: 100%;
+}
+#jasaTable2x5 .jasa-type{
+  width: 100%;
+}
+
+/* === Exact proportions for Jasa & Aksesoris table === */
+#jasaTable2x5{
+  table-layout: fixed;
+  width: 100%;
+}
+#jasaTable2x5 th, #jasaTable2x5 td{
+  vertical-align: middle;
+}
+#jasaTable2x5 td:nth-child(4), #jasaTable2x5 th:nth-child(4){
+  text-align: right;
+}
+#jasaTable2x5 input.jasa-price{
+  text-align: right;
+  width: 100%;
+  padding-right: 8px;
+}
+#jasaTable2x5 .jasa-note{
+  width: 100%;
+}
+#jasaTable2x5 .jasa-type{
+  width: 100%;
+}
+
+/* === Harga input left aligned === */
+#jasaTable2x5 input.jasa-price{
+  text-align: left !important;
+}
 </style>
 </head>
 <body>
@@ -186,7 +405,6 @@
 <button class="btn" id="screenshotBtn">Screenshot</button>
 <button class="btn" id="importBtn">Impor CSV</button>
 <button class="btn" id="exportBtn">Ekspor CSV</button>
-<button class="btn warn" id="clearBtn" title="Hapus semua data">Bersihkan</button>
 </div>
 </div>
 <div class="spacer"></div>
@@ -198,10 +416,7 @@
 </div>
 <input id="harian" type="hidden" value="0"/><input id="jajanan" type="hidden" value="0"/><input id="jasa" type="hidden" value="0"/><div><label>Absen Pagi</label><input class="input" id="absenPagi" required="required" type="time"/></div><div><label>Absen Siang</label><input class="input" id="absenSiang" required="required" type="time"/></div><div><label>Ruko Buka</label><input class="input" id="rukoBuka" required="required" type="time"/></div><div><label>Ruko Tutup</label><input class="input" id="rukoTutup" required="required" type="time"/></div></div>
 <div class="spacer"></div>
-<div class="grid g3"><div><label>Catatan (opsional)</label><input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/></div><div><label class="visually-hidden">Pemasukan Sewa PS (Rp)</label><input class="input mono visually-hidden" id="sewa" min="0" placeholder="0" step="100" type="number"/></div><div class="right">
-<label style="visibility:hidden">.</label>
-<button class="btn primary" id="addBtn">+ Tambah Pencatatan</button>
-</div></div>
+<div class="grid g3"><div><label>Catatan (opsional)</label><input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/></div><div><label class="visually-hidden">Pemasukan Sewa PS (Rp)</label><input class="input mono visually-hidden" id="sewa" min="0" placeholder="0" step="100" type="number"/></div><div class="right"><label style="visibility:hidden">.</label><div class="actions-row" id="formActions"><button class="btn warn" id="cancelEditBtn" style="display:none;">Batal</button><button class="btn primary" id="addBtn">+ Tambah Pencatatan</button></div></div></div>
 <div class="spacer"></div>
 <!-- Rincian Pemasukan Harian -->
 <div class="subcard">
@@ -276,7 +491,7 @@
 <div class="mini subtle">Kolom: 1) Tipe (drop-down) • 2) Keterangan (manual) • 3) Harga (manual)</div>
 </div>
 <div style="overflow:auto;margin-top:10px">
-<table class="table-sm" id="jasaTable2x5">
+<table class="table-sm" id="jasaTable2x5"><colgroup><col style="width:5.2%"/><col style="width:31.6%"/><col style="width:31.6%"/><col style="width:31.6%"/></colgroup>
 <thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
 <tbody></tbody>
 <tfoot><tr class="total-row"><td class="right" colspan="3">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr></tfoot>
@@ -294,20 +509,20 @@
 <div class="subcard">
 <div class="pad">
 <div class="row" style="justify-content:space-between;align-items:center">
-<div><b>Rincian Pemasukan SEWA PS</b> <span class="badge">3 kolom × 5 baris</span></div>
-<div class="mini subtle">Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Harga (otomatis bisa diedit)</div>
+<div><b>Rincian Pemasukan SEWA PS</b> <span class="badge">4 kolom × 5 baris</span></div>
+<div class="mini subtle">Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Keterangan (opsional) • 4) Harga (otomatis bisa diedit)</div>
 </div>
 <div style="overflow:auto;margin-top:10px">
 <table class="table-sm" id="sewaTable3x10">
 <thead>
 <tr>
-<th>No.</th><th>Jenis PS</th><th>Lama Sewa</th><th>Harga (Rp)</th>
+<th>No.</th><th>Jenis PS</th><th>Lama Sewa</th><th>Keterangan</th><th>Harga (Rp)</th>
 </tr>
 </thead>
 <tbody></tbody>
 <tfoot>
 <tr class="total-row">
-<td class="right" colspan="3">TOTAL</td>
+<td class="right" colspan="4">TOTAL</td>
 <td class="mono right" id="sewaTotal3x10">Rp 0</td>
 </tr>
 </tfoot>
@@ -361,7 +576,7 @@
 <div class="pill">
 <span>Total Semua:</span>
 <strong class="mono" id="allTotal"></strong>
-</div>
+<button class="btn warn" id="clearBtn" style="margin-left:8px;" title="Hapus semua data">Bersihkan Semua History</button></div>
 </div>
 <div class="spacer"></div>
 <div class="card pad">
@@ -395,11 +610,90 @@
 </div>
 <div class="note">Tombol <b>Edit</b> nge-load semua rincian ke form di atas biar bisa diperbaiki total.</div>
 </div>
-<div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
+<div class="card pad" id="graphCard">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+<div><b>Grafik Total Harian (Per Bulan)</b> <span class="mini subtle">titik berwarna sesuai ambang</span></div>
+<button class="btn" id="saveGraphBtn" title="Simpan grafik sebagai gambar">Simpan Grafik</button>
+</div>
+<canvas height="260" id="dailyGraph" style="width:100%;display:block"></canvas>
+<div class="mini subtle" id="graphCaption" style="margin-top:8px"></div>
+</div><div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
     © <span id="year"></span> URBAN GAMING LAMPUNG
   </div>
+<div class="spacer"></div>
 </div>
 <input accept=".csv" id="fileInput" style="display:none" type="file"/>
+<script>
+// === Themed Popup Helpers ===
+(function(){
+  function $(sel){ return document.querySelector(sel); }
+  function openModal(modalId, opts){
+    return new Promise(function(resolve){
+      var modal = document.getElementById(modalId);
+      var backdrop = document.getElementById('popupBackdrop');
+      var bodyEl = modal.querySelector('.modal-body');
+      var titleEl = modal.querySelector('.modal-title');
+      var okBtn = modal.querySelector('[data-ok]');
+      var cancelBtn = modal.querySelector('[data-cancel]');
+      var closeBtn = modal.querySelector('[data-close]');
+
+      titleEl.textContent = (opts && opts.title) || titleEl.textContent || '';
+      bodyEl.textContent = (opts && opts.message) || '';
+
+      function show(){
+        backdrop.hidden = false;
+        modal.hidden = false;
+        // small async to allow CSS transitions
+        requestAnimationFrame(function(){
+          backdrop.classList.add('is-visible');
+          modal.classList.add('is-visible');
+          (okBtn || closeBtn).focus();
+        });
+      }
+      function hide(val){
+        backdrop.classList.remove('is-visible');
+        modal.classList.remove('is-visible');
+        setTimeout(function(){
+          backdrop.hidden = true;
+          modal.hidden = true;
+          cleanup();
+          resolve(val);
+        }, 200);
+      }
+      function onKey(e){
+        if(e.key === 'Escape'){ hide(modalId === 'themedConfirm' ? false : true); }
+      }
+      function onBackdrop(e){
+        if(e.target === backdrop){ hide(modalId === 'themedConfirm' ? false : true); }
+      }
+      function cleanup(){
+        document.removeEventListener('keydown', onKey);
+        backdrop.removeEventListener('click', onBackdrop);
+        if(okBtn) okBtn.onclick = null;
+        if(cancelBtn) cancelBtn.onclick = null;
+        if(closeBtn) closeBtn.onclick = null;
+      }
+
+      if(okBtn){ okBtn.textContent = (opts && opts.okText) || 'OK'; okBtn.onclick = function(){ hide(true); }; }
+      if(cancelBtn){ cancelBtn.textContent = (opts && opts.cancelText) || 'Batal'; cancelBtn.onclick = function(){ hide(false); }; }
+      if(closeBtn){ closeBtn.onclick = function(){ hide(modalId === 'themedConfirm' ? false : true); }; }
+
+      document.addEventListener('keydown', onKey);
+      backdrop.addEventListener('click', onBackdrop);
+
+      show();
+    });
+  }
+
+  window.themedConfirm = function(message, options){
+    return openModal('themedConfirm', { message: message, title:(options&&options.title)||'Konfirmasi', okText:(options&&options.okText), cancelText:(options&&options.cancelText) });
+  };
+  window.themedAlert = function(message, options){
+    return openModal('themedAlert', { message: message, title:(options&&options.title)||'Info', okText:(options&&options.okText) });
+  };
+})();
+// === /Themed Popup Helpers ===
+</script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 (function(){
@@ -598,13 +892,24 @@
           '<td><select class="select mini sewa-jenis"><option value="">-</option>'+SEWA_TYPES.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
           '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
               '<select class="select mini sewa-durasi"><option value="">-</option><option value="12JAM">12 JAM</option><option value="1HARI">1 HARI</option><option value="2HARI">2 HARI</option><option value="3HARI">3 HARI</option></select>' +
-              '<input type="number" min="0" step="1" placeholder="jam (manual)" class="input mono mini sewa-manual"/></div></td>' +
-          '<td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
+              '<input type="text" placeholder="Isi Sendiri" class="input mini sewa-manual"/></div></td>' +
+          '<td><input type="text" placeholder="note (optional)" class="input mini sewa-lama-note"/></td><td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
         tb.appendChild(tr);
       }
       $all('#sewaTable3x10 tbody tr').forEach(function(tr){
         var selJ=tr.querySelector('.sewa-jenis'); var selD=tr.querySelector('.sewa-durasi'); var inM=tr.querySelector('.sewa-manual'); var inH=tr.querySelector('.sewa-harga');
-        function recalc(){ var jam=hoursFromDurasiSelect(selD.value,inM.value); var price=calcSewaPrice(selJ.value,jam); if(price>0){inH.value=price;} else if(!inM.value){inH.value='';} sumSewa3x10(); }
+        function recalc(){
+  var manualVal = (inM.value || '').trim();
+  if(manualVal){
+    // User filled 'Isi Sendiri', skip auto calculation entirely
+    return;
+  }
+  var jam = hoursFromDurasiSelect(selD.value, '');
+  var price = calcSewaPrice(selJ.value, jam);
+  if(price>0){ inH.value = price; }
+  else { inH.value=''; }
+  sumSewa3x10();
+}
         selJ.addEventListener('change', recalc); selD.addEventListener('change', recalc); inM.addEventListener('input', recalc); inH.addEventListener('input', sumSewa3x10);
       });
     }
@@ -640,13 +945,14 @@
         };
       });
       var sewa = $all('#sewaTable3x10 tbody tr').map(function(tr){
-        return {
-          jenis: tr.querySelector('.sewa-jenis').value || '',
-          durasi: tr.querySelector('.sewa-durasi').value || '',
-          manualJam: tr.querySelector('.sewa-manual').value || '',
-          harga: cleanNum(tr.querySelector('.sewa-harga').value)
-        };
-      });
+  return {
+    jenis: tr.querySelector('.sewa-jenis').value || '',
+    durasi: tr.querySelector('.sewa-durasi').value || '',
+    manualJam: tr.querySelector('.sewa-manual').value || '',
+    lamaNote: (tr.querySelector('.sewa-lama-note') && tr.querySelector('.sewa-lama-note').value) || '',
+    harga: cleanNum(tr.querySelector('.sewa-harga').value)
+  };
+});
       return { rincian:rincian, jajanan3x10:jajanan, jasa2x5:jasa, sewa3x10:sewa };
     }
 
@@ -670,7 +976,7 @@
       if(anyIn(det.rincian, ['jenis','jam','jumlah','harga'])) return false;
       if(anyIn(det.jajanan3x10, ['jenis','qty','jam','harga'])) return false;
       if(anyIn(det.jasa2x5, ['tipe','ket','harga'])) return false;
-      if(anyIn(det.sewa3x10, ['jenis','durasi','manualJam','harga'])) return false;
+      if(anyIn(det.sewa3x10, ['jenis','durasi','manualJam','lamaNote','harga'])) return false;
       return true;
     }
     function formIsTrulyEmpty(){
@@ -712,14 +1018,17 @@
       });
       sumJasa2x5();
       $all('#sewaTable3x10 tbody tr').forEach(function(tr,idx){
-        var d = (det.sewa3x10 && det.sewa3x10[idx]) || {};
-        tr.querySelector('.sewa-jenis').value = d.jenis || '';
-        tr.querySelector('.sewa-durasi').value = d.durasi || '';
-        tr.querySelector('.sewa-manual').value = d.manualJam || '';
-        tr.querySelector('.sewa-harga').value = d.harga || '';
-      });
-      sumSewa3x10();
+  var d = (det.sewa3x10 && det.sewa3x10[idx]) || {};
+  tr.querySelector('.sewa-jenis').value = d.jenis || '';
+  tr.querySelector('.sewa-durasi').value = d.durasi || '';
+  tr.querySelector('.sewa-manual').value = d.manualJam || '';
+  var note = d.lamaNote || '';
+  var noteEl = tr.querySelector('.sewa-lama-note'); if(noteEl) noteEl.value = note;
+  tr.querySelector('.sewa-harga').value = d.harga || '';
+});
+sumSewa3x10();
       if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
+      try{ drawDailyGraph(); }catch(e){ /* ignore */ }
     }
 
     // ===== Inline editable cells
@@ -782,21 +1091,27 @@
             edit.onclick=function(){
               // Load this entry into the form + detail tables
               state.editingId = e.id;
-              $('#addBtn').textContent = 'Simpan Perubahan';
+              $('#addBtn').textContent = 'Simpan Perubahan'; document.getElementById('cancelEditBtn').style.display='inline-block';
               $('#date').value = e.date || todayStr();
               $('#harian').value = cleanNum(e.harian);
               $('#jajanan').value = cleanNum(e.jajanan);
               $('#jasa').value = cleanNum(e.jasa);
               $('#sewa').value = cleanNum(e.sewa);
               $('#catatan').value = e.catatan || '';
+              $('#absenPagi').value = e.absenPagi || '';
+              $('#absenSiang').value = e.absenSiang || '';
+              $('#rukoBuka').value = e.rukoBuka || '';
+              $('#rukoTutup').value = e.rukoTutup || '';
               applyDetails(e.details || null);
-              if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
-              window.scrollTo({top:0,behavior:'smooth'});
-            };
+var actionsRow = document.getElementById('formActions');
+if(actionsRow) actionsRow.classList.add('editing');
+if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
+window.scrollTo({top:0,behavior:'smooth'});
+              };
             td.appendChild(edit);
             var sp=document.createElement('span'); sp.style.display='inline-block'; sp.style.width='6px'; td.appendChild(sp);
             var del=document.createElement('button'); del.className='btn warn'; del.textContent='Hapus'; del.title='Hapus baris ini';
-            del.onclick=function(){ if(confirm('Hapus baris ini?')){ state.entries = state.entries.filter(function(it){ return it!==e; }); save(); render(); } };
+            del.onclick = async function(){ if(await themedConfirm('Hapus baris ini?')){ state.entries = state.entries.filter(function(it){ return it!==e; }); save(); render(); } };
             td.appendChild(del); return td;
           })()
         ];
@@ -814,6 +1129,7 @@
       var monthSum=calcSums(monthList).total; var allSum=calcSums(state.entries).total;
       $('#monthTotal').textContent=fmtIDR(monthSum); $('#allTotal').textContent=fmtIDR(allSum);
       if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
+      try{ drawDailyGraph(); }catch(e){ /* ignore */ }
     }
 
     // ===== Add or Update entry from form
@@ -826,21 +1142,28 @@
         jasa: cleanNum($('#jasa').value),
         sewa: cleanNum($('#sewa').value),
         catatan: ($('#catatan').value||'').trim(),
+        absenPagi: $('#absenPagi').value || '',
+        absenSiang: $('#absenSiang').value || '',
+        rukoBuka: $('#rukoBuka').value || '',
+        rukoTutup: $('#rukoTutup').value || '',
         details: collectDetails()
       };
     }
-    function addOrUpdateEntry(){
+    async function addOrUpdateEntry(){
       // Guard: don't save empty forms
       if(formIsTrulyEmpty()){
-        alert('Form masih kosong. Isi setidaknya satu nilai atau rincian sebelum menyimpan.');
+        await themedAlert('Form masih kosong. Isi setidaknya satu nilai atau rincian sebelum menyimpan.');
         return;
       }
       var newEntry = entryFromForm();
       if(state.editingId){
         var idx = state.entries.findIndex(function(x){ return x.id===state.editingId; });
         if(idx>=0) state.entries[idx] = newEntry;
-        state.editingId = null;
-        $('#addBtn').textContent = '+ Tambah Pencatatan';
+state.editingId = null;
+$('#addBtn').textContent = '+ Tambah Pencatatan';
+document.getElementById('cancelEditBtn').style.display='none';
+var actionsRow = document.getElementById('formActions');
+if(actionsRow) actionsRow.classList.remove('editing');
       }else{
         state.entries.push(newEntry);
       }
@@ -851,9 +1174,11 @@
       ['harian','jajanan','jasa','sewa','catatan'].forEach(function(id){ var el=$('#'+id); if(el) el.value=''; });
             $all('#rincianTable .r-jenis').forEach(function(sel){ sel.value = ''; });
       $('#date').value=todayStr();
+      ['absenPagi','absenSiang','rukoBuka','rukoTutup'].forEach(function(id){var el=document.getElementById(id); if(el) el.value='';});
       $all('#rincianTable input, #jajananTable3x10 input, #jajananTable3x10 select, #jasaTable2x5 input, #jasaTable2x5 select, #sewaTable3x10 input, #sewaTable3x10 select').forEach(function(i){ i.value=''; });
       $('#rincianTotal').textContent=fmtIDR(0); $('#jajananTotal3x10').textContent=fmtIDR(0); $('#jasaTotal2x5').textContent=fmtIDR(0); $('#sewaTotal3x10').textContent=fmtIDR(0);
       if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
+      try{ drawDailyGraph(); }catch(e){ /* ignore */ }
     }
 
     // ===== CSV (aggregates only)
@@ -870,8 +1195,8 @@
     }
     function importCSV(file){
       var reader=new FileReader();
-      reader.onload=function(ev){
-        var text=ev.target.result||''; var lines=text.split(/\\r?\\n/); if(lines.length<2){ alert('CSV kosong atau tidak valid.'); return; }
+      reader.onload=async function(ev){
+        var text=ev.target.result||''; var lines=text.split(/\\r?\\n/); if(lines.length<2){ await themedAlert('CSV kosong atau tidak valid.'); return; }
         for(var i=1;i<lines.length;i++){
           var line=lines[i]; if(!line) continue; var p=line.split(',');
           var obj={ id:ID(), date:(p[0]||'').trim(), harian:cleanNum(p[1]), jajanan:cleanNum(p[2]), jasa:cleanNum(p[3]), sewa:cleanNum(p[4]), catatan:(p[6]||'').trim(), details:null };
@@ -893,18 +1218,32 @@
         var now=new Date(); var pad=function(n){return (n<10?'0':'')+n;}
         a.href=dataURL; a.download='screenshot_urban_ps_'+now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+'_'+pad(now.getHours())+pad(now.getMinutes())+pad(now.getSeconds())+'.png';
         document.body.appendChild(a); a.click(); a.remove(); if(btn) btn.style.visibility=prev;
-      }).catch(function(err){ if(btn) btn.style.visibility=prev; alert('Gagal screenshot: '+err.message); });
+      }).catch(async function(err){ if(btn) btn.style.visibility=prev; await themedAlert('Gagal screenshot: '+err.message); });
     }
 
     // ===== Events
-    $('#addBtn').addEventListener('click', function(){ try{ addOrUpdateEntry(); }catch(err){ alert('Gagal menyimpan: '+err.message); } });
-    ['harian','jajanan','jasa','sewa'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); }); });
+
+// ===== Events (basic confirm, no animations, no custom modal)
+document.getElementById('addBtn').addEventListener('click', async function(){
+  try {
+    if (typeof formIsTrulyEmpty === 'function' && formIsTrulyEmpty()) {
+      addOrUpdateEntry();
+      return;
+    }
+    var ok = await themedConfirm('Apakah pembukuan sudah di-screenshot?\nJika tekan OK data akan disimpan.');
+    if (ok) addOrUpdateEntry();
+  } catch (err) {
+    await themedAlert('Gagal menyimpan: ' + err.message);
+  }
+});
+
+        ['harian','jajanan','jasa','sewa'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); }); });
     ['harian','jajanan','jasa','sewa','catatan'].forEach(function(id){ $('#'+id).addEventListener('keydown', function(e){ if(e.key==='Enter'){ addOrUpdateEntry(); }}); });
     $('#monthFilter').addEventListener('change', function(e){ state.filter=e.target.value; render(); });
     $('#exportBtn').addEventListener('click', exportCSV);
     $('#importBtn').addEventListener('click', function(){ $('#fileInput').click(); });
     $('#fileInput').addEventListener('change', function(e){ var f=e.target.files && e.target.files[0]; if(f) importCSV(f); e.target.value=''; });
-    $('#clearBtn').addEventListener('click', function(){ if(confirm('Hapus SEMUA data?')){ state.entries=[]; save(); render(); alert('Semua data dihapus.'); } });
+    $('#clearBtn').addEventListener('click', async function(){ if(await themedConfirm('Hapus SEMUA data?')){ state.entries=[]; save(); render(); await themedAlert('Semua data dihapus.'); } });
     document.addEventListener('click', function(e){ if(e.target && e.target.id === 'screenshotBtn'){ takeFullScreenshot(); } });
 
     
@@ -929,6 +1268,25 @@
       }); }
     })();
 
+
+    // Cancel Edit button
+    (function(){
+      var cbtn = document.getElementById('cancelEditBtn');
+      if(cbtn){
+        cbtn.addEventListener('click', function(){
+  try{
+    clearForm();
+    state.editingId = null;
+    $('#addBtn').textContent = '+ Tambah Pencatatan';
+    cbtn.style.display = 'none';
+    var actionsRow = document.getElementById('formActions');
+    if(actionsRow) actionsRow.classList.remove('editing');
+          }catch(err){
+            console.error('Cancel error:', err);
+          }
+        });
+      }
+    })();
 // === Add Row simple helpers ===
     function renumberAll(tbody){
       var rows = tbody.querySelectorAll('tr');
@@ -995,12 +1353,23 @@
         '<td><select class="select mini sewa-jenis"><option value="">-</option>'+SEWA_TYPES.map(function(x){return '<option>'+x+'</option>';}).join('')+'</select></td>' +
         '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
             '<select class="select mini sewa-durasi"><option value="">-</option><option value="12JAM">12 JAM</option><option value="1HARI">1 HARI</option><option value="2HARI">2 HARI</option><option value="3HARI">3 HARI</option></select>' +
-            '<input type="number" min="0" step="1" placeholder="jam (manual)" class="input mono mini sewa-manual"/></div></td>' +
-        '<td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
+            '<input type="text" placeholder="Isi Sendiri" class="input mini sewa-manual"/></div></td>' +
+        '<td><input type="text" placeholder="note (optional)" class="input mini sewa-lama-note"/></td><td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
       tb.appendChild(tr);
       (function(){
         var selJ=tr.querySelector('.sewa-jenis'); var selD=tr.querySelector('.sewa-durasi'); var inM=tr.querySelector('.sewa-manual'); var inH=tr.querySelector('.sewa-harga');
-        function recalc(){ var jam=hoursFromDurasiSelect(selD.value,inM.value); var price=calcSewaPrice(selJ.value,jam); if(price>0){inH.value=price;} else if(!inM.value){inH.value='';} sumSewa3x10(); }
+        function recalc(){
+  var manualVal = (inM.value || '').trim();
+  if(manualVal){
+    // User filled 'Isi Sendiri', skip auto calculation entirely
+    return;
+  }
+  var jam = hoursFromDurasiSelect(selD.value, '');
+  var price = calcSewaPrice(selJ.value, jam);
+  if(price>0){ inH.value = price; }
+  else { inH.value=''; }
+  sumSewa3x10();
+}
         selJ.addEventListener('change', recalc); selD.addEventListener('change', recalc); inM.addEventListener('input', recalc); inH.addEventListener('input', sumSewa3x10);
       })();
       renumberAll(tb);
@@ -1017,7 +1386,7 @@
     
 
     // === Remove Row helpers ===
-    function removeRow(tbodySelector) {
+    async function removeRow(tbodySelector) {
       var tb = document.querySelector(tbodySelector + ' tbody');
       if (!tb || tb.rows.length === 0) return;
 
@@ -1027,7 +1396,7 @@
         if (el.value && String(el.value).trim() !== '') hasData = true;
       });
 
-      if (!hasData || confirm('Baris ini berisi data. Yakin ingin menghapusnya?')) {
+      if (!hasData || await themedConfirm('Baris ini berisi data. Yakin ingin menghapusnya?')) {
         tb.deleteRow(tb.rows.length - 1);
         renumberAll(tb);
         if (tbodySelector.indexOf('rincianTable') !== -1) sumRincian();
@@ -1052,10 +1421,10 @@
         else addBtn.parentNode.insertBefore(btn, addBtn.nextSibling);
       }
 
-      addRemoveBtn('rincianAddRow', function(){ removeRow('#rincianTable'); });
-      addRemoveBtn('jajanan3x10AddRow', function(){ removeRow('#jajananTable3x10'); });
-      addRemoveBtn('jasa2x5AddRow', function(){ removeRow('#jasaTable2x5'); });
-      addRemoveBtn('sewa3x10AddRow', function(){ removeRow('#sewaTable3x10'); });
+      addRemoveBtn('rincianAddRow', async function(){ await removeRow('#rincianTable'); });
+      addRemoveBtn('jajanan3x10AddRow', async function(){ await removeRow('#jajananTable3x10'); });
+      addRemoveBtn('jasa2x5AddRow', async function(){ await removeRow('#jasaTable2x5'); });
+      addRemoveBtn('sewa3x10AddRow', async function(){ await removeRow('#sewaTable3x10'); });
     })();
 
 // ===== Init
@@ -1079,10 +1448,251 @@
 
     sumRincian(); sumJajanan3x10(); sumJasa2x5(); sumSewa3x10();
     render();
-    updateRecap();
-    if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
+updateRecap();
+var actionsRow=document.getElementById('formActions');
+if(actionsRow) actionsRow.classList.remove('editing');
+if(window.sumGrandLive) window.sumGrandLive();
+updateRecap();
+
+    // ===== Daily Graph (per-month line chart) =====
+    var graphCtx = null, graphCanvas = null, graphTooltip = null;
+    function colorForValue(v){
+      if(v > 200000) return '#2ecc71'; // green
+      if(v > 150000) return '#2980b9'; // blue
+      if(v > 100000) return '#f1c40f'; // yellow
+      return '#e74c3c';                // red
+    }
+    function ensureTooltip(){
+      if(graphTooltip) return graphTooltip;
+      var div = document.createElement('div');
+      div.className = 'graph-tooltip';
+      div.style.position = 'absolute';
+      div.style.display = 'none';
+      document.body.appendChild(div);
+      graphTooltip = div;
+      return div;
+    }
+    function getMonthlySeries(){
+      // Pick month based on current filter selection; if ALL, use current month of today.
+      var monthPick = (state.filter==='ALL') ? (new Date().toISOString().slice(0,7)) : state.filter;
+      var list = state.entries.filter(function(x){ return (x.date||'').slice(0,7) === monthPick; });
+      // Build a map date->total then expand all days in that month
+      var map = {};
+      list.forEach(function(e){
+        var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+        map[e.date] = (map[e.date]||0) + tot;
+      });
+      var p = monthPick.split('-');
+      var y = +p[0], m = (+p[1])-1;
+      var first = new Date(y, m, 1);
+      var last = new Date(y, m+1, 0);
+      var data = [];
+      for(var d=1; d<=last.getDate(); d++){
+        var dt = new Date(y, m, d);
+        var iso = new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        data.push({date: iso, value: map[iso]||0});
+      }
+      return { month: monthPick, rows: data };
+    }
+    function drawDailyGraph(){
+      graphCanvas = document.getElementById('dailyGraph');
+      if(!graphCanvas) return;
+      var rect = graphCanvas.getBoundingClientRect();
+      // Set width to device pixel ratio for sharpness
+      var dpr = window.devicePixelRatio || 1;
+      var cssW = graphCanvas.clientWidth || rect.width || 800;
+      var cssH = graphCanvas.clientHeight || 260;
+      graphCanvas.width = Math.round(cssW * dpr);
+      graphCanvas.height = Math.round(cssH * dpr);
+      graphCanvas.style.width = cssW + 'px';
+      graphCanvas.style.height = cssH + 'px';
+      graphCtx = graphCanvas.getContext('2d');
+      graphCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      var series = getMonthlySeries();
+      var data = series.rows;
+      var caption = document.getElementById('graphCaption');
+      if(caption){
+        try {
+          var d = new Date(series.month+'-01');
+          caption.textContent = 'Periode: ' + d.toLocaleDateString('id-ID',{month:'long',year:'numeric'}) + ' • ' + (data.length) + ' hari';
+        }catch(e){ caption.textContent = 'Periode: ' + series.month; }
+      }
+
+      // Compute bounds
+      var maxV = 0;
+      data.forEach(function(r){ if(r.value>maxV) maxV=r.value; });
+      var padL = 48, padR = 12, padT = 16, padB = 42; // space for axes/labels
+      var W = (graphCanvas.clientWidth||cssW), H = (graphCanvas.clientHeight||cssH);
+      var plotW = Math.max(10, W - padL - padR);
+      var plotH = Math.max(10, H - padT - padB);
+      function xAt(i){ return padL + (plotW * (i/(Math.max(1,data.length-1)))) }
+      function yAt(v){ return padT + plotH - (maxV>0 ? (v/maxV)*plotH : 0); }
+
+      // Clear
+      graphCtx.clearRect(0,0,W,H);
+
+      // Axes
+      graphCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--ring') || '#334';
+      graphCtx.lineWidth = 1;
+      graphCtx.beginPath();
+      graphCtx.moveTo(padL, padT);
+      graphCtx.lineTo(padL, padT+plotH);
+      graphCtx.lineTo(padL+plotW, padT+plotH);
+      graphCtx.stroke();
+
+      // Y ticks (4)
+      graphCtx.font = '12px Segoe UI, Roboto, Arial, sans-serif';
+      graphCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#889';
+      var steps = 4;
+      for(var s=0; s<=steps; s++){
+        var val = Math.round((maxV * s)/steps);
+        var y = yAt(val);
+        graphCtx.beginPath();
+        graphCtx.moveTo(padL, y);
+        graphCtx.lineTo(padL+plotW, y);
+        graphCtx.globalAlpha = 0.2;
+        graphCtx.stroke();
+        graphCtx.globalAlpha = 1;
+        graphCtx.fillText((val||0).toLocaleString('id-ID'), 6, y+4);
+      }
+
+      // X labels: show every ~7 days to avoid clutter
+      for(var i=0;i<data.length;i++){
+        var dlab = data[i].date.slice(-2);
+        if(i===0 || i===data.length-1 || i%7===0){
+          var x = xAt(i);
+          graphCtx.fillText(dlab, x-6, padT+plotH+16);
+        }
+      }
+
+
+      // Draw line segments with threshold colors
+      for (var i=1; i<data.length; i++){
+        var prev = data[i-1];
+        var curr = data[i];
+        var x1 = xAt(i-1), y1 = yAt(prev.value);
+        var x2 = xAt(i), y2 = yAt(curr.value);
+        var grad = graphCtx.createLinearGradient(x1, y1, x2, y2);
+        // Use solid color for now
+        graphCtx.strokeStyle = colorForValue(curr.value);
+        graphCtx.lineWidth = 2;
+        graphCtx.beginPath();
+        graphCtx.moveTo(x1, y1);
+        graphCtx.lineTo(x2, y2);
+        graphCtx.stroke();
+      }
+    
+
+      // Draw points with threshold colors + labels
+      graphCtx.textAlign = 'center';
+      graphCtx.textBaseline = 'bottom';
+      data.forEach(function(r, i){
+        var x = xAt(i), y = yAt(r.value);
+        var c = colorForValue(r.value);
+        graphCtx.beginPath();
+        graphCtx.arc(x, y, 4, 0, Math.PI*2);
+        graphCtx.fillStyle = c;
+        graphCtx.fill();
+              // (Value labels removed to avoid clutter on x-axis)
+    });
+
+      // Hover tooltip
+      var pts = data.map(function(r,i){ return {i:i, x:xAt(i), y:yAt(r.value), v:r.value, d:r.date}; });
+      ensureTooltip();
+      function onMove(ev){
+        var rect2 = graphCanvas.getBoundingClientRect();
+        var mx = ev.clientX - rect2.left;
+        var my = ev.clientY - rect2.top;
+        var nearest = null, dmin = 16;
+        for(var k=0;k<pts.length;k++){
+          var dx = pts[k].x - mx, dy = pts[k].y - my;
+          var dd = Math.hypot(dx,dy);
+          if(dd < dmin){ dmin = dd; nearest = pts[k]; }
+        }
+        if(nearest){
+          graphCanvas.style.cursor = 'pointer';
+          var strDate = nearest.d;
+          try {
+            var nd = new Date(nearest.d);
+            strDate = nd.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+          } catch(e){}
+          graphTooltip.innerHTML = '<b>'+strDate+'</b><br>'+ fmtIDR(nearest.v);
+          graphTooltip.style.left = (rect2.left + nearest.x) + 'px';
+          graphTooltip.style.top  = (rect2.top + nearest.y - 12) + 'px';
+          graphTooltip.style.display = 'block';
+        }else{
+          graphCanvas.style.cursor = 'default';
+          graphTooltip.style.display = 'none';
+        }
+      }
+      function onLeave(){ if(graphTooltip) graphTooltip.style.display='none'; }
+      graphCanvas.onmousemove = onMove;
+      graphCanvas.onmouseleave = onLeave;
+    }
+
+    function saveGraphAsImage(){
+      var cvs = document.getElementById('dailyGraph');
+      if(!cvs) return;
+      var a=document.createElement('a');
+      a.href = cvs.toDataURL('image/png');
+      var mp = (state.filter==='ALL') ? (new Date().toISOString().slice(0,7)) : state.filter;
+      a.download = 'grafik_total_harian_'+mp+'.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function focusGraph(dateStr){
+      var card = document.getElementById('graphCard');
+      if(card){ card.classList.remove('pulse'); void card.offsetWidth; card.classList.add('pulse'); }
+      if(card){ card.scrollIntoView({behavior:'smooth', block:'end'}); }
+      // Optionally, we could highlight the exact point on next draw by storing target date.
+      window.__graphFocusDate = dateStr || null;
+    }
+
+
+    // === Wire graph save + resize + theme change
+    (function(){
+      var sgb = document.getElementById('saveGraphBtn');
+      if(sgb){ sgb.addEventListener('click', saveGraphAsImage); }
+      window.addEventListener('resize', function(){ try{ drawDailyGraph(); }catch(e){} });
+      var tbtn = document.getElementById('themeBtn');
+      if(tbtn){
+        tbtn.addEventListener('click', function(){ setTimeout(function(){ try{ drawDailyGraph(); }catch(e){} }, 50); }, { once:false });
+      }
+    })();
+
   });
 })();
 </script>
+<!-- === Themed Popups (Alert & Confirm) === -->
+<div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
+<div class="modal" hidden="" id="themedConfirm">
+<div>
+<div class="modal-header">
+<div class="modal-title">Konfirmasi</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body"></div>
+<div class="modal-footer">
+<button class="btn" data-cancel="">Batal</button>
+<button class="btn primary" data-ok="">OK</button>
+</div>
+</div>
+</div>
+<div class="modal" hidden="" id="themedAlert">
+<div>
+<div class="modal-header">
+<div class="modal-title">Info</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body"></div>
+<div class="modal-footer">
+<button class="btn primary" data-ok="">OK</button>
+</div>
+</div>
+</div>
+<!-- === /Themed Popups === -->
 </body>
 </html>
