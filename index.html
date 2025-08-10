@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Pembukuan Rental PS - URBAN DIGITAL (Theme Toggle)</title>
 <style>
   /* ========= THEME TOKENS ========= */
@@ -111,275 +112,230 @@
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <div>
-      <div class="title">PEMBUKUAN RENTAL PS — URBAN GAMING LAMPUNG DIGITAL</div>
-      <div class="subtitle">URBAN PlayStation Lampung 🎮</div>
-    </div>
-    <div class="row">
-      <button class="btn" id="themeBtn" title="Ganti tema">🌙 Dark</button>
-      <button class="btn" id="screenshotBtn">Screenshot</button>
-      <button class="btn" id="importBtn">Impor CSV</button>
-      <button class="btn" id="exportBtn">Ekspor CSV</button>
-      <button class="btn warn" id="clearBtn" title="Hapus semua data">Bersihkan</button>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <div class="card pad">
-    <div class="grid g4">
-      <div>
-        <label>Tanggal</label>
-        <input class="input" id="date" type="date"/>
-      </div>
-      <div>
-        <label class="visually-hidden">Pemasukan Harian (Rp)</label>
-        <input class="input mono" id="harian" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
-        <div class="mini subtle visually-hidden">*Diisi otomatis dari tabel rincian di bawah.</div>
-      </div>
-      <div>
-        <label class="visually-hidden">Pemasukan Jajanan (Rp)</label>
-        <input class="input mono" id="jajanan" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
-      </div>
-      <div>
-        <label class="visually-hidden">Pemasukan Jasa &amp; Aksesoris (Rp)</label>
-        <input class="input mono" id="jasa" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <div class="grid g3">
-      <div>
-        <label class="visually-hidden">Pemasukan Sewa PS (Rp)</label>
-        <input class="input mono" id="sewa" class="input mono visually-hidden" type="number" min="0" step="100" placeholder="0"/>
-      </div>
-      <div>
-        <label>Catatan (opsional)</label>
-        <input class="input" id="catatan" type="text" placeholder="misal : Ada yang belum bayar"/>
-      </div>
-      <div class="right">
-        <label style="visibility:hidden">.</label>
-        <button class="btn primary" id="addBtn">+ Tambah Pencatatan</button>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <!-- Rincian Pemasukan Harian -->
-    <div class="subcard">
-      <div class="pad">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <div><b>Rincian Pemasukan Harian</b> <span class="badge">10 baris</span></div>
-          <div class="mini subtle">Kolom: 1) No. 2) Jenis PS 3) Jam Masuk 4) Jumlah Jam 5) Harga</div>
-        </div>
-        <div style="overflow:auto;margin-top:10px">
-          <table class="table-sm" id="rincianTable">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>Jenis PS</th>
-                <th>Jam Masuk</th>
-                <th>Jumlah Jam</th>
-                <th>Harga (Rp)</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot>
-              <tr class="total-row">
-                <td class="right" colspan="4">TOTAL</td>
-                <td class="mono right" id="rincianTotal">Rp 0</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
+<div class="header">
+<div>
+<div class="title">PEMBUKUAN RENTAL PS — URBAN GAMING LAMPUNG DIGITAL</div>
+<div class="subtitle">URBAN PlayStation Lampung 🎮</div>
+</div>
+<div class="row">
+<button class="btn" id="themeBtn" title="Ganti tema">🌙 Dark</button>
+<button class="btn" id="screenshotBtn">Screenshot</button>
+<button class="btn" id="importBtn">Impor CSV</button>
+<button class="btn" id="exportBtn">Ekspor CSV</button>
+<button class="btn warn" id="clearBtn" title="Hapus semua data">Bersihkan</button>
+</div>
+</div>
+<div class="spacer"></div>
+<div class="card pad">
+<div class="grid grid" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+<div>
+<label>Tanggal</label>
+<input class="input" id="date" type="date"/>
+</div>
+<input id="harian" type="hidden" value="0"/><input id="jajanan" type="hidden" value="0"/><input id="jasa" type="hidden" value="0"/><div><label>Absen Pagi</label><input class="input" id="absenPagi" required="required" type="time"/></div><div><label>Absen Siang</label><input class="input" id="absenSiang" required="required" type="time"/></div><div><label>Ruko Buka</label><input class="input" id="rukoBuka" required="required" type="time"/></div><div><label>Ruko Tutup</label><input class="input" id="rukoTutup" required="required" type="time"/></div></div>
+<div class="spacer"></div>
+<div class="grid g3"><div><label>Catatan (opsional)</label><input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/></div><div><label class="visually-hidden">Pemasukan Sewa PS (Rp)</label><input class="input mono visually-hidden" id="sewa" min="0" placeholder="0" step="100" type="number"/></div><div class="right">
+<label style="visibility:hidden">.</label>
+<button class="btn primary" id="addBtn">+ Tambah Pencatatan</button>
+</div></div>
+<div class="spacer"></div>
+<!-- Rincian Pemasukan Harian -->
+<div class="subcard">
+<div class="pad">
+<div class="row" style="justify-content:space-between;align-items:center">
+<div><b>Rincian Pemasukan Harian</b> <span class="badge">10 baris</span></div>
+<div class="mini subtle">Kolom: 1) No. 2) Jenis PS 3) Jam Masuk 4) Jumlah Jam 5) Harga</div>
+</div>
+<div style="overflow:auto;margin-top:10px">
+<table class="table-sm" id="rincianTable">
+<thead>
+<tr>
+<th>No.</th>
+<th>Jenis PS</th>
+<th>Jam Masuk</th>
+<th>Jumlah Jam</th>
+<th>Harga (Rp)</th>
+</tr>
+</thead>
+<tbody></tbody>
+<tfoot>
+<tr class="total-row">
+<td class="right" colspan="4">TOTAL</td>
+<td class="mono right" id="rincianTotal">Rp 0</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
 <button class="btn primary" id="rincianAddRow" type="button">+ Tambah Baris</button>
-          <span class="mini subtle">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <!-- Rincian Pemasukan Jajanan (3 kolom × 10 baris) -->
-    <div class="subcard">
-      <div class="pad">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <div><b>Rincian Pemasukan Jajanan</b> <span class="badge">3 kolom × 10 baris</span></div>
-          <div class="mini subtle">Kolom: 1) Jenis • 2) Qty &amp; Jam • 3) Harga (otomatis)</div>
-        </div>
-        <div style="overflow:auto;margin-top:10px">
-          <table class="table-sm" id="jajananTable3x10">
-            <thead>
-              <tr><th>No.</th><th>Jenis Jajanan</th><th>Qty &amp; Jam</th><th>Harga (Rp)</th></tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot>
-              <tr class="total-row">
-                <td class="right" colspan="2">TOTAL</td>
-                <td></td>
-                <td class="mono right" id="jajananTotal3x10">Rp 0</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian Jajanan</button>
+<span class="mini subtle">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
+</div>
+</div>
+</div>
+<div class="spacer"></div>
+<!-- Rincian Pemasukan Jajanan (3 kolom × 10 baris) -->
+<div class="subcard">
+<div class="pad">
+<div class="row" style="justify-content:space-between;align-items:center">
+<div><b>Rincian Pemasukan Jajanan</b> <span class="badge">3 kolom × 10 baris</span></div>
+<div class="mini subtle">Kolom: 1) Jenis • 2) Qty &amp; Jam • 3) Harga (otomatis)</div>
+</div>
+<div style="overflow:auto;margin-top:10px">
+<table class="table-sm" id="jajananTable3x10">
+<thead>
+<tr><th>No.</th><th>Jenis Jajanan</th><th>Qty &amp; Jam</th><th>Harga (Rp)</th></tr>
+</thead>
+<tbody></tbody>
+<tfoot>
+<tr class="total-row">
+<td class="right" colspan="2">TOTAL</td>
+<td></td>
+<td class="mono right" id="jajananTotal3x10">Rp 0</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian Jajanan</button>
 <button class="btn primary" id="jajanan3x10AddRow" type="button">+ Tambah Baris</button>
-          <span class="mini subtle">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <!-- Rincian Pemasukan Jasa & Aksesoris (3 kolom × 5 baris) -->
-    <div class="subcard">
-      <div class="pad">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <div><b>Rincian Pemasukan Jasa &amp; Aksesoris</b> <span class="badge">3 kolom × 5 baris</span></div>
-          <div class="mini subtle">Kolom: 1) Tipe (drop-down) • 2) Keterangan (manual) • 3) Harga (manual)</div>
-        </div>
-        <div style="overflow:auto;margin-top:10px">
-          <table class="table-sm" id="jasaTable2x5">
-            <thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
-            <tbody></tbody>
-            <tfoot><tr class="total-row"><td class="right" colspan="2">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr></tfoot>
-          </table>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian Jasa &amp; Aksesoris</button>
+<span class="mini subtle">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
+</div>
+</div>
+</div>
+<div class="spacer"></div>
+<!-- Rincian Pemasukan Jasa & Aksesoris (3 kolom × 5 baris) -->
+<div class="subcard">
+<div class="pad">
+<div class="row" style="justify-content:space-between;align-items:center">
+<div><b>Rincian Pemasukan Jasa &amp; Aksesoris</b> <span class="badge">3 kolom × 5 baris</span></div>
+<div class="mini subtle">Kolom: 1) Tipe (drop-down) • 2) Keterangan (manual) • 3) Harga (manual)</div>
+</div>
+<div style="overflow:auto;margin-top:10px">
+<table class="table-sm" id="jasaTable2x5">
+<thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
+<tbody></tbody>
+<tfoot><tr class="total-row"><td class="right" colspan="2">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr></tfoot>
+</table>
+</div>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian Jasa &amp; Aksesoris</button>
 <button class="btn primary" id="jasa2x5AddRow" type="button">+ Tambah Baris</button>
-          <span class="mini subtle">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <!-- Rincian Pemasukan SEWA PS (3 kolom × 10 baris) -->
-    <div class="subcard">
-      <div class="pad">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <div><b>Rincian Pemasukan SEWA PS</b> <span class="badge">3 kolom × 5 baris</span></div>
-          <div class="mini subtle">Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Harga (otomatis bisa diedit)</div>
-        </div>
-        <div style="overflow:auto;margin-top:10px">
-          <table class="table-sm" id="sewaTable3x10">
-            <thead>
-              <tr>
-                <th>No.</th><th>Jenis PS</th><th>Lama Sewa</th><th>Harga (Rp)</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot>
-              <tr class="total-row">
-                <td class="right" colspan="3">TOTAL</td>
-                <td class="mono right" id="sewaTotal3x10">Rp 0</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian Sewa</button>
+<span class="mini subtle">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
+</div>
+</div>
+</div>
+<div class="spacer"></div>
+<!-- Rincian Pemasukan SEWA PS (3 kolom × 10 baris) -->
+<div class="subcard">
+<div class="pad">
+<div class="row" style="justify-content:space-between;align-items:center">
+<div><b>Rincian Pemasukan SEWA PS</b> <span class="badge">3 kolom × 5 baris</span></div>
+<div class="mini subtle">Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Harga (otomatis bisa diedit)</div>
+</div>
+<div style="overflow:auto;margin-top:10px">
+<table class="table-sm" id="sewaTable3x10">
+<thead>
+<tr>
+<th>No.</th><th>Jenis PS</th><th>Lama Sewa</th><th>Harga (Rp)</th>
+</tr>
+</thead>
+<tbody></tbody>
+<tfoot>
+<tr class="total-row">
+<td class="right" colspan="3">TOTAL</td>
+<td class="mono right" id="sewaTotal3x10">Rp 0</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian Sewa</button>
 <button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
-          <span class="mini subtle">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
-        </div>
-
-        <div class="spacer"></div>
-
-        <!-- Recap ringkas di atas TOTAL KESELURUHAN -->
-        <div class="recap" id="recapBar">
-          <div class="recap-item"><div class="label">Pemasukan Harian</div><div class="value mono" id="recapHarian">Rp 0</div></div>
-          <div class="recap-item"><div class="label">Pemasukan Jajanan</div><div class="value mono" id="recapJajanan">Rp 0</div></div>
-          <div class="recap-item"><div class="label">Pemasukan Jasa &amp; Aksesoris</div><div class="value mono" id="recapJasa">Rp 0</div></div>
-          <div class="recap-item"><div class="label">Pemasukan Sewa PS</div><div class="value mono" id="recapSewa">Rp 0</div></div>
-        </div>
-        <div class="spacer"></div>
-        <div class="subcard">
-          <div class="pad">
-            <table style="width:100%;border-collapse:collapse">
-              <tr class="total-row">
-                <td class="right" colspan="3" style="text-align:right;font-weight:800;">TOTAL KESELURUHAN</td>
-                <td class="mono right" id="grandTotal">Rp 0</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /card pad -->
-
-  <div class="spacer"></div>
-
-  <div class="row">
-    <div class="pill">
-      <span>Filter</span>
-      <select class="select" id="monthFilter"></select>
-    </div>
-    <div class="pill" id="rangePill">
-      <span>Rentang</span>
-      <input class="input" id="dateFrom" type="date" style="width:140px"/>
-      <span class="mini subtle">s/d</span>
-      <input class="input" id="dateTo" type="date" style="width:140px"/>
-      <button class="btn" id="rangeApply" type="button">Terapkan</button>
-      <button class="btn" id="rangeClear" type="button" title="Kosongkan rentang">Bersihkan</button>
-    </div>
-    <div class="pill">
-      <span>Total Bulan Ini:</span>
-      <strong class="mono" id="monthTotal"></strong>
-    </div>
-    <div class="pill">
-      <span>Total Semua:</span>
-      <strong class="mono" id="allTotal"></strong>
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <div class="card pad">
-    <div style="overflow:auto;">
-      <table id="table">
-        <thead>
-          <tr>
-            <th style="min-width:130px">Tanggal</th>
-            <th>Harian</th>
-            <th>Jajanan</th>
-            <th>Jasa &amp; Aksesoris</th>
-            <th>Sewa PS</th>
-            <th>Total</th>
-            <th>Catatan</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-        <tfoot>
-          <tr>
-            <td>Subtotal (tampil)</td>
-            <td class="mono right" id="sumHarian">Rp 0</td>
-            <td class="mono right" id="sumJajanan">Rp 0</td>
-            <td class="mono right" id="sumJasa">Rp 0</td>
-            <td class="mono right" id="sumSewa">Rp 0</td>
-            <td class="mono right" id="sumTotal">Rp 0</td>
-            <td colspan="2"></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <div class="note">Tombol <b>Edit</b> nge-load semua rincian ke form di atas biar bisa diperbaiki total.</div>
-  </div>
-
-  <div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
+<span class="mini subtle">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
+</div>
+<div class="spacer"></div>
+<!-- Recap ringkas di atas TOTAL KESELURUHAN -->
+<div class="recap" id="recapBar">
+<div class="recap-item"><div class="label">Pemasukan Harian</div><div class="value mono" id="recapHarian">Rp 0</div></div>
+<div class="recap-item"><div class="label">Pemasukan Jajanan</div><div class="value mono" id="recapJajanan">Rp 0</div></div>
+<div class="recap-item"><div class="label">Pemasukan Jasa &amp; Aksesoris</div><div class="value mono" id="recapJasa">Rp 0</div></div>
+<div class="recap-item"><div class="label">Pemasukan Sewa PS</div><div class="value mono" id="recapSewa">Rp 0</div></div>
+</div>
+<div class="spacer"></div>
+<div class="subcard">
+<div class="pad">
+<table style="width:100%;border-collapse:collapse">
+<tr class="total-row">
+<td class="right" colspan="3" style="text-align:right;font-weight:800;">TOTAL KESELURUHAN</td>
+<td class="mono right" id="grandTotal">Rp 0</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div><!-- /card pad -->
+<div class="spacer"></div>
+<div class="row">
+<div class="pill">
+<span>Filter</span>
+<select class="select" id="monthFilter"></select>
+</div>
+<div class="pill" id="rangePill">
+<span>Rentang</span>
+<input class="input" id="dateFrom" style="width:140px" type="date"/>
+<span class="mini subtle">s/d</span>
+<input class="input" id="dateTo" style="width:140px" type="date"/>
+<button class="btn" id="rangeApply" type="button">Terapkan</button>
+<button class="btn" id="rangeClear" title="Kosongkan rentang" type="button">Bersihkan</button>
+</div>
+<div class="pill">
+<span>Total Bulan Ini:</span>
+<strong class="mono" id="monthTotal"></strong>
+</div>
+<div class="pill">
+<span>Total Semua:</span>
+<strong class="mono" id="allTotal"></strong>
+</div>
+</div>
+<div class="spacer"></div>
+<div class="card pad">
+<div style="overflow:auto;">
+<table id="table">
+<thead>
+<tr>
+<th style="min-width:130px">Tanggal</th>
+<th>Harian</th>
+<th>Jajanan</th>
+<th>Jasa &amp; Aksesoris</th>
+<th>Sewa PS</th>
+<th>Total</th>
+<th>Catatan</th>
+<th>Aksi</th>
+</tr>
+</thead>
+<tbody></tbody>
+<tfoot>
+<tr>
+<td>Subtotal (tampil)</td>
+<td class="mono right" id="sumHarian">Rp 0</td>
+<td class="mono right" id="sumJajanan">Rp 0</td>
+<td class="mono right" id="sumJasa">Rp 0</td>
+<td class="mono right" id="sumSewa">Rp 0</td>
+<td class="mono right" id="sumTotal">Rp 0</td>
+<td colspan="2"></td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div class="note">Tombol <b>Edit</b> nge-load semua rincian ke form di atas biar bisa diperbaiki total.</div>
+</div>
+<div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
     © <span id="year"></span> URBAN GAMING LAMPUNG
   </div>
 </div>
-
-<input id="fileInput" type="file" accept=".csv" style="display:none"/>
-
+<input accept=".csv" id="fileInput" style="display:none" type="file"/>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 (function(){
