@@ -392,6 +392,80 @@
   text-align: left !important;
 }
 </style>
+
+<style id="ui-fix-0811">
+/* === UI Polishing: consistent proportions & spacing === */
+:root{
+  --space-1:8px;
+  --space-2:12px;
+  --space-3:16px;
+  --space-4:20px;
+  --ctrl-h:40px;
+  --radius:12px;
+}
+
+/* normalize gaps */
+.row{ gap: var(--space-2) !important; }
+.grid{ gap: var(--space-2) !important; }
+.spacer{ height: var(--space-3) !important; }
+
+/* cards & subcards padding symmetry */
+.card .pad, .subcard .pad{ padding: var(--space-3) !important; }
+.card, .subcard{ border-radius: 14px !important; }
+
+/* controls: same height/padding/radius */
+.input, .select, .btn, textarea{
+  min-height: var(--ctrl-h);
+  border-radius: var(--radius);
+  padding-top: 8px; padding-bottom: 8px;
+}
+textarea{ padding-top: 10px; padding-bottom: 10px; }
+
+/* pills: ensure same inner heights and spacing */
+.pill{ gap: var(--space-1) !important; }
+.pill select, .pill input[type="date"], .pill button{
+  height: calc(var(--ctrl-h) - 4px) !important;
+  line-height: calc(var(--ctrl-h) - 4px);
+  padding: 0 10px !important;
+  border-radius: 8px;
+}
+
+/* tables: consistent density & alignment */
+.table-sm th, .table-sm td{ padding: 10px 12px !important; }
+th, td{ vertical-align: middle; }
+th:first-child, td:first-child{ text-align: left; }
+
+/* top form: keep clean spacing & alignment */
+.container .card .grid > div label{ margin-bottom: 6px !important; }
+.container .card .grid input.input{ width: 100%; }
+
+/* action row: same spacing left-right when editing */
+.actions-row{ gap: var(--space-2) !important; }
+.actions-row.editing{ justify-content: space-between !important; }
+#cancelEditBtn{ margin-right: auto; } /* keep "Batal" on the left */
+
+/* ensure graph & footer spacing is even */
+#graphCard{ margin-top: var(--space-3); }
+#graphCard + div{ margin-top: var(--space-3) !important; } /* footer wrapper */
+
+/* Jasa & Aksesoris proportions (already set via colgroup) + clean inputs */
+#jasaTable2x5 input.jasa-price{ text-align: left !important; }
+#jasaTable2x5 colgroup col:nth-child(2),
+#jasaTable2x5 colgroup col:nth-child(3),
+#jasaTable2x5 colgroup col:nth-child(4){ width:31.6% !important; }
+
+/* prevent layout jump on inputs (tabular) */
+.mono{ font-variant-numeric: tabular-nums; }
+
+/* responsive: stack cleanly on small screens */
+@media(max-width:900px){
+  .header{ align-items: flex-start; }
+}
+@media(max-width:600px){
+  .row{ gap: var(--space-1) !important; }
+  .btn{ min-width: auto; }
+}
+</style>
 </head>
 <body>
 <div class="container">
