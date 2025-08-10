@@ -108,6 +108,70 @@
   @media(max-width:900px){.recap{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:600px){.recap{grid-template-columns:1fr}}
 
+
+/* === Custom red warning buttons === */
+.btn.warn {
+  background: #d93025 !important; /* Red tone */
+  border-color: #a12016 !important;
+  color: #fff !important;
+}
+.btn.warn:hover {
+  filter: brightness(1.1);
+}
+
+
+/* === Filter bar consistency === */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--card2);
+  border: 1px solid var(--ring);
+  border-radius: 999px;
+}
+
+.pill select,
+.pill input,
+.pill button {
+  height: 34px;            /* consistent height */
+  padding: 0 10px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.pill select {
+  min-width: 130px;        /* proportion for dropdown */
+}
+
+.pill input[type="date"] {
+  min-width: 140px;        /* proportion for date inputs */
+}
+
+.pill button {
+  white-space: nowrap;
+}
+
+
+/* Force all controls inside pill to be equal height */
+.pill select,
+.pill input[type="date"],
+.pill button {
+  height: 36px !important;       /* exact same height */
+  line-height: 36px;
+  padding: 0 10px !important;     /* same padding */
+  font-size: 13px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* Make date picker icon vertically aligned */
+.pill input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
 </style>
 </head>
 <body>
@@ -215,7 +279,7 @@
 <table class="table-sm" id="jasaTable2x5">
 <thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
 <tbody></tbody>
-<tfoot><tr class="total-row"><td class="right" colspan="2">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr></tfoot>
+<tfoot><tr class="total-row"><td class="right" colspan="3">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr></tfoot>
 </table>
 </div>
 <div class="row" style="margin-top:10px">
@@ -586,6 +650,41 @@
       return { rincian:rincian, jajanan3x10:jajanan, jasa2x5:jasa, sewa3x10:sewa };
     }
 
+
+    // ===== Validation helpers
+    function detailsIsEmpty(det){
+      det = det || collectDetails();
+      function anyIn(arr, keys){
+        if(!arr) return false;
+        for(var i=0;i<arr.length;i++){
+          var o = arr[i] || {};
+          for(var k=0;k<keys.length;k++){
+            var v = o[keys[k]];
+            if(typeof v === 'number' && v > 0) return true;
+            if(typeof v === 'string' && String(v).trim() !== '') return true;
+          }
+        }
+        return false;
+      }
+      // If any detail field has content/value, not empty
+      if(anyIn(det.rincian, ['jenis','jam','jumlah','harga'])) return false;
+      if(anyIn(det.jajanan3x10, ['jenis','qty','jam','harga'])) return false;
+      if(anyIn(det.jasa2x5, ['tipe','ket','harga'])) return false;
+      if(anyIn(det.sewa3x10, ['jenis','durasi','manualJam','harga'])) return false;
+      return true;
+    }
+    function formIsTrulyEmpty(){
+      var h = cleanNum($('#harian').value);
+      var j = cleanNum($('#jajanan').value);
+      var ja = cleanNum($('#jasa').value);
+      var s = cleanNum($('#sewa').value);
+      var cat = ($('#catatan').value||'').trim();
+      // Consider "empty" if all numeric incomes are zero AND no detail inputs filled.
+      // Catatan alone does not count as data.
+      var det = collectDetails();
+      return (h + j + ja + s === 0) && detailsIsEmpty(det);
+    }
+
     // ===== Apply details
     function applyDetails(det){
       det = det || {};
@@ -731,6 +830,11 @@
       };
     }
     function addOrUpdateEntry(){
+      // Guard: don't save empty forms
+      if(formIsTrulyEmpty()){
+        alert('Form masih kosong. Isi setidaknya satu nilai atau rincian sebelum menyimpan.');
+        return;
+      }
       var newEntry = entryFromForm();
       if(state.editingId){
         var idx = state.entries.findIndex(function(x){ return x.id===state.editingId; });
@@ -745,6 +849,7 @@
 
     function clearForm(){
       ['harian','jajanan','jasa','sewa','catatan'].forEach(function(id){ var el=$('#'+id); if(el) el.value=''; });
+            $all('#rincianTable .r-jenis').forEach(function(sel){ sel.value = ''; });
       $('#date').value=todayStr();
       $all('#rincianTable input, #jajananTable3x10 input, #jajananTable3x10 select, #jasaTable2x5 input, #jasaTable2x5 select, #sewaTable3x10 input, #sewaTable3x10 select').forEach(function(i){ i.value=''; });
       $('#rincianTotal').textContent=fmtIDR(0); $('#jajananTotal3x10').textContent=fmtIDR(0); $('#jasaTotal2x5').textContent=fmtIDR(0); $('#sewaTotal3x10').textContent=fmtIDR(0);
@@ -955,7 +1060,8 @@
 
 // ===== Init
     $('#year').textContent=(new Date()).getFullYear();
-    $('#date').value=todayStr();
+          $all('#rincianTable .r-jenis').forEach(function(sel){ sel.value = ''; });
+      $('#date').value=todayStr();
     load();
     // Build tables
     (function initTables(){
