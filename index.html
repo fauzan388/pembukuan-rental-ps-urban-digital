@@ -390,6 +390,9 @@
 #jasaTable2x5 input.jasa-price{
   text-align: left !important;
 }
+
+/* === Right-aligned helper for notes === */
+.auto-note{ margin-left:auto; text-align:right;  white-space:nowrap;}
 </style>
 
 <style id="ui-fix-0811">
@@ -474,7 +477,7 @@ th:first-child, td:first-child{ text-align: left; }
 <div class="subtitle">URBAN PlayStation Lampung 🎮</div>
 </div>
 <div class="row">
-<button class="btn" id="themeBtn" title="Ganti tema">🌙 Dark</button>
+<button class="btn" id="themeBtn" title="Ganti tema">🌙 Gelap</button>
 <button class="btn" id="screenshotBtn">Screenshot</button>
 <button class="btn" id="importBtn">Impor CSV</button>
 <button class="btn" id="exportBtn">Ekspor CSV</button>
@@ -521,7 +524,7 @@ th:first-child, td:first-child{ text-align: left; }
 <div class="row" style="margin-top:10px">
 <button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
 <button class="btn primary" id="rincianAddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
+<span class="mini subtle auto-note">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
 </div>
 </div>
 </div>
@@ -551,7 +554,7 @@ th:first-child, td:first-child{ text-align: left; }
 <div class="row" style="margin-top:10px">
 <button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian Jajanan</button>
 <button class="btn primary" id="jajanan3x10AddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
+<span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
 </div>
 </div>
 </div>
@@ -573,7 +576,7 @@ th:first-child, td:first-child{ text-align: left; }
 <div class="row" style="margin-top:10px">
 <button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian Jasa &amp; Aksesoris</button>
 <button class="btn primary" id="jasa2x5AddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
+<span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
 </div>
 </div>
 </div>
@@ -604,7 +607,7 @@ th:first-child, td:first-child{ text-align: left; }
 <div class="row" style="margin-top:10px">
 <button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian Sewa</button>
 <button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
+<span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
 </div>
 <div class="spacer"></div>
 <!-- Recap ringkas di atas TOTAL KESELURUHAN -->
@@ -790,7 +793,7 @@ th:first-child, td:first-child{ text-align: left; }
     function applyTheme(t){
       document.documentElement.setAttribute('data-theme', t==='light' ? 'light' : null);
       var btn = $('#themeBtn');
-      if(btn){ btn.textContent = (t==='light') ? '☀️ Light' : '🌙 Dark'; }
+      if(btn){ btn.textContent = (t==='light') ? '☀️ Terang' : '🌙 Gelap'; }
     }
     function getTheme(){ try{ return localStorage.getItem(THEME_KEY)||'dark'; }catch(e){ return 'dark'; } }
     function setTheme(t){ try{ localStorage.setItem(THEME_KEY,t); }catch(e){} applyTheme(t); }
