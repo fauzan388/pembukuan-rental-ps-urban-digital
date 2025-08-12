@@ -392,9 +392,30 @@
 }
 
 /* === Right-aligned helper for notes === */
-.auto-note{ margin-left:auto; text-align:right;  white-space:nowrap;}
-</style>
+.auto-note{ margin-left:auto; text-align:left;  white-space:nowrap;}
+/** Footer rows alignment for new totals **/
+#table tfoot .total-row td:first-child{ text-align:left; }
 
+/* === Filter Card (square-rounded, precise) === */
+.filter-card{ border-radius:14px; background:var(--card2); border:1px solid var(--ring); }
+.filter-grid{ display:grid; grid-template-columns: 140px 1fr; gap:12px 16px; align-items:center; }
+.filter-grid .f-row{ display:contents; } /* allow label + control align on same row */
+.filter-grid label{ font-size:14px; color:var(--muted); font-weight:600; }
+.filter-card .select, .filter-card .input{ height:40px; border-radius:10px; }
+.filter-card .range-wrap{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.filter-card .range-wrap .input{ width:180px; }
+.filter-card .range-wrap .sep{ color:var(--muted); min-width:24px; text-align:center; }
+.filter-card .btn{ height:40px; border-radius:10px; padding:0 14px; }
+@media (max-width: 700px){
+  .filter-grid{ grid-template-columns: 1fr; }
+  .filter-grid label{ margin-bottom:4px; }
+  .filter-card .range-wrap{ gap:8px; }
+  .filter-card .range-wrap .input{ flex:1 1 160px; min-width:0; }
+  .filter-card .btn{ flex:1 1 auto; }
+  .filter-card .sep{ order:2; } /* keep natural reading on wrap */
+}
+
+</style>
 <style id="ui-fix-0811">
 /* === UI Polishing: consistent proportions & spacing === */
 :root{
@@ -468,7 +489,6 @@ th:first-child, td:first-child{ text-align: left; }
   .btn{ min-width: auto; }
 }
 </style>
-
 <style id="mobile-polish-0811">
 /* ===== Mobile polish (safe, symmetric, no-left-stretch) ===== */
 html, body { overflow-x: hidden; }
@@ -507,8 +527,132 @@ html, body { overflow-x: hidden; }
 
 /* Smooth scrolling for in-app navigation */
 html { scroll-behavior: smooth; }
-</style>
 
+/* === Merged Filter + Rentang pill === */
+.pill-merged{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 12px;
+  background:var(--card2);
+  border:1px solid var(--ring);
+  border-radius:999px;
+}
+.pill-merged .seg{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.pill-merged .divider{
+  width:1px;
+  align-self:stretch;
+  background:var(--ring);
+  opacity:.6;
+}
+/* Make the merged pill full-width on small screens for symmetry */
+@media (max-width: 600px){
+  .pill-merged{ width:100%; }
+}
+
+
+/* === Toolbar polish: consistent heights & tidy wrap === */
+.toolbar-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+}
+.toolbar-row .pill,
+.toolbar-row .pill-merged{
+  min-height: calc(var(--ctrl-h) + 4px);
+}
+/* Metric pill (for totals) */
+.pill.metric{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  background:var(--card2);
+  border:1px solid var(--ring);
+  border-radius:999px;
+}
+.pill.metric .label{
+  font-size:12px;
+  color:var(--muted);
+}
+.pill.metric .value{
+  font-weight:800;
+  font-variant-numeric: tabular-nums;
+}
+/* Keep danger button aligned in the pill */
+.pill.metric .btn{
+  height: calc(var(--ctrl-h) - 4px) !important;
+  line-height: calc(var(--ctrl-h) - 4px);
+  padding: 0 12px !important;
+  border-radius: 8px;
+}
+
+/* Responsive: make items fill nicely on small screens */
+@media (max-width: 900px){
+  .toolbar-row > *{ flex:1 1 auto; }
+}
+@media (max-width: 600px){
+  .toolbar-row .pill-merged,
+  .toolbar-row .pill.metric{
+    width:100%;
+  }
+}
+
+
+/* === Catatan & Button precise alignment === */
+.catatan-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.catatan-wrap {
+  flex: 1; /* Catatan takes all free space */
+}
+
+.actions-wrap {
+  flex: 0 0 auto; /* Button only as wide as needed */
+}
+
+#formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .catatan-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actions-wrap {
+    width: 100%;
+  }
+  #formActions {
+    justify-content: flex-start;
+  }
+}
+</style>
+<style>
+#jajananSettingsModal .modal-body {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+#jajananSettingsModal table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#jajananSettingsModal th, #jajananSettingsModal td {
+  padding: 6px;
+  border-bottom: 1px solid var(--ring);
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -517,11 +661,12 @@ html { scroll-behavior: smooth; }
 <div class="title">PEMBUKUAN RENTAL PS — URBAN GAMING LAMPUNG DIGITAL</div>
 <div class="subtitle">URBAN PlayStation Lampung 🎮</div>
 </div>
-<div class="row">
+<div class="row toolbar-row">
 <button class="btn" id="themeBtn" title="Ganti tema">🌙 Gelap</button>
 <button class="btn" id="screenshotBtn">Screenshot</button>
-<button class="btn" id="importBtn">Impor CSV</button>
-<button class="btn" id="exportBtn">Ekspor CSV</button>
+
+<button class="btn" id="settingsBtn">⚙ Pengaturan</button>
+
 </div>
 </div>
 <div class="spacer"></div>
@@ -531,9 +676,21 @@ html { scroll-behavior: smooth; }
 <label>Tanggal</label>
 <input class="input" id="date" type="date"/>
 </div>
-<input id="harian" type="hidden" value="0"/><input id="jajanan" type="hidden" value="0"/><input id="jasa" type="hidden" value="0"/><div><label>Absen Pagi</label><input class="input" id="absenPagi" required="required" type="time"/></div><div><label>Absen Siang</label><input class="input" id="absenSiang" required="required" type="time"/></div><div><label>Ruko Buka</label><input class="input" id="rukoBuka" required="required" type="time"/></div><div><label>Ruko Tutup</label><input class="input" id="rukoTutup" required="required" type="time"/></div></div>
+<input id="harian" type="hidden" value="0"/><input id="jajanan" type="hidden" value="0"/><input id="jasa" type="hidden" value="0"/><input id="sewa" type="hidden" value="0"/><div><label>Absen Pagi</label><input class="input" id="absenPagi" required="required" type="time"/></div><div><label>Absen Siang</label><input class="input" id="absenSiang" required="required" type="time"/></div><div><label>Ruko Buka</label><input class="input" id="rukoBuka" required="required" type="time"/></div><div><label>Ruko Tutup</label><input class="input" id="rukoTutup" required="required" type="time"/></div></div>
 <div class="spacer"></div>
-<div class="grid g3"><div><label>Catatan (opsional)</label><input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/></div><div><label >Pemasukan Sewa PS (Rp)</label><input class="input mono" id="sewa" min="0" placeholder="0" step="100" type="number"/></div><div class="right"><label style="visibility:hidden">.</label><div class="actions-row" id="formActions"><button class="btn warn" id="cancelEditBtn" style="display:none;">Batal</button><button class="btn primary" id="addBtn">+ Tambah Pencatatan</button></div></div></div>
+<div class="row catatan-row">
+<div class="catatan-wrap">
+<label>Catatan (opsional)</label>
+<input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/>
+</div>
+<div class="actions-wrap">
+<label style="visibility:hidden">.</label>
+<div class="actions-row" id="formActions">
+<button class="btn warn" id="cancelEditBtn" style="display:none;">Batal</button>
+<button class="btn primary" id="addBtn">+ Tambah Pencatatan</button>
+</div>
+</div>
+</div>
 <div class="spacer"></div>
 <!-- Rincian Pemasukan Harian -->
 <div class="subcard">
@@ -558,6 +715,10 @@ html { scroll-behavior: smooth; }
 <tr class="total-row">
 <td class="right" colspan="4">TOTAL</td>
 <td class="mono right" id="rincianTotal">Rp 0</td>
+</tr>
+<tr class="total-row">
+<td colspan="8" style="text-align:left; padding-top:8px;">
+</td>
 </tr>
 </tfoot>
 </table>
@@ -589,6 +750,10 @@ html { scroll-behavior: smooth; }
 <td></td>
 <td class="mono right" id="jajananTotal3x10">Rp 0</td>
 </tr>
+<tr class="total-row">
+<td colspan="8" style="text-align:left; padding-top:8px;">
+</td>
+</tr>
 </tfoot>
 </table>
 </div>
@@ -611,7 +776,12 @@ html { scroll-behavior: smooth; }
 <table class="table-sm" id="jasaTable2x5"><colgroup><col style="width:5.2%"/><col style="width:31.6%"/><col style="width:31.6%"/><col style="width:31.6%"/></colgroup>
 <thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
 <tbody></tbody>
-<tfoot><tr class="total-row"><td class="right" colspan="3">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr></tfoot>
+<tfoot><tr class="total-row"><td class="right" colspan="3">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr>
+<tr class="total-row">
+<td colspan="8" style="text-align:left; padding-top:8px;">
+</td>
+</tr>
+</tfoot>
 </table>
 </div>
 <div class="row" style="margin-top:10px">
@@ -642,6 +812,10 @@ html { scroll-behavior: smooth; }
 <td class="right" colspan="4">TOTAL</td>
 <td class="mono right" id="sewaTotal3x10">Rp 0</td>
 </tr>
+<tr class="total-row">
+<td colspan="8" style="text-align:left; padding-top:8px;">
+</td>
+</tr>
 </tfoot>
 </table>
 </div>
@@ -663,7 +837,7 @@ html { scroll-behavior: smooth; }
 <div class="pad">
 <table style="width:100%;border-collapse:collapse">
 <tr class="total-row">
-<td class="right" colspan="3" style="text-align:right;font-weight:800;">TOTAL KESELURUHAN</td>
+<td class="right" colspan="3" style="text-align:left;font-weight:800;">TOTAL KESELURUHAN</td>
 <td class="mono right" id="grandTotal">Rp 0</td>
 </tr>
 </table>
@@ -673,27 +847,26 @@ html { scroll-behavior: smooth; }
 </div>
 </div><!-- /card pad -->
 <div class="spacer"></div>
-<div class="row">
-<div class="pill">
-<span>Filter</span>
+<!-- Filter & Rentang (clean, square-rounded, responsive) -->
+<div class="subcard filter-card">
+<div class="pad">
+<div class="filter-grid">
+<div class="f-row">
+<label for="monthFilter">Filter</label>
 <select class="select" id="monthFilter"></select>
 </div>
-<div class="pill" id="rangePill">
-<span>Rentang</span>
-<input class="input" id="dateFrom" style="width:140px" type="date"/>
-<span class="mini subtle">s/d</span>
-<input class="input" id="dateTo" style="width:140px" type="date"/>
-<button class="btn" id="rangeApply" type="button">Terapkan</button>
-<button class="btn" id="rangeClear" title="Kosongkan rentang" type="button">Bersihkan</button>
+<div class="f-row">
+<label for="dateFrom">Rentang</label>
+<div class="range-wrap">
+<input class="input" disabled="" id="dateFrom" type="date"/>
+<span class="sep">s/d</span>
+<input class="input" disabled="" id="dateTo" type="date"/>
+<button class="btn" disabled="" id="rangeApply" type="button">Terapkan</button>
+<button class="btn" disabled="" id="rangeClear" title="Kosongkan rentang" type="button">Bersihkan</button>
 </div>
-<div class="pill">
-<span>Total Bulan Ini:</span>
-<strong class="mono" id="monthTotal"></strong>
 </div>
-<div class="pill">
-<span>Total Semua:</span>
-<strong class="mono" id="allTotal"></strong>
-<button class="btn warn" id="clearBtn" style="margin-left:8px;" title="Hapus semua data">Bersihkan Semua History</button></div>
+</div>
+</div>
 </div>
 <div class="spacer"></div>
 <div class="card pad">
@@ -722,6 +895,13 @@ html { scroll-behavior: smooth; }
 <td class="mono right" id="sumTotal">Rp 0</td>
 <td colspan="2"></td>
 </tr>
+<tr class="total-row"><td colspan="5">Total bulan ini</td><td class="mono right" id="sumMonth">Rp 0</td><td colspan="2"></td></tr>
+<tr class="total-row"><td colspan="5">Total semua</td><td class="mono right" id="sumAll">Rp 0</td><td colspan="2"></td></tr>
+<tr class="total-row">
+<td colspan="8" style="text-align:left; padding-top:8px;">
+<button class="btn warn" id="clearBtn" title="Hapus semua data">Bersihkan Semua History</button>
+</td>
+</tr>
 </tfoot>
 </table>
 </div>
@@ -729,7 +909,7 @@ html { scroll-behavior: smooth; }
 </div>
 <div class="card pad" id="graphCard">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
-<div><b>Grafik Total Harian (Per Bulan)</b> <span class="mini subtle">titik berwarna sesuai ambang</span></div>
+<div><b>Grafik Total</b> <span class="mini subtle">titik berwarna sesuai ambang</span></div>
 <button class="btn" id="saveGraphBtn" title="Simpan grafik sebagai gambar">Simpan Grafik</button>
 </div>
 <canvas height="260" id="dailyGraph" style="width:100%;display:block"></canvas>
@@ -811,6 +991,64 @@ html { scroll-behavior: smooth; }
 })();
 // === /Themed Popup Helpers ===
 </script>
+<script>
+  // === Themed Password Prompt (matches existing modal/backdrop) ===
+  window.themedPromptPassword = function(options){
+    return new Promise(function(resolve){
+      var modal = document.getElementById('themedPassword');
+      var backdrop = document.getElementById('popupBackdrop');
+      if(!modal || !backdrop){ return resolve(null); }
+
+      var titleEl = modal.querySelector('.modal-title');
+      var input   = modal.querySelector('#pwdInput');
+      var okBtn   = modal.querySelector('[data-ok]');
+      var cancel  = modal.querySelector('[data-cancel]');
+      var close   = modal.querySelector('[data-close]');
+
+      titleEl.textContent = (options && options.title) || 'Verifikasi';
+      if(input){
+        input.placeholder = (options && options.placeholder) || 'Password admin';
+        input.value = '';
+      }
+
+      function show(){
+        backdrop.hidden = false; modal.hidden = false;
+        requestAnimationFrame(function(){
+          backdrop.classList.add('is-visible');
+          modal.classList.add('is-visible');
+          setTimeout(function(){ try{ input && input.focus(); }catch(_){} }, 30);
+        });
+      }
+      function hide(val){
+        backdrop.classList.remove('is-visible');
+        modal.classList.remove('is-visible');
+        setTimeout(function(){
+          backdrop.hidden = true; modal.hidden = true;
+          cleanup(); resolve(val);
+        }, 200);
+      }
+      function onKey(e){
+        if(e.key === 'Escape') hide(null);
+        if(e.key === 'Enter')  hide(String((input && input.value) || ''));
+      }
+      function onBackdrop(e){ if(e.target === backdrop) hide(null); }
+      function cleanup(){
+        document.removeEventListener('keydown', onKey);
+        backdrop.removeEventListener('click', onBackdrop);
+        if(okBtn) okBtn.onclick = null;
+        if(cancel) cancel.onclick = null;
+        if(close) close.onclick = null;
+      }
+
+      if(okBtn)   okBtn.onclick   = function(){ hide(String((input && input.value) || '')); };
+      if(cancel)  cancel.onclick  = function(){ hide(null); };
+      if(close)   close.onclick   = function(){ hide(null); };
+      document.addEventListener('keydown', onKey);
+      backdrop.addEventListener('click', onBackdrop);
+      show();
+    });
+  };
+</script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
 (function(){
@@ -820,6 +1058,113 @@ html { scroll-behavior: smooth; }
   }
 
   onReady(function(){
+
+// ===== Pengaturan Jajanan (Integrated inside onReady) =====
+(function(){
+  var JAJ_PRICE_DEFAULT = {
+    "Kopi Panas Original":3000,"Teh Panas":3000,"Es Teh":3000,"Kopi Kapal Api":3000,
+    "GoodDay Capuchino Panas":4000,"GoodDay Capuchino Dingin":5000,
+    "Luwak White Cofee Panas":4000,"Luwak White Cofee Dingin":5000,
+    "Torabika Moka Panas":4000,"Torabika Moka Dingin":5000,
+    "Marimas":2000,"Nutrisari":3000,
+    "Mie Pakai Telor (Free Nasi)":10000,"Mie Tanpa Telor (Free Nasi)":7000,"Pop Mie (Free Nasi)":8000
+  };
+  function loadJajananSettings(){
+    try {
+      var saved = JSON.parse(localStorage.getItem('urban_ps_jajanan_settings')||'{}');
+      return Object.assign({}, JAJ_PRICE_DEFAULT, saved);
+    } catch(e){
+      return Object.assign({}, JAJ_PRICE_DEFAULT);
+    }
+  }
+  function saveJajananSettings(newData){
+    localStorage.setItem('urban_ps_jajanan_settings', JSON.stringify(newData));
+  }
+  function showJajananSettingsModal(){
+    var modal = document.getElementById('jajananSettingsModal');
+    var backdrop = document.getElementById('popupBackdrop');
+    var tbody = document.querySelector('#jajananSettingsTable tbody');
+    tbody.innerHTML = '';
+    var data = loadJajananSettings();
+    Object.keys(data).forEach(function(name){
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td style="padding:4px"><input type="text" class="input" value="'+name+'"></td>'+
+                     '<td style="padding:4px"><input type="number" class="input mono" value="'+data[name]+'"></td>'+
+                     '<td style="padding:4px;text-align:center"><button class="btn warn remove-item" type="button">Hapus</button></td>';
+      tbody.appendChild(tr);
+    });
+    backdrop.hidden = false;
+    modal.hidden = false;
+    requestAnimationFrame(function(){
+      backdrop.classList.add('is-visible');
+      modal.classList.add('is-visible');
+    });
+    function onBackdropClick(e){ if(e.target === backdrop) hideModal(); }
+    backdrop.addEventListener('click', onBackdropClick, { once: true });
+  }
+  function hideModal(){
+    var modal = document.getElementById('jajananSettingsModal');
+    var backdrop = document.getElementById('popupBackdrop');
+    backdrop.classList.remove('is-visible');
+    modal.classList.remove('is-visible');
+    setTimeout(function(){
+      backdrop.hidden = true;
+      modal.hidden = true;
+    },200);
+  }
+  var __jajBtn = document.getElementById('jajananSettingsBtn');
+  if(__jajBtn){ __jajBtn.addEventListener('click', showJajananSettingsModal); }
+  window.showJajananSettingsModal = showJajananSettingsModal;
+  document.querySelector('#jajananSettingsModal [data-close]').addEventListener('click', hideModal);
+  document.querySelector('#jajananSettingsModal [data-cancel]').addEventListener('click', hideModal);
+  document.getElementById('addJajananItemBtn').addEventListener('click', function(){
+    var tbody = document.querySelector('#jajananSettingsTable tbody');
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="padding:4px"><input type="text" class="input" placeholder="Nama Jajanan"></td>'+
+                   '<td style="padding:4px"><input type="number" class="input mono" placeholder="Harga"></td>'+
+                   '<td style="padding:4px;text-align:center"><button class="btn warn remove-item" type="button">Hapus</button></td>';
+    tbody.appendChild(tr);
+  });
+  document.querySelector('#jajananSettingsTable').addEventListener('click', function(e){
+    if(e.target.classList.contains('remove-item')){
+      e.target.closest('tr').remove();
+    }
+  });
+  document.getElementById('saveJajananSettingsBtn').addEventListener('click', function(){
+    var tbody = document.querySelector('#jajananSettingsTable tbody');
+    var newData = {};
+    tbody.querySelectorAll('tr').forEach(function(tr){
+      var name = tr.querySelector('td:nth-child(1) input').value.trim();
+      var price = parseInt(tr.querySelector('td:nth-child(2) input').value)||0;
+      if(name) newData[name] = price;
+    });
+    saveJajananSettings(newData);
+    hideModal();
+    buildJajanan3x10();
+  });
+  // Override buildJajanan3x10 to use saved settings
+  var originalBuildJajanan3x10 = buildJajanan3x10;
+  buildJajanan3x10 = function(){
+    JAJ_PRICE = loadJajananSettings();
+    var tb = document.querySelector('#jajananTable3x10 tbody'); tb.innerHTML='';
+    var items = Object.keys(JAJ_PRICE);
+    for(var i=0;i<5;i++){
+      var tr=document.createElement('tr');
+      tr.innerHTML = '<td>'+(i+1)+'</td>' +
+        '<td><select class="select mini j3-jenis"><option value="">-</option>'+items.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
+        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+            '<input type="number" min="0" step="1" placeholder="0" class="input mono mini j3-qty"/>' +
+            '<input type="time" class="input mini j3-jam"/></div></td>' +
+        '<td><input type="number" min="0" step="100" placeholder="0" readonly class="input mono mini j3-harga"/></td>';
+      tb.appendChild(tr);
+    }
+    document.querySelectorAll('#jajananTable3x10 tbody tr').forEach(function(tr){
+      var sel=tr.querySelector('.j3-jenis'), qty=tr.querySelector('.j3-qty'), harga=tr.querySelector('.j3-harga');
+      function recalc(){ var unit=JAJ_PRICE[sel.value]||0; var q=parseInt(qty.value)||0; harga.value=unit*q; sumJajanan3x10(); }
+      sel.addEventListener('change', recalc); qty.addEventListener('input', recalc);
+    });
+  };
+})();
     // ===== Helpers
     function $(sel){ return document.querySelector(sel); }
     function $all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
@@ -829,6 +1174,23 @@ html { scroll-behavior: smooth; }
     function todayStr(){ var o=(new Date()).getTimezoneOffset(); var d=new Date(Date.now()-o*60000); return d.toISOString().slice(0,10); }
     function fmtIDR(n){ try { return (n||0).toLocaleString('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}); } catch(e){ return 'Rp '+String(n||0).replace(/\\B(?=(\\d{3})+(?!\\d))/g,'.'); } }
 
+
+    function setRangeControlsEnabled(isRange){
+      var ids = ['dateFrom','dateTo','rangeApply','rangeClear'];
+      ids.forEach(function(id){
+        var el = document.getElementById(id);
+        if(!el) return;
+        el.disabled = !isRange;
+        el.style.opacity = isRange ? '1' : '0.5';
+      });
+      if(!isRange){
+        var from = document.getElementById('dateFrom');
+        var to   = document.getElementById('dateTo');
+        if(from) from.value = '';
+        if(to)   to.value = '';
+        if(window.state) window.state.range = null;
+      }
+    }
     // ===== Theme Toggle (persist)
     var THEME_KEY = 'urban_ps_theme';
     function applyTheme(t){
@@ -853,16 +1215,48 @@ html { scroll-behavior: smooth; }
     function prettyMonth(ym){ var p=ym.split('-'); var d=new Date(+p[0],+p[1]-1,1); try{ return d.toLocaleDateString('id-ID',{month:'long',year:'numeric'}); }catch(e){ return ym; } }
     function buildMonthFilter(){
       var sel=$('#monthFilter'); var map={}, months=[];
-      for(var i=0;i<state.entries.length;i++){ var mk=monthKey(state.entries[i].date); if(mk && !map[mk]){ map[mk]=1; months.push(mk); } }
+      for(var i=0;i<state.entries.length;i++){ 
+        var mk=monthKey(state.entries[i].date); 
+        if(mk && !map[mk]){ map[mk]=1; months.push(mk); } 
+      }
       months.sort(); sel.innerHTML='';
-      var optAll=document.createElement('option'); optAll.value='ALL'; optAll.textContent='Semua Bulan'; sel.appendChild(optAll);
-      for(var j=0;j<months.length;j++){ var o=document.createElement('option'); o.value=months[j]; o.textContent=prettyMonth(months[j]); sel.appendChild(o); }
+      var optAll=document.createElement('option'); 
+      optAll.value='ALL'; 
+      optAll.textContent='Semua Bulan'; 
+      sel.appendChild(optAll);
+
+      for(var j=0;j<months.length;j++){ 
+        var o=document.createElement('option'); 
+        o.value=months[j]; 
+        o.textContent=prettyMonth(months[j]); 
+        sel.appendChild(o); 
+      }
+
+      // Append Rentang option at the bottom
+      var optRange=document.createElement('option'); 
+      optRange.value='RENTANG'; 
+      optRange.textContent='Rentang'; 
+      sel.appendChild(optRange);
+
       sel.value=state.filter;
+      // Append Rentang option
     }
 
     function filtered(){
-      var list = (state.filter==='ALL') ? state.entries.slice() : state.entries.filter(function(e){ return monthKey(e.date)===state.filter; });
-      if (state.range && (state.range.from || state.range.to)) {
+      var list;
+      if (state.filter === 'ALL') {
+        list = state.entries.slice();
+      } else if (state.filter === 'RENTANG') {
+        // If no range selected, return empty list immediately
+        if (!state.range || (!state.range.from && !state.range.to)) {
+          return [];
+        }
+        list = state.entries.slice();
+      } else {
+        list = state.entries.filter(function(e){ return monthKey(e.date) === state.filter; });
+      }
+
+      if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
         var from = state.range.from || '0000-01-01';
         var to   = state.range.to   || '9999-12-31';
         list = list.filter(function(e){
@@ -870,6 +1264,7 @@ html { scroll-behavior: smooth; }
           return d && d >= from && d <= to;
         });
       }
+
       return list;
     }
     function calcSums(list){
@@ -896,6 +1291,29 @@ html { scroll-behavior: smooth; }
       if(_ja) _ja.textContent = fmt(ja);
       if(_s) _s.textContent = fmt(s);
     }
+
+function scrollToTopMobile() {
+  try {
+    if (document.activeElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur();
+    }
+  } catch(e) {}
+  var header = document.querySelector('.header');
+  if (header && header.scrollIntoView) {
+    try { header.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch(e) {}
+  }
+  var root = document.scrollingElement || document.documentElement || document.body;
+  if (root && root.scrollTo) {
+    try { root.scrollTo(0, 0); } catch(e) {}
+    requestAnimationFrame(function(){
+      setTimeout(function(){
+        try { root.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { try { root.scrollTop = 0; } catch(_) {} }
+      }, 80);
+    });
+  } else {
+    try { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch(e) {}
+  }
+}
 
 
     // ====== Tables builders & sum
@@ -1223,7 +1641,7 @@ sumSewa3x10();
 var actionsRow = document.getElementById('formActions');
 if(actionsRow) actionsRow.classList.add('editing');
 if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
-window.scrollTo({top:0,behavior:'smooth'});
+scrollToTopMobile();
               };
             td.appendChild(edit);
             var sp=document.createElement('span'); sp.style.display='inline-block'; sp.style.width='6px'; td.appendChild(sp);
@@ -1241,10 +1659,56 @@ window.scrollTo({top:0,behavior:'smooth'});
       $('#sumSewa').textContent=fmtIDR(sums.sewa);
       $('#sumTotal').textContent=fmtIDR(sums.total);
 
-      var monthPick=(state.filter==='ALL')?monthKey(todayStr()):state.filter;
-      var monthList=state.entries.filter(function(x){ return monthKey(x.date)===monthPick; });
-      var monthSum=calcSums(monthList).total; var allSum=calcSums(state.entries).total;
-      $('#monthTotal').textContent=fmtIDR(monthSum); $('#allTotal').textContent=fmtIDR(allSum);
+      var monthSum;
+if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+    var from = state.range.from || '0000-01-01';
+    var to   = state.range.to   || '9999-12-31';
+    var rangeList = state.entries.filter(function(e){
+        var d = e.date || '';
+        return d && d >= from && d <= to;
+    });
+    monthSum = calcSums(rangeList).total;
+} else {
+    var monthPick = (state.filter==='ALL') ? monthKey(todayStr()) : state.filter;
+    var monthList = state.entries.filter(function(x){ return monthKey(x.date)===monthPick; });
+    monthSum = calcSums(monthList).total;
+} var allSum=calcSums(state.entries).total;
+      var _mt=$('#monthTotal'); if(_mt) _mt.textContent=fmtIDR(monthSum); var _at=$('#allTotal'); if(_at) _at.textContent=fmtIDR(allSum);
+      // Fill new footer cells inside History
+      var sm=document.getElementById('sumMonth'); if(sm) sm.textContent = fmtIDR(monthSum);
+      var sa=document.getElementById('sumAll'); if(sa) sa.textContent = fmtIDR(allSum);
+
+      var totalLabelEl = document.querySelector('#table tfoot tr.total-row td[colspan="5"]');
+      if (totalLabelEl) {
+        totalLabelEl.textContent = (state.filter === 'RENTANG') ? 'Total rentang' : 'Total bulan ini';
+      }
+
+      // Per-column month sums
+      var monthCols = calcSums(monthList);
+      var allCols = calcSums(state.entries);
+      var mapIds = {
+        'sumHarianMonth': monthCols.harian,
+        'sumJajananMonth': monthCols.jajanan,
+        'sumJasaMonth': monthCols.jasa,
+        'sumSewaMonth': monthCols.sewa,
+        'sumHarianAll': allCols.harian,
+        'sumJajananAll': allCols.jajanan,
+        'sumJasaAll': allCols.jasa,
+        'sumSewaAll': allCols.sewa
+      };
+      Object.keys(mapIds).forEach(function(id){
+        var el = document.getElementById(id);
+        if(el){ el.textContent = fmtIDR(mapIds[id]); }
+      });
+
+      var sm=document.getElementById('sumMonth'); if(sm) sm.textContent = fmtIDR(monthSum);
+      var sa=document.getElementById('sumAll'); if(sa) sa.textContent = fmtIDR(allSum);
+
+      var totalLabelEl = document.querySelector('#table tfoot tr.total-row td[colspan="5"]');
+      if (totalLabelEl) {
+        totalLabelEl.textContent = (state.filter === 'RENTANG') ? 'Total rentang' : 'Total bulan ini';
+      }
+
       if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
       try{ drawDailyGraph(); }catch(e){ /* ignore */ }
     }
@@ -1299,7 +1763,7 @@ if(actionsRow) actionsRow.classList.remove('editing');
     }
 
     // ===== CSV (aggregates only)
-    function exportCSV(){
+    window.exportCSV = function(){
       var header=['tanggal','harian','jajanan','jasa_aksesoris','sewa_ps','total','catatan'];
       var rows=state.entries.map(function(e){
         var tot=cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
@@ -1356,16 +1820,101 @@ document.getElementById('addBtn').addEventListener('click', async function(){
 
         ['harian','jajanan','jasa','sewa'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); }); });
     ['harian','jajanan','jasa','sewa','catatan'].forEach(function(id){ $('#'+id).addEventListener('keydown', function(e){ if(e.key==='Enter'){ addOrUpdateEntry(); }}); });
-    $('#monthFilter').addEventListener('change', function(e){ state.filter=e.target.value; render(); });
-    $('#exportBtn').addEventListener('click', exportCSV);
-    $('#importBtn').addEventListener('click', function(){ $('#fileInput').click(); });
-    $('#fileInput').addEventListener('change', function(e){ var f=e.target.files && e.target.files[0]; if(f) importCSV(f); e.target.value=''; });
-    $('#clearBtn').addEventListener('click', async function(){ if(await themedConfirm('Hapus SEMUA data?')){ state.entries=[]; save(); render(); await themedAlert('Semua data dihapus.'); } });
+    $('#monthFilter').addEventListener('change', function(e){
+      state.filter=e.target.value;
+      setRangeControlsEnabled(state.filter==='RENTANG');
+      render();
+    setRangeControlsEnabled(state.filter==='RENTANG');
+    });
+    
+    
+    $('#clearBtn').addEventListener('click', async function(){
+  // Password + confirm flow (theme-matched modal)
+  const ADMIN_PASSWORD = '707426';
+  var pwd = await themedPromptPassword({
+    title: 'Verifikasi Hapus Data',
+    placeholder: 'Password admin'
+  });
+  if (pwd === null) return; // closed/cancelled
+  if (pwd !== ADMIN_PASSWORD){
+    await themedAlert('Password salah. Aksi dibatalkan.');
+    return;
+  }
+  if (await themedConfirm('Hapus SEMUA data?')){
+    state.entries = [];
+    save();
+    render();
+    setRangeControlsEnabled(state.filter==='RENTANG');
+    await themedAlert('Semua data dihapus.');
+  }
+});
     document.addEventListener('click', function(e){ if(e.target && e.target.id === 'screenshotBtn'){ takeFullScreenshot(); } });
 
     
     
-    // Range filter events (custom date range)
+    
+
+// === Settings Modal Logic ===
+(function(){
+  var backdrop = document.getElementById('popupBackdrop');
+  var settingsModal = document.getElementById('settingsModal');
+
+  function showSettingsModal(){
+    backdrop.hidden = false;
+    settingsModal.hidden = false;
+    requestAnimationFrame(function(){
+      backdrop.classList.add('is-visible');
+      settingsModal.classList.add('is-visible');
+    });
+  }
+  function hideSettingsModal(){
+    backdrop.classList.remove('is-visible');
+    settingsModal.classList.remove('is-visible');
+    setTimeout(function(){
+      backdrop.hidden = true;
+      settingsModal.hidden = true;
+    }, 200);
+  }
+
+  document.getElementById('settingsBtn').addEventListener('click', function(){
+    showSettingsModal();
+
+    // Setup theme toggle button each time settings modal is opened
+    var themeBtnInSettings = document.getElementById('themeToggleInSettings');
+    if(themeBtnInSettings){
+      function updateThemeBtnText(){
+        var currentTheme = getTheme();
+        themeBtnInSettings.textContent = (currentTheme === 'light') ? '☀️ Terang' : '🌙 Gelap';
+      }
+      updateThemeBtnText();
+      themeBtnInSettings.onclick = function(){
+        var cur = getTheme();
+        setTheme(cur === 'light' ? 'dark' : 'light');
+        updateThemeBtnText();
+      };
+    }
+  });
+
+  // Close buttons inside modal
+  settingsModal.querySelectorAll('[data-close]').forEach(function(btn){
+    btn.addEventListener('click', hideSettingsModal);
+  });
+
+  // Navigate to Item Jajanan settings
+  document.getElementById('openJajananSettings').addEventListener('click', function(){
+    hideSettingsModal();
+    setTimeout(function(){
+      if (typeof showJajananSettingsModal === 'function') {
+        showJajananSettingsModal();
+      } else {
+        console.error('showJajananSettingsModal function not found.');
+      }
+    }, 220); // wait for animation
+  });
+})();
+
+
+// Range filter events (custom date range)
     ;(function(){
       var _from = document.getElementById('dateFrom');
       var _to = document.getElementById('dateTo');
@@ -1376,12 +1925,16 @@ document.getElementById('addBtn').addEventListener('click', async function(){
         var t = _to && _to.value ? _to.value : '';
         state.range = (f || t) ? {from:f, to:t} : null;
         render();
+    setRangeControlsEnabled(state.filter==='RENTANG');
+        try { drawDailyGraph(); } catch(e) {}
       }); }
       if(_clear){ _clear.addEventListener('click', function(){
         if(_from) _from.value='';
         if(_to) _to.value='';
         state.range = null;
         render();
+    setRangeControlsEnabled(state.filter==='RENTANG');
+        try { drawDailyGraph(); } catch(e) {}
       }); }
     })();
 
@@ -1565,6 +2118,7 @@ document.getElementById('addBtn').addEventListener('click', async function(){
 
     sumRincian(); sumJajanan3x10(); sumJasa2x5(); sumSewa3x10();
     render();
+    setRangeControlsEnabled(state.filter==='RENTANG');
 updateRecap();
 var actionsRow=document.getElementById('formActions');
 if(actionsRow) actionsRow.classList.remove('editing');
@@ -1589,164 +2143,182 @@ updateRecap();
       graphTooltip = div;
       return div;
     }
-    function getMonthlySeries(){
-      // Pick month based on current filter selection; if ALL, use current month of today.
-      var monthPick = (state.filter==='ALL') ? (new Date().toISOString().slice(0,7)) : state.filter;
-      var list = state.entries.filter(function(x){ return (x.date||'').slice(0,7) === monthPick; });
-      // Build a map date->total then expand all days in that month
-      var map = {};
-      list.forEach(function(e){
-        var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
-        map[e.date] = (map[e.date]||0) + tot;
-      });
-      var p = monthPick.split('-');
-      var y = +p[0], m = (+p[1])-1;
-      var first = new Date(y, m, 1);
-      var last = new Date(y, m+1, 0);
-      var data = [];
-      for(var d=1; d<=last.getDate(); d++){
-        var dt = new Date(y, m, d);
-        var iso = new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
-        data.push({date: iso, value: map[iso]||0});
-      }
-      return { month: monthPick, rows: data };
-    }
-    function drawDailyGraph(){
-      graphCanvas = document.getElementById('dailyGraph');
-      if(!graphCanvas) return;
-      var rect = graphCanvas.getBoundingClientRect();
-      // Set width to device pixel ratio for sharpness
-      var dpr = window.devicePixelRatio || 1;
-      var cssW = graphCanvas.clientWidth || rect.width || 800;
-      var cssH = graphCanvas.clientHeight || 260;
-      graphCanvas.width = Math.round(cssW * dpr);
-      graphCanvas.height = Math.round(cssH * dpr);
-      graphCanvas.style.width = cssW + 'px';
-      graphCanvas.style.height = cssH + 'px';
-      graphCtx = graphCanvas.getContext('2d');
-      graphCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      var series = getMonthlySeries();
-      var data = series.rows;
-      var caption = document.getElementById('graphCaption');
-      if(caption){
-        try {
-          var d = new Date(series.month+'-01');
-          caption.textContent = 'Periode: ' + d.toLocaleDateString('id-ID',{month:'long',year:'numeric'}) + ' • ' + (data.length) + ' hari';
-        }catch(e){ caption.textContent = 'Periode: ' + series.month; }
-      }
-
-      // Compute bounds
-      var maxV = 0;
-      data.forEach(function(r){ if(r.value>maxV) maxV=r.value; });
-      var padL = 48, padR = 12, padT = 16, padB = 42; // space for axes/labels
-      var W = (graphCanvas.clientWidth||cssW), H = (graphCanvas.clientHeight||cssH);
-      var plotW = Math.max(10, W - padL - padR);
-      var plotH = Math.max(10, H - padT - padB);
-      function xAt(i){ return padL + (plotW * (i/(Math.max(1,data.length-1)))) }
-      function yAt(v){ return padT + plotH - (maxV>0 ? (v/maxV)*plotH : 0); }
-
-      // Clear
-      graphCtx.clearRect(0,0,W,H);
-
-      // Axes
-      graphCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--ring') || '#334';
-      graphCtx.lineWidth = 1;
-      graphCtx.beginPath();
-      graphCtx.moveTo(padL, padT);
-      graphCtx.lineTo(padL, padT+plotH);
-      graphCtx.lineTo(padL+plotW, padT+plotH);
-      graphCtx.stroke();
-
-      // Y ticks (4)
-      graphCtx.font = '12px Segoe UI, Roboto, Arial, sans-serif';
-      graphCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#889';
-      var steps = 4;
-      for(var s=0; s<=steps; s++){
-        var val = Math.round((maxV * s)/steps);
-        var y = yAt(val);
-        graphCtx.beginPath();
-        graphCtx.moveTo(padL, y);
-        graphCtx.lineTo(padL+plotW, y);
-        graphCtx.globalAlpha = 0.2;
-        graphCtx.stroke();
-        graphCtx.globalAlpha = 1;
-        graphCtx.fillText((val||0).toLocaleString('id-ID'), 6, y+4);
-      }
-
-      // X labels: show every ~7 days to avoid clutter
-      for(var i=0;i<data.length;i++){
-        var dlab = data[i].date.slice(-2);
-        if(i===0 || i===data.length-1 || i%7===0){
-          var x = xAt(i);
-          graphCtx.fillText(dlab, x-6, padT+plotH+16);
-        }
-      }
-
-
-      // Draw line segments with threshold colors
-      for (var i=1; i<data.length; i++){
-        var prev = data[i-1];
-        var curr = data[i];
-        var x1 = xAt(i-1), y1 = yAt(prev.value);
-        var x2 = xAt(i), y2 = yAt(curr.value);
-        var grad = graphCtx.createLinearGradient(x1, y1, x2, y2);
-        // Use solid color for now
-        graphCtx.strokeStyle = colorForValue(curr.value);
-        graphCtx.lineWidth = 2;
-        graphCtx.beginPath();
-        graphCtx.moveTo(x1, y1);
-        graphCtx.lineTo(x2, y2);
-        graphCtx.stroke();
-      }
     
-
-      // Draw points with threshold colors + labels
-      graphCtx.textAlign = 'center';
-      graphCtx.textBaseline = 'bottom';
-      data.forEach(function(r, i){
-        var x = xAt(i), y = yAt(r.value);
-        var c = colorForValue(r.value);
-        graphCtx.beginPath();
-        graphCtx.arc(x, y, 4, 0, Math.PI*2);
-        graphCtx.fillStyle = c;
-        graphCtx.fill();
-              // (Value labels removed to avoid clutter on x-axis)
+function getMonthlySeries(){
+  // RENTANG mode → build directly from range
+  if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+    var from = state.range.from || '0000-01-01';
+    var to   = state.range.to   || '9999-12-31';
+    var list = state.entries.filter(function(e){
+      var d = e.date || '';
+      return d && d >= from && d <= to;
     });
 
-      // Hover tooltip
-      var pts = data.map(function(r,i){ return {i:i, x:xAt(i), y:yAt(r.value), v:r.value, d:r.date}; });
-      ensureTooltip();
-      function onMove(ev){
-        var rect2 = graphCanvas.getBoundingClientRect();
-        var mx = ev.clientX - rect2.left;
-        var my = ev.clientY - rect2.top;
-        var nearest = null, dmin = 16;
-        for(var k=0;k<pts.length;k++){
-          var dx = pts[k].x - mx, dy = pts[k].y - my;
-          var dd = Math.hypot(dx,dy);
-          if(dd < dmin){ dmin = dd; nearest = pts[k]; }
-        }
-        if(nearest){
-          graphCanvas.style.cursor = 'pointer';
-          var strDate = nearest.d;
-          try {
-            var nd = new Date(nearest.d);
-            strDate = nd.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
-          } catch(e){}
-          graphTooltip.innerHTML = '<b>'+strDate+'</b><br>'+ fmtIDR(nearest.v);
-          graphTooltip.style.left = (rect2.left + nearest.x) + 'px';
-          graphTooltip.style.top  = (rect2.top + nearest.y - 12) + 'px';
-          graphTooltip.style.display = 'block';
-        }else{
-          graphCanvas.style.cursor = 'default';
-          graphTooltip.style.display = 'none';
-        }
-      }
-      function onLeave(){ if(graphTooltip) graphTooltip.style.display='none'; }
-      graphCanvas.onmousemove = onMove;
-      graphCanvas.onmouseleave = onLeave;
+    // Map date → total
+    var map = {};
+    list.forEach(function(e){
+      var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+      map[e.date] = (map[e.date]||0) + tot;
+    });
+
+    // Generate all days from 'from' to 'to'
+    var data = [];
+    var start = new Date(from);
+    var end = new Date(to);
+    for (var dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+      var iso = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+      data.push({date: iso, value: map[iso]||0});
     }
+    return { month: from + ' s/d ' + to, rows: data };
+  }
+
+  // fallback to monthly behaviour
+  var monthPick = (state.filter==='ALL') ? (new Date().toISOString().slice(0,7)) : state.filter;
+  var list = state.entries.filter(function(x){ return (x.date||'').slice(0,7) === monthPick; });
+  var map = {};
+  list.forEach(function(e){
+    var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+    map[e.date] = (map[e.date]||0) + tot;
+  });
+  var p = monthPick.split('-');
+  var y = +p[0], m = (+p[1])-1;
+  var last = new Date(y, m+1, 0);
+  var data = [];
+  for(var d=1; d<=last.getDate(); d++){
+    var dt = new Date(y, m, d);
+    var iso = new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    data.push({date: iso, value: map[iso]||0});
+  }
+  return { month: monthPick, rows: data };
+}
+
+
+function drawDailyGraph(){
+  graphCanvas = document.getElementById('dailyGraph');
+  if(!graphCanvas) return;
+  var rect = graphCanvas.getBoundingClientRect();
+  var dpr = window.devicePixelRatio || 1;
+  var cssW = graphCanvas.clientWidth || rect.width || 800;
+  var cssH = graphCanvas.clientHeight || 260;
+  graphCanvas.width = Math.round(cssW * dpr);
+  graphCanvas.height = Math.round(cssH * dpr);
+  graphCanvas.style.width = cssW + 'px';
+  graphCanvas.style.height = cssH + 'px';
+  graphCtx = graphCanvas.getContext('2d');
+  graphCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  var data = [];
+  var caption = document.getElementById('graphCaption');
+
+  if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+    var from = state.range.from || '0000-01-01';
+    var to   = state.range.to   || '9999-12-31';
+    var list = state.entries.filter(function(e){
+      var d = e.date || '';
+      return d && d >= from && d <= to;
+    });
+    var map = {};
+    list.forEach(function(e){
+      var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+      map[e.date] = (map[e.date]||0) + tot;
+    });
+    var start = new Date(from);
+    var end = new Date(to);
+    for (var dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+      var iso = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+      data.push({date: iso, value: map[iso]||0});
+    }
+    if(caption) caption.textContent = 'Periode: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
+  } else {
+    // Month mode
+    var monthPick = (state.filter==='ALL') ? (new Date().toISOString().slice(0,7)) : state.filter;
+    var list = state.entries.filter(function(x){ return (x.date||'').slice(0,7) === monthPick; });
+    var map = {};
+    list.forEach(function(e){
+      var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+      map[e.date] = (map[e.date]||0) + tot;
+    });
+    var p = monthPick.split('-');
+    var y = +p[0], m = (+p[1])-1;
+    var last = new Date(y, m+1, 0);
+    for(var d=1; d<=last.getDate(); d++){
+      var dt = new Date(y, m, d);
+      var iso = new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+      data.push({date: iso, value: map[iso]||0});
+    }
+    if(caption){
+      try {
+        var d = new Date(monthPick+'-01');
+        caption.textContent = 'Periode: ' + d.toLocaleDateString('id-ID',{month:'long',year:'numeric'}) + ' • ' + data.length + ' hari';
+      }catch(e){ caption.textContent = 'Periode: ' + monthPick; }
+    }
+  }
+
+  var maxV = 0;
+  data.forEach(function(r){ if(r.value>maxV) maxV=r.value; });
+  var padL = 48, padR = 12, padT = 16, padB = 42;
+  var W = (graphCanvas.clientWidth||cssW), H = (graphCanvas.clientHeight||cssH);
+  var plotW = Math.max(10, W - padL - padR);
+  var plotH = Math.max(10, H - padT - padB);
+  function xAt(i){ return padL + (plotW * (i/(Math.max(1,data.length-1)))) }
+  function yAt(v){ return padT + plotH - (maxV>0 ? (v/maxV)*plotH : 0); }
+
+  graphCtx.clearRect(0,0,W,H);
+  graphCtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--ring') || '#334';
+  graphCtx.lineWidth = 1;
+  graphCtx.beginPath();
+  graphCtx.moveTo(padL, padT);
+  graphCtx.lineTo(padL, padT+plotH);
+  graphCtx.lineTo(padL+plotW, padT+plotH);
+  graphCtx.stroke();
+
+  graphCtx.font = '12px Segoe UI, Roboto, Arial, sans-serif';
+  graphCtx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--muted') || '#889';
+  var steps = 4;
+  for(var s=0; s<=steps; s++){
+    var val = Math.round((maxV * s)/steps);
+    var y = yAt(val);
+    graphCtx.beginPath();
+    graphCtx.moveTo(padL, y);
+    graphCtx.lineTo(padL+plotW, y);
+    graphCtx.globalAlpha = 0.2;
+    graphCtx.stroke();
+    graphCtx.globalAlpha = 1;
+    graphCtx.fillText((val||0).toLocaleString('id-ID'), 6, y+4);
+  }
+
+  for(var i=0;i<data.length;i++){
+    var dlab = data[i].date.slice(-2);
+    if(i===0 || i===data.length-1 || i%Math.ceil(data.length/6)===0){
+      var x = xAt(i);
+      graphCtx.fillText(dlab, x-6, padT+plotH+16);
+    }
+  }
+
+  for (var i=1; i<data.length; i++){
+    var prev = data[i-1];
+    var curr = data[i];
+    var x1 = xAt(i-1), y1 = yAt(prev.value);
+    var x2 = xAt(i), y2 = yAt(curr.value);
+    graphCtx.strokeStyle = colorForValue(curr.value);
+    graphCtx.lineWidth = 2;
+    graphCtx.beginPath();
+    graphCtx.moveTo(x1, y1);
+    graphCtx.lineTo(x2, y2);
+    graphCtx.stroke();
+  }
+
+  graphCtx.textAlign = 'center';
+  graphCtx.textBaseline = 'bottom';
+  data.forEach(function(r, i){
+    var x = xAt(i), y = yAt(r.value);
+    var c = colorForValue(r.value);
+    graphCtx.beginPath();
+    graphCtx.arc(x, y, 4, 0, Math.PI*2);
+    graphCtx.fillStyle = c;
+    graphCtx.fill();
+  });
+}
 
     function saveGraphAsImage(){
       var cvs = document.getElementById('dailyGraph');
@@ -1782,6 +2354,142 @@ updateRecap();
 
   });
 })();
+
+
+
+
+
+// === Export Data Sub-menu ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id === "openExportDataSettings"){
+        var backdrop = document.getElementById('popupBackdrop');
+        var modal = document.getElementById('exportDataSettingsModal');
+        backdrop.hidden = false;
+        modal.hidden = false;
+        requestAnimationFrame(function(){
+            backdrop.classList.add('is-visible');
+            modal.classList.add('is-visible');
+        });
+    }
+    if(e.target && e.target.id === "exportCSVBtn"){
+        try { exportCSV(); } catch(err){ themedAlert("Gagal ekspor CSV: " + err.message); }
+    }
+    if(e.target && e.target.id === "importCSVBtn"){
+        var fileInput = document.getElementById('fileInput');
+        if(fileInput) fileInput.click();
+    }
+});
+
+
+// === Export Data Sub-menu ===
+(function(){
+    var backdrop = document.getElementById('popupBackdrop');
+    var modal = document.getElementById('exportDataSettingsModal');
+
+    document.addEventListener("click", function(e){
+        if(e.target && e.target.id === "openExportDataSettings"){
+            backdrop.hidden = false;
+            modal.hidden = false;
+            requestAnimationFrame(function(){
+                backdrop.classList.add('is-visible');
+                modal.classList.add('is-visible');
+            });
+        }
+        if(e.target && e.target.id === "exportCSVBtn"){
+            try { exportCSV(); } catch(err){ themedAlert("Gagal ekspor CSV: " + err.message); }
+        }
+    });
+
+    if(modal){
+        modal.querySelectorAll('[data-close]').forEach(function(btn){
+            btn.addEventListener('click', function(){
+                backdrop.classList.remove('is-visible');
+                modal.classList.remove('is-visible');
+                setTimeout(function(){
+                    backdrop.hidden = true;
+                    modal.hidden = true;
+                }, 200);
+            });
+        });
+    }
+})();
+
+// === Event delegation for Backup & Restore ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id === "backupDataBtn"){
+        try {
+            let allData = {};
+            for(let i = 0; i < localStorage.length; i++){
+                let key = localStorage.key(i);
+                allData[key] = localStorage.getItem(key);
+            }
+            let blob = new Blob([JSON.stringify(allData, null, 2)], {type: "application/json"});
+            let url = URL.createObjectURL(blob);
+            let a = document.createElement("a");
+            a.href = url;
+            let now = new Date();
+            let pad = function(n){return (n<10?'0':'')+n;};
+            a.download = "urban_ps_backup_" + now.getFullYear() + "-" + pad(now.getMonth()+1) + "-" + pad(now.getDate()) + ".json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch(err){
+            themedAlert("Gagal backup: " + err.message);
+        }
+    }
+
+    if(e.target && e.target.id === "restoreDataBtn"){
+        var inputEl = document.getElementById("restoreFileInput");
+        if(inputEl) inputEl.click();
+    }
+});
+
+document.addEventListener("change", function(e){
+    if(e.target && e.target.id === "restoreFileInput"){
+        let file = e.target.files[0];
+        if(!file) return;
+        let reader = new FileReader();
+        reader.onload = function(evt){
+            try {
+                let data = JSON.parse(evt.target.result);
+                for(let key in data){
+                    localStorage.setItem(key, data[key]);
+                }
+                themedAlert("Data berhasil direstore. Halaman akan dimuat ulang.", {title: "Restore Berhasil"}).then(function(){
+                    location.reload();
+                });
+            } catch(err){
+                themedAlert("Gagal restore: " + err.message);
+            }
+        };
+        reader.readAsText(file);
+    }
+});
+
+
+// === Global delegation for closing Export Data modal (returns to Settings modal) ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-close")){
+        var exportModal = e.target.closest("#exportDataSettingsModal");
+        var backdrop = document.getElementById("popupBackdrop");
+        var settingsModal = document.getElementById("settingsModal");
+        if(exportModal){
+            exportModal.classList.remove("is-visible");
+            setTimeout(function(){
+                exportModal.hidden = true;
+                if(settingsModal){
+                    settingsModal.hidden = false;
+                    requestAnimationFrame(function(){
+                        backdrop.classList.add('is-visible');
+                        settingsModal.classList.add('is-visible');
+                    });
+                }
+            }, 200);
+        }
+    }
+});
+
 </script>
 <!-- === Themed Popups (Alert & Confirm) === -->
 <div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
@@ -1810,6 +2518,84 @@ updateRecap();
 </div>
 </div>
 </div>
+<!-- Themed Password Modal -->
+<div class="modal" hidden="" id="themedPassword">
+<div>
+<div class="modal-header">
+<div class="modal-title">Verifikasi</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body">
+<label class="mini subtle" for="pwdInput">Masukkan password untuk melanjutkan</label>
+<input autocomplete="current-password" class="input" id="pwdInput" placeholder="Password admin" type="password"/>
+</div>
+<div class="modal-footer">
+<button class="btn" data-cancel="">Batal</button>
+<button class="btn primary" data-ok="">OK</button>
+</div>
+</div>
+</div>
 <!-- === /Themed Popups === -->
+<!-- Main Settings Modal -->
+<div class="modal" hidden="" id="settingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Pengaturan</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<span>Mode Tema</span>
+<button class="btn" id="themeToggleInSettings">🌙 Gelap</button>
+</div>
+<button class="btn" id="openJajananSettings">🍿 Item Jajanan</button>
+<button class="btn" id="backupDataBtn">💾 Backup Data</button>
+<button class="btn" id="restoreDataBtn">📂 Restore Data</button>
+<button class="btn" id="openExportDataSettings">📤 Export Data</button>
+<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+<!-- In future you can add more sub-settings here -->
+</div>
+<div class="modal-footer">
+<button class="btn" data-close="">Batal</button>
+</div>
+</div>
+</div>
+<!-- Export Data Modal -->
+<div class="modal" hidden="" id="exportDataSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Export Data</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
+<button class="btn" id="exportCSVBtn">📄 Ekspor CSV</button>
+</div>
+<div class="modal-footer">
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<!-- Pengaturan Jajanan Modal -->
+<div class="modal" hidden="" id="jajananSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Pengaturan Jajanan</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body">
+<table id="jajananSettingsTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead>
+<tr><th style="text-align:left;padding:6px">Nama Jajanan</th><th style="text-align:left;padding:6px">Harga (Rp)</th><th style="padding:6px">Aksi</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJajananItemBtn" type="button">+ Tambah Item</button>
+</div>
+<div class="modal-footer">
+<button class="btn" data-cancel="">Batal</button>
+<button class="btn primary" id="saveJajananSettingsBtn">Simpan</button>
+</div>
+</div>
+</div>
 </body>
 </html>
