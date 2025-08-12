@@ -653,6 +653,67 @@ html { scroll-behavior: smooth; }
   border-bottom: 1px solid var(--ring);
 }
 </style>
+
+<style>
+#popupBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 1000;
+}
+#popupBackdrop.is-visible {
+    opacity: 1;
+}
+.modal {
+    z-index: 1001;
+}
+</style>
+
+
+
+
+
+
+
+<style>
+.settings-sidebar .btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    text-align: left;
+    padding: 12px 18px;
+    border: 2px solid var(--ring);
+    border-radius: 8px;
+    background: var(--card2);
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+.settings-sidebar .btn span.emoji {
+    flex-shrink: 0;
+    font-size: 18px;
+    line-height: 1;
+}
+.settings-sidebar .btn:hover {
+    background: var(--hover);
+}
+.settings-sidebar .btn.active {
+    background: #1C308A;
+    color: #fff;
+    border-color: #1C308A;
+}
+</style>
+
+
+
+
+
+
 </head>
 <body>
 <div class="container">
@@ -662,7 +723,7 @@ html { scroll-behavior: smooth; }
 <div class="subtitle">URBAN PlayStation Lampung 🎮</div>
 </div>
 <div class="row toolbar-row">
-<button class="btn" id="themeBtn" title="Ganti tema">🌙 Gelap</button>
+<button class="btn" id="themeBtn" title="Ganti tema"><span class="emoji">🌙</span>Gelap</button>
 <button class="btn" id="screenshotBtn">Screenshot</button>
 
 <button class="btn" id="settingsBtn">⚙ Pengaturan</button>
@@ -2359,6 +2420,119 @@ function drawDailyGraph(){
 
 
 
+
+// === Backup & Restore Data Sub-menu ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id === "openBackupRestoreSettings"){
+        var backdrop = document.getElementById('popupBackdrop');
+        var modal = document.getElementById('backupRestoreSettingsModal');
+        backdrop.hidden = false;
+        modal.hidden = false;
+        requestAnimationFrame(function(){
+            backdrop.classList.add('is-visible');
+            modal.classList.add('is-visible');
+        });
+    }
+});
+
+
+// === Global delegation for closing Backup & Restore Data modal (returns to Settings modal) ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-close")){
+        var backupModal = e.target.closest("#backupRestoreSettingsModal");
+        var backdrop = document.getElementById("popupBackdrop");
+        var settingsModal = document.getElementById("settingsModal");
+        if(backupModal){
+            backupModal.classList.remove("is-visible");
+            setTimeout(function(){
+                backupModal.hidden = true;
+                if(settingsModal){
+                    settingsModal.hidden = false;
+                    requestAnimationFrame(function(){
+                        backdrop.classList.add('is-visible');
+                        settingsModal.classList.add('is-visible');
+                    });
+                } else {
+                    backdrop.hidden = true;
+                }
+            }, 200);
+        }
+    }
+});
+
+
+// === Settings Modal Tab Switch ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-settings-tab")){
+        var target = e.target.getAttribute("data-settings-tab");
+        document.querySelectorAll("#settingsContentArea .settings-tab").forEach(function(tab){
+            tab.hidden = (tab.getAttribute("data-tab") !== target);
+        });
+    }
+});
+
+
+
+
+// === Open Rincian Table Sub-Modals without hiding main backdrop ===
+document.addEventListener("click", function(e){
+    function openSubModal(id){
+        var modal = document.getElementById(id);
+        if(modal){
+            modal.hidden = false;
+            requestAnimationFrame(function(){
+                modal.classList.add('is-visible');
+            });
+        }
+    }
+    if(e.target && e.target.id === "openJenisPSHarianSettings"){
+        openSubModal("jenisPSHarianSettingsModal");
+    }
+    if(e.target && e.target.id === "openJasaAksesorisSettings"){
+        openSubModal("jasaAksesorisSettingsModal");
+    }
+    if(e.target && e.target.id === "openJenisPSSewaSettings"){
+        openSubModal("jenisPSSewaSettingsModal");
+    }
+});
+
+// === Close only sub-modals, keep main backdrop active ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-close")){
+        var modal = e.target.closest(".modal");
+        if(modal && modal.id !== "settingsModal"){ // avoid closing settings main modal here
+            modal.classList.remove("is-visible");
+            setTimeout(function(){
+                modal.hidden = true;
+            }, 200);
+        }
+    }
+});
+
+
+// === Toggle active state on sidebar buttons ===
+document.querySelectorAll('.settings-sidebar .btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        document.querySelectorAll('.settings-sidebar .btn').forEach(function(b){
+            b.classList.remove('active');
+        });
+        btn.classList.add('active');
+    });
+});
+
+
+// === Integrate active state with tab switching ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-settings-tab")){
+        // Remove active class from all sidebar buttons
+        document.querySelectorAll('.settings-sidebar .btn').forEach(function(b){
+            b.classList.remove('active');
+        });
+        // Add active class to clicked button
+        e.target.classList.add('active');
+    }
+});
+
 // === Export Data Sub-menu ===
 document.addEventListener("click", function(e){
     if(e.target && e.target.id === "openExportDataSettings"){
@@ -2380,6 +2554,119 @@ document.addEventListener("click", function(e){
     }
 });
 
+
+
+// === Backup & Restore Data Sub-menu ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.id === "openBackupRestoreSettings"){
+        var backdrop = document.getElementById('popupBackdrop');
+        var modal = document.getElementById('backupRestoreSettingsModal');
+        backdrop.hidden = false;
+        modal.hidden = false;
+        requestAnimationFrame(function(){
+            backdrop.classList.add('is-visible');
+            modal.classList.add('is-visible');
+        });
+    }
+});
+
+
+// === Global delegation for closing Backup & Restore Data modal (returns to Settings modal) ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-close")){
+        var backupModal = e.target.closest("#backupRestoreSettingsModal");
+        var backdrop = document.getElementById("popupBackdrop");
+        var settingsModal = document.getElementById("settingsModal");
+        if(backupModal){
+            backupModal.classList.remove("is-visible");
+            setTimeout(function(){
+                backupModal.hidden = true;
+                if(settingsModal){
+                    settingsModal.hidden = false;
+                    requestAnimationFrame(function(){
+                        backdrop.classList.add('is-visible');
+                        settingsModal.classList.add('is-visible');
+                    });
+                } else {
+                    backdrop.hidden = true;
+                }
+            }, 200);
+        }
+    }
+});
+
+
+// === Settings Modal Tab Switch ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-settings-tab")){
+        var target = e.target.getAttribute("data-settings-tab");
+        document.querySelectorAll("#settingsContentArea .settings-tab").forEach(function(tab){
+            tab.hidden = (tab.getAttribute("data-tab") !== target);
+        });
+    }
+});
+
+
+
+
+// === Open Rincian Table Sub-Modals without hiding main backdrop ===
+document.addEventListener("click", function(e){
+    function openSubModal(id){
+        var modal = document.getElementById(id);
+        if(modal){
+            modal.hidden = false;
+            requestAnimationFrame(function(){
+                modal.classList.add('is-visible');
+            });
+        }
+    }
+    if(e.target && e.target.id === "openJenisPSHarianSettings"){
+        openSubModal("jenisPSHarianSettingsModal");
+    }
+    if(e.target && e.target.id === "openJasaAksesorisSettings"){
+        openSubModal("jasaAksesorisSettingsModal");
+    }
+    if(e.target && e.target.id === "openJenisPSSewaSettings"){
+        openSubModal("jenisPSSewaSettingsModal");
+    }
+});
+
+// === Close only sub-modals, keep main backdrop active ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-close")){
+        var modal = e.target.closest(".modal");
+        if(modal && modal.id !== "settingsModal"){ // avoid closing settings main modal here
+            modal.classList.remove("is-visible");
+            setTimeout(function(){
+                modal.hidden = true;
+            }, 200);
+        }
+    }
+});
+
+
+// === Toggle active state on sidebar buttons ===
+document.querySelectorAll('.settings-sidebar .btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+        document.querySelectorAll('.settings-sidebar .btn').forEach(function(b){
+            b.classList.remove('active');
+        });
+        btn.classList.add('active');
+    });
+});
+
+
+// === Integrate active state with tab switching ===
+document.addEventListener("click", function(e){
+    if(e.target && e.target.hasAttribute("data-settings-tab")){
+        // Remove active class from all sidebar buttons
+        document.querySelectorAll('.settings-sidebar .btn').forEach(function(b){
+            b.classList.remove('active');
+        });
+        // Add active class to clicked button
+        e.target.classList.add('active');
+    }
+});
 
 // === Export Data Sub-menu ===
 (function(){
@@ -2490,6 +2777,35 @@ document.addEventListener("click", function(e){
     }
 });
 
+
+// === Focus Trap for Modals ===
+function trapFocus(modal) {
+  const focusableEls = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (!focusableEls.length) return;
+  const firstEl = focusableEls[0];
+  const lastEl = focusableEls[focusableEls.length - 1];
+  modal.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) { // Shift + Tab
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else { // Tab
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    }
+  });
+}
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('transitionend', () => {
+    if (!modal.hidden) trapFocus(modal);
+  });
+});
+
 </script>
 <!-- === Themed Popups (Alert & Confirm) === -->
 <div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
@@ -2544,16 +2860,119 @@ document.addEventListener("click", function(e){
 <button class="modal-close" data-close="">✕</button>
 </div>
 <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
-<div style="display:flex;align-items:center;justify-content:space-between;">
-<span>Mode Tema</span>
-<button class="btn" id="themeToggleInSettings">🌙 Gelap</button>
+<style>
+.settings-layout { display:flex; gap:16px; min-height:240px; }
+.settings-sidebar { flex:0 0 200px; background:var(--card2); border:1px solid var(--ring); border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px; }
+.settings-sidebar .btn { justify-content:flex-start; }
+.settings-content { flex:1; display:flex; flex-direction:column; gap:12px; }
+.settings-tab[hidden] { display:none !important; }
+@media(max-width:600px){
+  .settings-layout { flex-direction:column; }
+  .settings-sidebar { flex:0 0 auto; }
+}
+
+/* === UX ENHANCEMENTS === */
+/* Hover & Active Buttons */
+.btn {
+  transition: transform 0.15s ease, filter 0.15s ease, background-color 0.25s ease;
+}
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Hover row on table */
+table tbody tr {
+  transition: background-color 0.2s ease;
+}
+table tbody tr:hover {
+  background-color: rgba(110,168,254,0.08);
+}
+
+/* Sticky header for scrollable tables */
+table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  z-index: 2;
+}
+
+/* Smooth theme transition */
+body, .card, .subcard, .modal > * {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Modal open animation */
+.modal > * {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.modal.is-visible > * {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* Focus-visible styles for accessibility */
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(110,168,254,0.5);
+}
+
+</style>
+<div class="settings-layout">
+  <!-- Sidebar kiri -->
+  <div class="settings-sidebar">
+    <button class="btn" data-settings-tab="theme"><span class="emoji">⚙️</span> General</button>
+    <button class="btn" data-settings-tab="jajanan"><span class="emoji">📝</span>Edit Rincian</button>
+    <button class="btn" data-settings-tab="backup"><span class="emoji">📦</span>Backup & Restore Data</button>
+    <button class="btn" data-settings-tab="export"><span class="emoji">📤</span>Export Data</button>
+  </div>
+  <!-- Konten kanan -->
+  <div class="settings-content" id="settingsContentArea">
+    <!-- Tab: Theme -->
+    <div class="settings-tab" data-tab="theme">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span>Mode Tema</span>
+        <button class="btn" id="themeToggleInSettings"><span class="emoji">🌙</span>Gelap</button>
+      </div>
+    </div>
+    <!-- Tab: Jajanan -->
+    
+<div class="settings-tab" data-tab="jajanan" hidden>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
+    <button class="btn" id="openJajananSettings">Item Jajanan</button>
+    <button class="btn" id="openJasaAksesorisSettings">Item Jasa & Aksesori</button>
+    <button class="btn" id="openJenisPSSewaSettings">Item Jenis PS Pemasukan Sewa PS</button>
+  </div>
 </div>
-<button class="btn" id="openJajananSettings">🍿 Item Jajanan</button>
-<button class="btn" id="backupDataBtn">💾 Backup Data</button>
-<button class="btn" id="restoreDataBtn">📂 Restore Data</button>
-<button class="btn" id="openExportDataSettings">📤 Export Data</button>
-<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-<!-- In future you can add more sub-settings here -->
+
+    <!-- Tab: Backup & Restore -->
+    <div class="settings-tab" data-tab="backup" hidden>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
+        <button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
+        <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+      </div>
+    </div>
+    <!-- Tab: Export -->
+    <div class="settings-tab" data-tab="export" hidden>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 <div class="modal-footer">
 <button class="btn" data-close="">Batal</button>
@@ -2561,6 +2980,24 @@ document.addEventListener("click", function(e){
 </div>
 </div>
 <!-- Export Data Modal -->
+<!-- Backup & Restore Data Modal -->
+<div class="modal" hidden id="backupRestoreSettingsModal">
+  <div>
+    <div class="modal-header">
+      <div class="modal-title">Backup & Restore Data</div>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
+      <button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
+      <button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
+      <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-close>Tutup</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal" hidden="" id="exportDataSettingsModal">
 <div>
 <div class="modal-header">
@@ -2568,7 +3005,7 @@ document.addEventListener("click", function(e){
 <button class="modal-close" data-close="">✕</button>
 </div>
 <div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
-<button class="btn" id="exportCSVBtn">📄 Ekspor CSV</button>
+<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
 </div>
 <div class="modal-footer">
 <button class="btn" data-close="">Tutup</button>
@@ -2597,5 +3034,69 @@ document.addEventListener("click", function(e){
 </div>
 </div>
 </div>
+
+<!-- Jenis PS Harian Modal -->
+<div class="modal" hidden id="jenisPSHarianSettingsModal">
+  <div>
+    <div class="modal-header">
+      <div class="modal-title">Item Jenis PS Pemasukan Harian</div>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow:auto;">
+      <table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+        <thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <button class="btn" id="addJenisPSHarianBtn" type="button">+ Tambah Jenis PS</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="saveJenisPSHarianBtn">Simpan</button>
+      <button class="btn" data-close>Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Jasa & Aksesoris Modal -->
+<div class="modal" hidden id="jasaAksesorisSettingsModal">
+  <div>
+    <div class="modal-header">
+      <div class="modal-title">Item Jasa & Aksesoris</div>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow:auto;">
+      <table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+        <thead><tr><th>Nama Jasa/Aksesoris</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <button class="btn" id="addJasaAksesorisBtn" type="button">+ Tambah Jasa/Aksesoris</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="saveJasaAksesorisBtn">Simpan</button>
+      <button class="btn" data-close>Tutup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Jenis PS Sewa Modal -->
+<div class="modal" hidden id="jenisPSSewaSettingsModal">
+  <div>
+    <div class="modal-header">
+      <div class="modal-title">Item Jenis PS Pemasukan Sewa PS</div>
+      <button class="modal-close" data-close>✕</button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow:auto;">
+      <table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+        <thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <button class="btn" id="addJenisPSSewaBtn" type="button">+ Tambah Jenis PS</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="saveJenisPSSewaBtn">Simpan</button>
+      <button class="btn" data-close>Tutup</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
