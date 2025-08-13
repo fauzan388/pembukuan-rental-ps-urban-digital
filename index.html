@@ -60,10 +60,6 @@
   .grid{display:grid;gap:12px}
   .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
   .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
-  @media(max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:600px){.g4,.g3{grid-template-columns:1fr}}
-
-  label{font-size:12px;color:var(--muted);display:block;margin:0 0 6px}
   input,select,button,textarea{font:inherit}
 
   .input,.select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--ring);background:var(--input-bg);color:var(--text);outline:none;transition:background .2s ease,border-color .2s ease}
@@ -104,16 +100,6 @@
   .recap-item{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--ring);border-radius:12px;padding:12px}
   .recap-item .label{font-size:12px;color:var(--muted)}
   .recap-item .value{font-weight:800;font-variant-numeric:tabular-nums}
-  @media(max-width:900px){.recap{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:600px){.recap{grid-template-columns:1fr}}
-
-
-/* === Custom red warning buttons === */
-.btn.warn {
-  background: #d93025 !important; /* Red tone */
-  border-color: #a12016 !important;
-  color: #fff !important;
-}
 .btn.warn:hover {
   filter: brightness(1.1);
 }
@@ -406,13 +392,71 @@
 .filter-card .range-wrap .input{ width:180px; }
 .filter-card .range-wrap .sep{ color:var(--muted); min-width:24px; text-align:center; }
 .filter-card .btn{ height:40px; border-radius:10px; padding:0 14px; }
-@media (max-width: 700px){
-  .filter-grid{ grid-template-columns: 1fr; }
   .filter-grid label{ margin-bottom:4px; }
   .filter-card .range-wrap{ gap:8px; }
   .filter-card .range-wrap .input{ flex:1 1 160px; min-width:0; }
   .filter-card .btn{ flex:1 1 auto; }
   .filter-card .sep{ order:2; } /* keep natural reading on wrap */
+}
+
+
+.g2 { 
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.g4 { 
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* Responsif */
+  .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+}
+
+.g2 { 
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+}
+
+.g2 { 
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.g2 { 
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px;
+}
+
+/* === Button trio: 3-up layout on mobile === */
+.button-trio {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap; /* default desktop/tablet */
+}
+
+@media (max-width: 600px){
+  .button-trio {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+  .button-trio .btn {
+    width: 100%;
+  }
+  .button-trio .auto-note {
+    grid-column: 1 / -1;
+    margin-top: 4px;
+  }
 }
 
 </style>
@@ -653,7 +697,6 @@ html { scroll-behavior: smooth; }
   border-bottom: 1px solid var(--ring);
 }
 </style>
-
 <style>
 #popupBackdrop {
     position: fixed;
@@ -671,13 +714,6 @@ html { scroll-behavior: smooth; }
     z-index: 1001;
 }
 </style>
-
-
-
-
-
-
-
 <style>
 .settings-sidebar .btn {
     display: flex;
@@ -708,12 +744,6 @@ html { scroll-behavior: smooth; }
     border-color: #1C308A;
 }
 </style>
-
-
-
-
-
-
 </head>
 <body>
 <div class="container">
@@ -725,19 +755,46 @@ html { scroll-behavior: smooth; }
 <div class="row toolbar-row">
 <button class="btn" id="themeBtn" title="Ganti tema"><span class="emoji">🌙</span>Gelap</button>
 <button class="btn" id="screenshotBtn">Screenshot</button>
-
 <button class="btn" id="settingsBtn">⚙ Pengaturan</button>
-
 </div>
 </div>
 <div class="spacer"></div>
 <div class="card pad">
-<div class="grid g5 top-form">
+<!-- Row 1: Date & Day -->
+<div class="grid g2 top-form">
 <div>
 <label>Tanggal</label>
 <input class="input" id="date" type="date"/>
 </div>
-<input id="harian" type="hidden" value="0"/><input id="jajanan" type="hidden" value="0"/><input id="jasa" type="hidden" value="0"/><input id="sewa" type="hidden" value="0"/><div><label>Absen Pagi</label><input class="input" id="absenPagi" required="required" type="time"/></div><div><label>Absen Siang</label><input class="input" id="absenSiang" required="required" type="time"/></div><div><label>Ruko Buka</label><input class="input" id="rukoBuka" required="required" type="time"/></div><div><label>Ruko Tutup</label><input class="input" id="rukoTutup" required="required" type="time"/></div></div>
+<div>
+<label>Hari</label>
+<input class="input" id="day" readonly="" style="background-color: var(--card2); color: var(--muted);" type="text"/>
+</div>
+</div>
+<!-- Row 2: Absen & Ruko -->
+<div class="grid g4" style="margin-top: 12px;">
+<div>
+<label>Absen Pagi</label>
+<input class="input" id="absenPagi" required="" type="time"/>
+</div>
+<div>
+<label>Absen Siang</label>
+<input class="input" id="absenSiang" required="" type="time"/>
+</div>
+<div>
+<label>Ruko Buka</label>
+<input class="input" id="rukoBuka" required="" type="time"/>
+</div>
+<div>
+<label>Ruko Tutup</label>
+<input class="input" id="rukoTutup" required="" type="time"/>
+</div>
+</div>
+<!-- Hidden fields -->
+<input id="harian" type="hidden" value="0"/>
+<input id="jajanan" type="hidden" value="0"/>
+<input id="jasa" type="hidden" value="0"/>
+<input id="sewa" type="hidden" value="0"/>
 <div class="spacer"></div>
 <div class="row catatan-row">
 <div class="catatan-wrap">
@@ -778,14 +835,14 @@ html { scroll-behavior: smooth; }
 <td class="mono right" id="rincianTotal">Rp 0</td>
 </tr>
 <tr class="total-row">
-<td colspan="8" style="text-align:left; padding-top:8px;">
+<td colspan="9" style="text-align:left; padding-top:8px;">
 </td>
 </tr>
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
+<div class="row button-trio" style="margin-top:10px">
+<button class="btn" id="rincianClear" type="button">Kosongkan Tabel</button>
 <button class="btn primary" id="rincianAddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
 </div>
@@ -812,14 +869,14 @@ html { scroll-behavior: smooth; }
 <td class="mono right" id="jajananTotal3x10">Rp 0</td>
 </tr>
 <tr class="total-row">
-<td colspan="8" style="text-align:left; padding-top:8px;">
+<td colspan="9" style="text-align:left; padding-top:8px;">
 </td>
 </tr>
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian Jajanan</button>
+<div class="row button-trio" style="margin-top:10px">
+<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Tabel</button>
 <button class="btn primary" id="jajanan3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
 </div>
@@ -839,14 +896,14 @@ html { scroll-behavior: smooth; }
 <tbody></tbody>
 <tfoot><tr class="total-row"><td class="right" colspan="3">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr>
 <tr class="total-row">
-<td colspan="8" style="text-align:left; padding-top:8px;">
+<td colspan="9" style="text-align:left; padding-top:8px;">
 </td>
 </tr>
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian Jasa &amp; Aksesoris</button>
+<div class="row button-trio" style="margin-top:10px">
+<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Tabel</button>
 <button class="btn primary" id="jasa2x5AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
 </div>
@@ -874,14 +931,14 @@ html { scroll-behavior: smooth; }
 <td class="mono right" id="sewaTotal3x10">Rp 0</td>
 </tr>
 <tr class="total-row">
-<td colspan="8" style="text-align:left; padding-top:8px;">
+<td colspan="9" style="text-align:left; padding-top:8px;">
 </td>
 </tr>
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian Sewa</button>
+<div class="row button-trio" style="margin-top:10px">
+<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Tabel</button>
 <button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
 </div>
@@ -932,23 +989,32 @@ html { scroll-behavior: smooth; }
 <div class="spacer"></div>
 <div class="card pad">
 <div style="overflow:auto;">
-<table id="table">
+<div class="row" style="justify-content:space-between;align-items:center">
+<div><b>History Pembukuan</b></div>
+<div class="mini subtle">Riwayat semua pencatatan pemasukan</div>
+</div>
+<div style="overflow:auto;margin-top:10px">
+<table class="table-sm" id="table">
 <thead>
 <tr>
+<th colspan="2" style="text-align:center;">Tanggal &amp; Hari</th>
+<th rowspan="2">Harian</th>
+<th rowspan="2">Jajanan</th>
+<th rowspan="2">Jasa &amp; Aksesoris</th>
+<th rowspan="2">Sewa PS</th>
+<th rowspan="2">Total</th>
+<th rowspan="2">Catatan</th>
+<th rowspan="2">Aksi</th>
+</tr>
+<tr>
 <th style="min-width:130px">Tanggal</th>
-<th>Harian</th>
-<th>Jajanan</th>
-<th>Jasa &amp; Aksesoris</th>
-<th>Sewa PS</th>
-<th>Total</th>
-<th>Catatan</th>
-<th>Aksi</th>
+<th>Hari</th>
 </tr>
 </thead>
 <tbody></tbody>
 <tfoot>
 <tr>
-<td>Subtotal (tampil)</td>
+<td>Subtotal (tampil)</td><td></td>
 <td class="mono right" id="sumHarian">Rp 0</td>
 <td class="mono right" id="sumJajanan">Rp 0</td>
 <td class="mono right" id="sumJasa">Rp 0</td>
@@ -956,10 +1022,10 @@ html { scroll-behavior: smooth; }
 <td class="mono right" id="sumTotal">Rp 0</td>
 <td colspan="2"></td>
 </tr>
-<tr class="total-row"><td colspan="5">Total bulan ini</td><td class="mono right" id="sumMonth">Rp 0</td><td colspan="2"></td></tr>
-<tr class="total-row"><td colspan="5">Total semua</td><td class="mono right" id="sumAll">Rp 0</td><td colspan="2"></td></tr>
+<tr class="total-row"><td colspan="6">Total bulan ini</td><td class="mono right" id="sumMonth">Rp 0</td><td colspan="2"></td></tr>
+<tr class="total-row"><td colspan="6">Total semua</td><td class="mono right" id="sumAll">Rp 0</td><td colspan="2"></td></tr>
 <tr class="total-row">
-<td colspan="8" style="text-align:left; padding-top:8px;">
+<td colspan="9" style="text-align:left; padding-top:8px;">
 <button class="btn warn" id="clearBtn" title="Hapus semua data">Bersihkan Semua History</button>
 </td>
 </tr>
@@ -968,6 +1034,8 @@ html { scroll-behavior: smooth; }
 </div>
 <div class="note">Tombol <b>Edit</b> nge-load semua rincian ke form di atas biar bisa diperbaiki total.</div>
 </div>
+</div>
+<div class="spacer"></div>
 <div class="card pad" id="graphCard">
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
 <div><b>Grafik Total</b> <span class="mini subtle">titik berwarna sesuai ambang</span></div>
@@ -1340,6 +1408,15 @@ html { scroll-behavior: smooth; }
       $('#grandTotal').textContent = fmtIDR(g); updateRecap();
     };
 
+
+    function getDayName(dateStr){
+      if(!dateStr) return "-";
+      try {
+        var opts = { weekday: 'long' };
+        return new Date(dateStr).toLocaleDateString('id-ID', opts);
+      } catch(e){ return "-"; }
+    }
+
     function updateRecap(){
       var fmt = fmtIDR;
       var h = cleanNum($('#harian').value);
@@ -1675,6 +1752,7 @@ sumSewa3x10();
         var tr=document.createElement('tr');
         var tds=[
           (function(){ var td=document.createElement('td'); td.appendChild(editableDateCell(e.date,function(v){ e.date=v; save(); render(); })); return td; })(),
+          (function(){ var td=document.createElement('td'); td.textContent=getDayName(e.date); return td; })(),
           (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.harian,function(v){ e.harian=v; save(); render(); })); return td; })(),
           (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.jajanan,function(v){ e.jajanan=v; save(); render(); })); return td; })(),
           (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.jasa,function(v){ e.jasa=v; save(); render(); })); return td; })(),
@@ -1720,7 +1798,8 @@ scrollToTopMobile();
       $('#sumSewa').textContent=fmtIDR(sums.sewa);
       $('#sumTotal').textContent=fmtIDR(sums.total);
 
-      var monthSum;
+      var monthList = [];
+    var monthSum;
 if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
     var from = state.range.from || '0000-01-01';
     var to   = state.range.to   || '9999-12-31';
@@ -1869,7 +1948,7 @@ if(actionsRow) actionsRow.classList.remove('editing');
 document.getElementById('addBtn').addEventListener('click', async function(){
   try {
     if (typeof formIsTrulyEmpty === 'function' && formIsTrulyEmpty()) {
-      addOrUpdateEntry();
+      await themedAlert('Form masih kosong. Isi setidaknya satu nilai atau rincian sebelum menyimpan.');
       return;
     }
     var ok = await themedConfirm('Apakah pembukuan sudah di-screenshot?\nJika tekan OK data akan disimpan.');
@@ -2146,7 +2225,7 @@ document.getElementById('addBtn').addEventListener('click', async function(){
         btn.className = 'btn warn';
         btn.textContent = '- Hapus Baris';
         btn.type = 'button';
-        btn.style.marginLeft = '6px';
+        // removed margin for grid layout
         btn.addEventListener('click', handler);
         if (addBtn.after) addBtn.after(btn);
         else addBtn.parentNode.insertBefore(btn, addBtn.nextSibling);
@@ -2556,20 +2635,6 @@ document.addEventListener("click", function(e){
 
 
 
-// === Backup & Restore Data Sub-menu ===
-document.addEventListener("click", function(e){
-    if(e.target && e.target.id === "openBackupRestoreSettings"){
-        var backdrop = document.getElementById('popupBackdrop');
-        var modal = document.getElementById('backupRestoreSettingsModal');
-        backdrop.hidden = false;
-        modal.hidden = false;
-        requestAnimationFrame(function(){
-            backdrop.classList.add('is-visible');
-            modal.classList.add('is-visible');
-        });
-    }
-});
-
 
 // === Global delegation for closing Backup & Restore Data modal (returns to Settings modal) ===
 document.addEventListener("click", function(e){
@@ -2596,110 +2661,11 @@ document.addEventListener("click", function(e){
 });
 
 
-// === Settings Modal Tab Switch ===
-document.addEventListener("click", function(e){
-    if(e.target && e.target.hasAttribute("data-settings-tab")){
-        var target = e.target.getAttribute("data-settings-tab");
-        document.querySelectorAll("#settingsContentArea .settings-tab").forEach(function(tab){
-            tab.hidden = (tab.getAttribute("data-tab") !== target);
-        });
-    }
-});
 
 
 
 
-// === Open Rincian Table Sub-Modals without hiding main backdrop ===
-document.addEventListener("click", function(e){
-    function openSubModal(id){
-        var modal = document.getElementById(id);
-        if(modal){
-            modal.hidden = false;
-            requestAnimationFrame(function(){
-                modal.classList.add('is-visible');
-            });
-        }
-    }
-    if(e.target && e.target.id === "openJenisPSHarianSettings"){
-        openSubModal("jenisPSHarianSettingsModal");
-    }
-    if(e.target && e.target.id === "openJasaAksesorisSettings"){
-        openSubModal("jasaAksesorisSettingsModal");
-    }
-    if(e.target && e.target.id === "openJenisPSSewaSettings"){
-        openSubModal("jenisPSSewaSettingsModal");
-    }
-});
 
-// === Close only sub-modals, keep main backdrop active ===
-document.addEventListener("click", function(e){
-    if(e.target && e.target.hasAttribute("data-close")){
-        var modal = e.target.closest(".modal");
-        if(modal && modal.id !== "settingsModal"){ // avoid closing settings main modal here
-            modal.classList.remove("is-visible");
-            setTimeout(function(){
-                modal.hidden = true;
-            }, 200);
-        }
-    }
-});
-
-
-// === Toggle active state on sidebar buttons ===
-document.querySelectorAll('.settings-sidebar .btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-        document.querySelectorAll('.settings-sidebar .btn').forEach(function(b){
-            b.classList.remove('active');
-        });
-        btn.classList.add('active');
-    });
-});
-
-
-// === Integrate active state with tab switching ===
-document.addEventListener("click", function(e){
-    if(e.target && e.target.hasAttribute("data-settings-tab")){
-        // Remove active class from all sidebar buttons
-        document.querySelectorAll('.settings-sidebar .btn').forEach(function(b){
-            b.classList.remove('active');
-        });
-        // Add active class to clicked button
-        e.target.classList.add('active');
-    }
-});
-
-// === Export Data Sub-menu ===
-(function(){
-    var backdrop = document.getElementById('popupBackdrop');
-    var modal = document.getElementById('exportDataSettingsModal');
-
-    document.addEventListener("click", function(e){
-        if(e.target && e.target.id === "openExportDataSettings"){
-            backdrop.hidden = false;
-            modal.hidden = false;
-            requestAnimationFrame(function(){
-                backdrop.classList.add('is-visible');
-                modal.classList.add('is-visible');
-            });
-        }
-        if(e.target && e.target.id === "exportCSVBtn"){
-            try { exportCSV(); } catch(err){ themedAlert("Gagal ekspor CSV: " + err.message); }
-        }
-    });
-
-    if(modal){
-        modal.querySelectorAll('[data-close]').forEach(function(btn){
-            btn.addEventListener('click', function(){
-                backdrop.classList.remove('is-visible');
-                modal.classList.remove('is-visible');
-                setTimeout(function(){
-                    backdrop.hidden = true;
-                    modal.hidden = true;
-                }, 200);
-            });
-        });
-    }
-})();
 
 // === Event delegation for Backup & Restore ===
 document.addEventListener("click", function(e){
@@ -2928,50 +2894,102 @@ textarea:focus-visible {
   box-shadow: 0 0 0 3px rgba(110,168,254,0.5);
 }
 
+
+/* === History Table UI Polishing === */
+#table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#table th, #table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+#table th {
+  color: var(--muted);
+  font-size: 13px;
+  background: var(--card2);
+}
+#table tbody tr:hover {
+  background-color: rgba(110, 168, 254, 0.08);
+}
+/* Tombol Edit dan Hapus */
+#table .btn {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  min-width: 50px;
+}
+#table .btn.warn {
+  background: #d93025 !important;
+  border-color: #a12016 !important;
+  color: #fff !important;
+}
+#table .btn.warn:hover {
+  filter: brightness(1.1);
+}
+/* Responsif */
+@media (max-width: 600px) {
+  #table th, #table td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  #table .btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+/* === Global warn buttons: force red everywhere (including dynamic "- Hapus Baris") === */
+.btn.warn {
+  background: #d93025 !important;
+  border-color: #a12016 !important;
+  color: #fff !important;
+}
+.btn.warn:hover {
+  filter: brightness(1.1);
+}
 </style>
 <div class="settings-layout">
-  <!-- Sidebar kiri -->
-  <div class="settings-sidebar">
-    <button class="btn" data-settings-tab="theme"><span class="emoji">⚙️</span> General</button>
-    <button class="btn" data-settings-tab="jajanan"><span class="emoji">📝</span>Edit Rincian</button>
-    <button class="btn" data-settings-tab="backup"><span class="emoji">📦</span>Backup & Restore Data</button>
-    <button class="btn" data-settings-tab="export"><span class="emoji">📤</span>Export Data</button>
-  </div>
-  <!-- Konten kanan -->
-  <div class="settings-content" id="settingsContentArea">
-    <!-- Tab: Theme -->
-    <div class="settings-tab" data-tab="theme">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span>Mode Tema</span>
-        <button class="btn" id="themeToggleInSettings"><span class="emoji">🌙</span>Gelap</button>
-      </div>
-    </div>
-    <!-- Tab: Jajanan -->
-    
-<div class="settings-tab" data-tab="jajanan" hidden>
-  <div style="display:flex;flex-direction:column;gap:12px;">
-    <button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
-    <button class="btn" id="openJajananSettings">Item Jajanan</button>
-    <button class="btn" id="openJasaAksesorisSettings">Item Jasa & Aksesori</button>
-    <button class="btn" id="openJenisPSSewaSettings">Item Jenis PS Pemasukan Sewa PS</button>
-  </div>
+<!-- Sidebar kiri -->
+<div class="settings-sidebar">
+<button class="btn" data-settings-tab="theme"><span class="emoji">⚙️</span> General</button>
+<button class="btn" data-settings-tab="jajanan"><span class="emoji">📝</span>Edit Rincian</button>
+<button class="btn" data-settings-tab="backup"><span class="emoji">📦</span>Backup &amp; Restore Data</button>
+<button class="btn" data-settings-tab="export"><span class="emoji">📤</span>Export Data</button>
 </div>
-
-    <!-- Tab: Backup & Restore -->
-    <div class="settings-tab" data-tab="backup" hidden>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
-        <button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
-        <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-      </div>
-    </div>
-    <!-- Tab: Export -->
-    <div class="settings-tab" data-tab="export" hidden>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
-      </div>
-    </div>
-  </div>
+<!-- Konten kanan -->
+<div class="settings-content" id="settingsContentArea">
+<!-- Tab: Theme -->
+<div class="settings-tab" data-tab="theme">
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<span>Mode Tema</span>
+<button class="btn" id="themeToggleInSettings"><span class="emoji">🌙</span>Gelap</button>
+</div>
+</div>
+<!-- Tab: Jajanan -->
+<div class="settings-tab" data-tab="jajanan" hidden="">
+<div style="display:flex;flex-direction:column;gap:12px;">
+<button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
+<button class="btn" id="openJajananSettings">Item Jajanan</button>
+<button class="btn" id="openJasaAksesorisSettings">Item Jasa &amp; Aksesori</button>
+<button class="btn" id="openJenisPSSewaSettings">Item Jenis PS Pemasukan Sewa PS</button>
+</div>
+</div>
+<!-- Tab: Backup & Restore -->
+<div class="settings-tab" data-tab="backup" hidden="">
+<div style="display:flex;flex-direction:column;gap:10px;">
+<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
+<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
+<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+</div>
+</div>
+<!-- Tab: Export -->
+<div class="settings-tab" data-tab="export" hidden="">
+<div style="display:flex;flex-direction:column;gap:10px;">
+<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="modal-footer">
@@ -2981,23 +2999,22 @@ textarea:focus-visible {
 </div>
 <!-- Export Data Modal -->
 <!-- Backup & Restore Data Modal -->
-<div class="modal" hidden id="backupRestoreSettingsModal">
-  <div>
-    <div class="modal-header">
-      <div class="modal-title">Backup & Restore Data</div>
-      <button class="modal-close" data-close>✕</button>
-    </div>
-    <div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
-      <button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
-      <button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
-      <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" data-close>Tutup</button>
-    </div>
-  </div>
+<div class="modal" hidden="" id="backupRestoreSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Backup &amp; Restore Data</div>
+<button class="modal-close" data-close="">✕</button>
 </div>
-
+<div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
+<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
+<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
+<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+</div>
+<div class="modal-footer">
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
 <div class="modal" hidden="" id="exportDataSettingsModal">
 <div>
 <div class="modal-header">
@@ -3034,69 +3051,94 @@ textarea:focus-visible {
 </div>
 </div>
 </div>
-
 <!-- Jenis PS Harian Modal -->
-<div class="modal" hidden id="jenisPSHarianSettingsModal">
-  <div>
-    <div class="modal-header">
-      <div class="modal-title">Item Jenis PS Pemasukan Harian</div>
-      <button class="modal-close" data-close>✕</button>
-    </div>
-    <div class="modal-body" style="max-height:60vh;overflow:auto;">
-      <table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-        <thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <button class="btn" id="addJenisPSHarianBtn" type="button">+ Tambah Jenis PS</button>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" id="saveJenisPSHarianBtn">Simpan</button>
-      <button class="btn" data-close>Tutup</button>
-    </div>
-  </div>
+<div class="modal" hidden="" id="jenisPSHarianSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Item Jenis PS Pemasukan Harian</div>
+<button class="modal-close" data-close="">✕</button>
 </div>
-
+<div class="modal-body" style="max-height:60vh;overflow:auto;">
+<table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJenisPSHarianBtn" type="button">+ Tambah Jenis PS</button>
+</div>
+<div class="modal-footer">
+<button class="btn" id="saveJenisPSHarianBtn">Simpan</button>
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
 <!-- Jasa & Aksesoris Modal -->
-<div class="modal" hidden id="jasaAksesorisSettingsModal">
-  <div>
-    <div class="modal-header">
-      <div class="modal-title">Item Jasa & Aksesoris</div>
-      <button class="modal-close" data-close>✕</button>
-    </div>
-    <div class="modal-body" style="max-height:60vh;overflow:auto;">
-      <table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-        <thead><tr><th>Nama Jasa/Aksesoris</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <button class="btn" id="addJasaAksesorisBtn" type="button">+ Tambah Jasa/Aksesoris</button>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" id="saveJasaAksesorisBtn">Simpan</button>
-      <button class="btn" data-close>Tutup</button>
-    </div>
-  </div>
+<div class="modal" hidden="" id="jasaAksesorisSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Item Jasa &amp; Aksesoris</div>
+<button class="modal-close" data-close="">✕</button>
 </div>
-
+<div class="modal-body" style="max-height:60vh;overflow:auto;">
+<table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead><tr><th>Nama Jasa/Aksesoris</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJasaAksesorisBtn" type="button">+ Tambah Jasa/Aksesoris</button>
+</div>
+<div class="modal-footer">
+<button class="btn" id="saveJasaAksesorisBtn">Simpan</button>
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
 <!-- Jenis PS Sewa Modal -->
-<div class="modal" hidden id="jenisPSSewaSettingsModal">
-  <div>
-    <div class="modal-header">
-      <div class="modal-title">Item Jenis PS Pemasukan Sewa PS</div>
-      <button class="modal-close" data-close>✕</button>
-    </div>
-    <div class="modal-body" style="max-height:60vh;overflow:auto;">
-      <table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-        <thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <button class="btn" id="addJenisPSSewaBtn" type="button">+ Tambah Jenis PS</button>
-    </div>
-    <div class="modal-footer">
-      <button class="btn" id="saveJenisPSSewaBtn">Simpan</button>
-      <button class="btn" data-close>Tutup</button>
-    </div>
-  </div>
+<div class="modal" hidden="" id="jenisPSSewaSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Item Jenis PS Pemasukan Sewa PS</div>
+<button class="modal-close" data-close="">✕</button>
 </div>
-
+<div class="modal-body" style="max-height:60vh;overflow:auto;">
+<table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJenisPSSewaBtn" type="button">+ Tambah Jenis PS</button>
+</div>
+<div class="modal-footer">
+<button class="btn" id="saveJenisPSSewaBtn">Simpan</button>
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<script>
+(function(){
+  function updateDayField(){
+    var dateInput = document.getElementById('date');
+    var dayInput = document.getElementById('day');
+    if(!dateInput || !dayInput) return;
+    if(!dateInput.value){
+      dayInput.value = '';
+      return;
+    }
+    try{
+      var opts = { weekday: 'long' };
+      var d = new Date(dateInput.value);
+      dayInput.value = d.toLocaleDateString('id-ID', opts);
+    }catch(e){
+      dayInput.value = '';
+    }
+  }
+  var dateInput = document.getElementById('date');
+  if(dateInput){
+    dateInput.addEventListener('input', updateDayField);
+    dateInput.addEventListener('change', updateDayField);
+    // Init on load after slight delay to catch programmatic changes
+    setTimeout(updateDayField, 50);
+    // Expose globally so other code can trigger it
+    window.updateDayField = updateDayField;
+  }
+})();
+</script>
 </body>
 </html>
