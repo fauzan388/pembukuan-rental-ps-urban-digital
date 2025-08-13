@@ -60,6 +60,10 @@
   .grid{display:grid;gap:12px}
   .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
   .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media(max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:600px){.g4,.g3{grid-template-columns:1fr}}
+
+  label{font-size:12px;color:var(--muted);display:block;margin:0 0 6px}
   input,select,button,textarea{font:inherit}
 
   .input,.select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--ring);background:var(--input-bg);color:var(--text);outline:none;transition:background .2s ease,border-color .2s ease}
@@ -100,6 +104,16 @@
   .recap-item{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--ring);border-radius:12px;padding:12px}
   .recap-item .label{font-size:12px;color:var(--muted)}
   .recap-item .value{font-weight:800;font-variant-numeric:tabular-nums}
+  @media(max-width:900px){.recap{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:600px){.recap{grid-template-columns:1fr}}
+
+
+/* === Custom red warning buttons === */
+.btn.warn {
+  background: #d93025 !important; /* Red tone */
+  border-color: #a12016 !important;
+  color: #fff !important;
+}
 .btn.warn:hover {
   filter: brightness(1.1);
 }
@@ -392,6 +406,8 @@
 .filter-card .range-wrap .input{ width:180px; }
 .filter-card .range-wrap .sep{ color:var(--muted); min-width:24px; text-align:center; }
 .filter-card .btn{ height:40px; border-radius:10px; padding:0 14px; }
+@media (max-width: 700px){
+  .filter-grid{ grid-template-columns: 1fr; }
   .filter-grid label{ margin-bottom:4px; }
   .filter-card .range-wrap{ gap:8px; }
   .filter-card .range-wrap .input{ flex:1 1 160px; min-width:0; }
@@ -412,6 +428,8 @@
 }
 
 /* Responsif */
+@media (max-width: 900px) {
+  .g2 { grid-template-columns: 1fr; }
   .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 }
@@ -428,37 +446,6 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
-
-.g2 { 
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  gap: 12px;
-}
-
-/* === Button trio: 3-up layout on mobile === */
-.button-trio {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap; /* default desktop/tablet */
-}
-
-@media (max-width: 600px){
-  .button-trio {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    width: 100%;
-  }
-  .button-trio .btn {
-    width: 100%;
-  }
-  .button-trio .auto-note {
-    grid-column: 1 / -1;
-    margin-top: 4px;
-  }
-}
-
 </style>
 <style id="ui-fix-0811">
 /* === UI Polishing: consistent proportions & spacing === */
@@ -841,8 +828,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row button-trio" style="margin-top:10px">
-<button class="btn" id="rincianClear" type="button">Kosongkan Tabel</button>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
 <button class="btn primary" id="rincianAddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
 </div>
@@ -875,8 +862,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row button-trio" style="margin-top:10px">
-<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Tabel</button>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian Jajanan</button>
 <button class="btn primary" id="jajanan3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
 </div>
@@ -902,8 +889,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row button-trio" style="margin-top:10px">
-<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Tabel</button>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian Jasa &amp; Aksesoris</button>
 <button class="btn primary" id="jasa2x5AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
 </div>
@@ -937,8 +924,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row button-trio" style="margin-top:10px">
-<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Tabel</button>
+<div class="row" style="margin-top:10px">
+<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian Sewa</button>
 <button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
 </div>
@@ -2225,7 +2212,7 @@ document.getElementById('addBtn').addEventListener('click', async function(){
         btn.className = 'btn warn';
         btn.textContent = '- Hapus Baris';
         btn.type = 'button';
-        // removed margin for grid layout
+        btn.style.marginLeft = '6px';
         btn.addEventListener('click', handler);
         if (addBtn.after) addBtn.after(btn);
         else addBtn.parentNode.insertBefore(btn, addBtn.nextSibling);
@@ -2937,16 +2924,6 @@ textarea:focus-visible {
     padding: 4px 8px;
     font-size: 11px;
   }
-}
-
-/* === Global warn buttons: force red everywhere (including dynamic "- Hapus Baris") === */
-.btn.warn {
-  background: #d93025 !important;
-  border-color: #a12016 !important;
-  color: #fff !important;
-}
-.btn.warn:hover {
-  filter: brightness(1.1);
 }
 </style>
 <div class="settings-layout">
