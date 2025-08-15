@@ -741,7 +741,7 @@ html { scroll-behavior: smooth; }
 </div>
 <div class="row toolbar-row">
 <button class="btn" id="themeBtn" title="Ganti tema"><span class="emoji">🌙</span>Gelap</button>
-<button class="btn" id="screenshotBtn">Screenshot</button>
+<button class="btn" id="exportReportBtn">Export Report</button>
 <button class="btn" id="settingsBtn">⚙ Pengaturan</button>
 </div>
 </div>
@@ -1166,6 +1166,7 @@ html { scroll-behavior: smooth; }
   };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 (function(){
   function onReady(fn){
@@ -1805,6 +1806,44 @@ if (state.filter === 'RENTANG' && state.range && (state.range.from || state.rang
       var sm=document.getElementById('sumMonth'); if(sm) sm.textContent = fmtIDR(monthSum);
       var sa=document.getElementById('sumAll'); if(sa) sa.textContent = fmtIDR(allSum);
 
+// === Custom Footer Logic ===
+(function(){
+    var smEl = document.getElementById('sumMonth');
+    var saRow = null;
+    document.querySelectorAll('#table tfoot tr').forEach(function(tr){
+        if(tr.textContent.trim().toLowerCase().includes('total semua')){
+            saRow = tr;
+        }
+    });
+    // Reset visibility
+    if(saRow) saRow.style.display = '';
+    if(smEl){
+        var labelCell = smEl.closest('tr').querySelector('td[colspan="6"]');
+        if(labelCell) labelCell.textContent = 'Total Bulan Ini';
+    }
+
+    if(state.filter === 'RENTANG'){
+        if(state.range && (state.range.from || state.range.to)){
+            var from = state.range.from || '0000-01-01';
+            var to   = state.range.to   || '9999-12-31';
+            var rangeList = state.entries.filter(function(e){
+                var d = e.date || '';
+                return d && d >= from && d <= to;
+            });
+            var rangeSum = calcSums(rangeList).total;
+            if(smEl) smEl.textContent = fmtIDR(rangeSum);
+        }
+        if(smEl){
+            var labelCell = smEl.closest('tr').querySelector('td[colspan="6"]');
+            if(labelCell) labelCell.textContent = 'Total Rentang';
+        }
+        if(saRow) saRow.style.display = 'none';
+    } else if(state.filter !== 'ALL'){
+        // Filter bulan: sembunyikan Total Semua
+        if(saRow) saRow.style.display = 'none';
+    }
+})();
+
       var totalLabelEl = document.querySelector('#table tfoot tr.total-row td[colspan="5"]');
       if (totalLabelEl) {
         totalLabelEl.textContent = (state.filter === 'RENTANG') ? 'Total rentang' : 'Total bulan ini';
@@ -1830,6 +1869,44 @@ if (state.filter === 'RENTANG' && state.range && (state.range.from || state.rang
 
       var sm=document.getElementById('sumMonth'); if(sm) sm.textContent = fmtIDR(monthSum);
       var sa=document.getElementById('sumAll'); if(sa) sa.textContent = fmtIDR(allSum);
+
+// === Custom Footer Logic ===
+(function(){
+    var smEl = document.getElementById('sumMonth');
+    var saRow = null;
+    document.querySelectorAll('#table tfoot tr').forEach(function(tr){
+        if(tr.textContent.trim().toLowerCase().includes('total semua')){
+            saRow = tr;
+        }
+    });
+    // Reset visibility
+    if(saRow) saRow.style.display = '';
+    if(smEl){
+        var labelCell = smEl.closest('tr').querySelector('td[colspan="6"]');
+        if(labelCell) labelCell.textContent = 'Total Bulan Ini';
+    }
+
+    if(state.filter === 'RENTANG'){
+        if(state.range && (state.range.from || state.range.to)){
+            var from = state.range.from || '0000-01-01';
+            var to   = state.range.to   || '9999-12-31';
+            var rangeList = state.entries.filter(function(e){
+                var d = e.date || '';
+                return d && d >= from && d <= to;
+            });
+            var rangeSum = calcSums(rangeList).total;
+            if(smEl) smEl.textContent = fmtIDR(rangeSum);
+        }
+        if(smEl){
+            var labelCell = smEl.closest('tr').querySelector('td[colspan="6"]');
+            if(labelCell) labelCell.textContent = 'Total Rentang';
+        }
+        if(saRow) saRow.style.display = 'none';
+    } else if(state.filter !== 'ALL'){
+        // Filter bulan: sembunyikan Total Semua
+        if(saRow) saRow.style.display = 'none';
+    }
+})();
 
       var totalLabelEl = document.querySelector('#table tfoot tr.total-row td[colspan="5"]');
       if (totalLabelEl) {
@@ -1975,7 +2052,48 @@ document.getElementById('addBtn').addEventListener('click', async function(){
     await themedAlert('Semua data dihapus.');
   }
 });
-    document.addEventListener('click', function(e){ if(e.target && e.target.id === 'screenshotBtn'){ takeFullScreenshot(); } });
+    
+document.addEventListener('click', function(e){
+    if(e.target && e.target.id === 'exportReportBtn'){
+        exportReportPDF();
+    }
+});
+
+async function exportReportPDF(){
+    try {
+        const { jsPDF } = window.jspdf;
+        var w = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
+        var h = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+        window.scrollTo(0,0);
+        const canvas = await html2canvas(document.body, {
+            useCORS: true,
+            backgroundColor: getComputedStyle(document.body).backgroundColor,
+            windowWidth: w,
+            windowHeight: h,
+            scale: 1.2 // turunkan scale agar file lebih kecil
+        });
+        const imgData = canvas.toDataURL('image/jpeg', 0.85); // JPEG dengan kualitas 85%
+        
+        // Ukuran PDF mengikuti proporsi gambar tapi diperkecil agar file tidak besar
+        const maxWidth = 1200; // batas lebar px untuk PDF
+        const scaleFactor = Math.min(1, maxWidth / canvas.width);
+        const pdfWidth = canvas.width * scaleFactor;
+        const pdfHeight = canvas.height * scaleFactor;
+        
+        const pdf = new jsPDF('p', 'pt', [pdfWidth, pdfHeight]);
+        
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, '', 'FAST');
+        
+        const today = new Date();
+        const tanggal = today.toISOString().slice(0,10);
+        const hari = today.toLocaleDateString('id-ID', { weekday: 'long' });
+        const fileName = `pembukuan_URVAN_LPG_${tanggal}_${hari}.pdf`;
+        pdf.save(fileName);
+    } catch(err){
+        await themedAlert('Gagal export PDF: ' + err.message);
+    }
+}
+
 
     
     
