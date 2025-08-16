@@ -26,6 +26,17 @@
     --table-border:#232c52;
     --shadow:0 10px 30px rgba(0,0,0,.25);
   }
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --ctrl-h: 40px;
+  --radius: 8px;
+}
+
   /* Light theme overrides */
   [data-theme="light"]{
     --bg:#f6f7fb;
@@ -51,13 +62,13 @@
   body{margin:0;font-family:Segoe UI,Roboto,Arial,ui-sans-serif;background:var(--bg);color:var(--text);transition:background .25s ease,color .25s ease}
   .container{max-width:1100px;margin:24px auto;padding:0 16px}
 
-  .header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .header{display:flex;align-items:center;justify-content:space-between;gap: var(--space-2)}
   .title{font-size:28px;font-weight:800}
   .subtitle{color:var(--muted);font-size:14px}
 
-  .card{background:var(--card);border:1px solid var(--ring);border-radius:16px;box-shadow:var(--shadow)}
-  .pad{padding:16px}
-  .grid{display:grid;gap:12px}
+  .card{background:var(--card);border:1px solid var(--ring);border-radius: calc(var(--radius) * 2);box-shadow:var(--shadow)}
+  .pad{padding: var(--space-3)}
+  .grid{display:grid;gap: var(--space-2)}
   .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
   .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
   @media(max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -66,42 +77,42 @@
   label{font-size:12px;color:var(--muted);display:block;margin:0 0 6px}
   input,select,button,textarea{font:inherit}
 
-  .input,.select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--ring);background:var(--input-bg);color:var(--text);outline:none;transition:background .2s ease,border-color .2s ease}
-  .btn{border:1px solid var(--ring);background:var(--btn-bg);color:var(--text);padding:10px 14px;border-radius:12px;cursor:pointer;transition:filter .15s ease,opacity .15s ease}
+  .input,.select{width:100%;padding: var(--space-2);border-radius: var(--radius);border:1px solid var(--ring);background:var(--input-bg);color:var(--text);outline:none;transition:background .2s ease,border-color .2s ease}
+  .btn{border:1px solid var(--ring);background:var(--btn-bg);color:var(--text);padding: var(--space-2) 14px;border-radius: var(--radius);cursor:pointer;transition:filter .15s ease,opacity .15s ease}
   .btn:hover{filter:brightness(1.05)}
   .btn.primary{border-color:transparent;background:var(--accent);color:#fff}
   .btn.warn{background:var(--warn-bg);border-color:var(--warn-ring);color:#4f2a00}
 
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .row{display:flex;gap: var(--space-2);flex-wrap:wrap;align-items:center}
   .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card2);border:1px solid var(--ring);border-radius:999px}
-  .pill .select{padding:6px 10px}
+  .pill .select{padding: var(--space-1) 10px}
 
   table{width:100%;border-collapse:collapse}
-  th,td{padding:10px 8px;border-bottom:1px solid var(--table-border);text-align:right}
+  th,td{padding: var(--space-2); vertical-align: middle;}
   th:first-child,td:first-child{text-align:left}
   th{color:var(--muted);font-size:13px}
   .mono{font-variant-numeric:tabular-nums}
   .right{text-align:right}
-  .spacer{height:16px}
+  .spacer{height: var(--ctrl-h)}
   .note{color:var(--muted);font-size:12px}
   .subtle{color:var(--muted)}
   .mini{font-size:12px}
-  .table-sm th,.table-sm td{padding:6px 8px}
+  .table-sm th,.table-sm td{padding: var(--space-1) var(--space-2);}
   .total-row td{font-weight:800;border-top:2px solid var(--ring);border-bottom:none}
   .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--ring);font-size:12px}
 
   /* Section card variants that previously used hardcoded colors */
-  .subcard{background:var(--card2);border:1px solid var(--ring);border-radius:14px}
-  .subcard .pad{padding:16px}
+  .subcard{background:var(--card2);border:1px solid var(--ring);border-radius: calc(var(--radius) * 2)}
+  .subcard .pad{padding: var(--space-3)}
 
   /* Range pill spacing */
   #rangePill { gap:8px }
-  #rangePill .input { padding:6px 10px }
+  #rangePill .input { padding: var(--space-1) 10px }
   #rangePill .btn { padding:8px 10px }
 
   /* === Recap styles === */
-  .recap{display:grid;gap:10px;grid-template-columns:repeat(4,minmax(0,1fr));margin:6px 0 0}
-  .recap-item{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--ring);border-radius:12px;padding:12px}
+  .recap{display:grid;gap: var(--space-2);grid-template-columns:repeat(4,minmax(0,1fr));margin:6px 0 0}
+  .recap-item{display:flex;align-items:center;gap: var(--space-2);background:var(--card2);border:1px solid var(--ring);border-radius: var(--radius);padding: var(--space-2)}
   .recap-item .label{font-size:12px;color:var(--muted)}
   .recap-item .value{font-weight:800;font-variant-numeric:tabular-nums}
   @media(max-width:900px){.recap{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -124,7 +135,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
+  padding: var(--space-1) 10px;
   background: var(--card2);
   border: 1px solid var(--ring);
   border-radius: 999px;
@@ -133,7 +144,7 @@
 .pill select,
 .pill input,
 .pill button {
-  height: 34px;            /* consistent height */
+  height: var(--ctrl-h);            /* consistent height */
   padding: 0 10px;
   font-size: 13px;
   border-radius: 6px;
@@ -156,8 +167,8 @@
 .pill select,
 .pill input[type="date"],
 .pill button {
-  height: 36px !important;       /* exact same height */
-  line-height: 36px;
+  height: var(--ctrl-h) !important;       /* exact same height */
+  line-height: var(--ctrl-h);
   padding: 0 10px !important;     /* same padding */
   font-size: 13px;
   border-radius: 6px;
@@ -187,23 +198,23 @@
   background:var(--card);
   color:var(--text);
   border:1px solid var(--ring);
-  border-radius:16px;
+  border-radius: calc(var(--radius) * 2);
   box-shadow:var(--shadow);
 }
 
 .modal-header{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding:14px 16px; border-bottom:1px solid var(--ring);
+  display:flex; align-items:center; justify-content:space-between; gap: var(--space-2);
+  padding: var(--space-2) 16px; border-bottom:1px solid var(--ring);
 }
 .modal-title{ font-weight:800; font-size:16px; }
 .modal-close{
   background:transparent; border:1px solid var(--ring); color:var(--text);
-  border-radius:10px; padding:6px 10px; cursor:pointer;
+  border-radius: var(--radius); padding: var(--space-1) 10px; cursor:pointer;
 }
 
-.modal-body{ padding:16px; font-size:14px; }
+.modal-body{ padding: var(--space-3); font-size:14px; }
 .modal-footer{
-  padding:14px 16px; display:flex; gap:10px; justify-content:flex-end; border-top:1px solid var(--ring);
+  padding: var(--space-2) 16px; display:flex; gap: var(--space-2); justify-content:flex-end; border-top:1px solid var(--ring);
 }
 
 /* ===== Modal Animations ===== */
@@ -228,7 +239,7 @@
 
 
   /* === Form action row (Add / Cancel) === */
-  .actions-row{display:flex;gap:10px;width:100%;justify-content:flex-end}
+  .actions-row{display:flex;gap: var(--space-2);width:100%;justify-content:flex-end}
   .actions-row.editing{justify-content:space-between}
   .actions-row .btn{min-width:120px}
   .actions-row.editing .btn{flex:1;max-width:220px}
@@ -252,7 +263,7 @@
   color: var(--text);
   border: 1px solid var(--ring);
   border-radius: 8px;
-  padding: 6px 8px;
+  padding: var(--space-1) 8px;
   box-shadow: var(--shadow);
   transform: translate(-50%, -120%);
   white-space: nowrap;
@@ -274,11 +285,9 @@
 #graphCard .mini.subtle {
   font-size: 11px !important;
 }
-#graphCard canvas {
-  height: 180px !important;
-}
+#graphCard canvas { width: 100% !important; height: auto !important; aspect-ratio: 16 / 6; }
 .spacer {
-  height: 8px !important;
+  height: var(--ctrl-h) !important;
 }
 
 /* === Fix Harga column in Jasa & Aksesoris table === */
@@ -296,12 +305,6 @@
 /* === Clean & stable layout for Jasa & Aksesoris table === */
 #jasaTable2x5{
   table-layout: fixed;              /* prevent jitter */
-}
-#jasaTable2x5 th, #jasaTable2x5 td{
-  vertical-align: middle;
-}
-#jasaTable2x5 td:nth-child(4), #jasaTable2x5 th:nth-child(4){
-  text-align: right;
 }
 #jasaTable2x5 input.jasa-price{
   text-align: right;
@@ -397,15 +400,15 @@
 #table tfoot .total-row td:first-child{ text-align:left; }
 
 /* === Filter Card (square-rounded, precise) === */
-.filter-card{ border-radius:14px; background:var(--card2); border:1px solid var(--ring); }
-.filter-grid{ display:grid; grid-template-columns: 140px 1fr; gap:12px 16px; align-items:center; }
+.filter-card{ border-radius: calc(var(--radius) * 2); background:var(--card2); border:1px solid var(--ring); }
+.filter-grid{ display:grid; grid-template-columns: 140px 1fr; gap: var(--space-2) 16px; align-items:center; }
 .filter-grid .f-row{ display:contents; } /* allow label + control align on same row */
 .filter-grid label{ font-size:14px; color:var(--muted); font-weight:600; }
-.filter-card .select, .filter-card .input{ height:40px; border-radius:10px; }
-.filter-card .range-wrap{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.filter-card .select, .filter-card .input{ height: var(--ctrl-h); border-radius: var(--radius); }
+.filter-card .range-wrap{ display:flex; flex-wrap:wrap; gap: var(--space-2); align-items:center; }
 .filter-card .range-wrap .input{ width:180px; }
 .filter-card .range-wrap .sep{ color:var(--muted); min-width:24px; text-align:center; }
-.filter-card .btn{ height:40px; border-radius:10px; padding:0 14px; }
+.filter-card .btn{ height: var(--ctrl-h); border-radius: var(--radius); padding:0 14px; }
 @media (max-width: 700px){
   .filter-grid{ grid-template-columns: 1fr; }
   .filter-grid label{ margin-bottom:4px; }
@@ -419,12 +422,12 @@
 .g2 { 
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-2);
 }
 .g4 { 
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-2);
 }
 
 /* Responsif */
@@ -434,18 +437,122 @@
 }
 }
 
-.g2 { 
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
+.g2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap: var(--space-2); }
+
+/* === Responsive Typography (8pt Grid System) === */
+:root {
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-md: 16px;
+  --font-lg: 20px;
+  --font-xl: 24px;
+  --font-2xl: 32px;
 }
 
-.g2 { 
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+/* Base text */
+body {
+  font-size: var(--font-md);
+  line-height: 1.5;
 }
+
+/* Titles */
+.title {
+  font-size: var(--font-xl);
+  font-weight: 800;
+  line-height: 1.3;
+}
+.subtitle {
+  font-size: var(--font-sm);
+}
+
+/* Table text */
+th, td {
+  font-size: var(--font-sm);
+}
+
+/* Small labels and notes */
+label, .mini, .note, .subtle {
+  font-size: var(--font-xs);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  body { font-size: var(--font-sm); }
+  .title { font-size: var(--font-lg); }
+}
+@media (max-width: 600px) {
+  body { font-size: var(--font-sm); }
+  .title { font-size: 18px; } /* mobile-friendly */
+  .subtitle { font-size: var(--font-xs); }
+  th, td { font-size: var(--font-xs); }
+}
+
+
+/* === Fluid Typography & Spacing (8pt Grid System with clamp) === */
+:root {
+  --space-1: clamp(4px, 0.5vw, 6px);
+  --space-2: clamp(8px, 1vw, 12px);
+  --space-3: clamp(16px, 2vw, 20px);
+  --space-4: clamp(24px, 3vw, 32px);
+  --space-5: clamp(32px, 4vw, 40px);
+  --ctrl-h: clamp(36px, 5vw, 48px);
+  --radius: 8px;
+}
+
+/* Typography */
+body { font-size: clamp(14px, 1.6vw, 16px); line-height: 1.5; }
+.title { font-size: clamp(20px, 3vw, 32px); font-weight: 800; line-height: 1.3; }
+.subtitle { font-size: clamp(12px, 1.4vw, 16px); }
+th, td { font-size: clamp(12px, 1.4vw, 14px); }
+label, .mini, .note, .subtle { font-size: clamp(11px, 1.2vw, 12px); }
+
+/* Buttons & Inputs */
+.input, .select, .btn, textarea {
+  min-height: var(--ctrl-h);
+  border-radius: var(--radius);
+  padding: 0 var(--space-2);
+  font-size: inherit;
+}
+
+/* Card & Grid Spacing */
+.card .pad, .subcard .pad { padding: var(--space-3); }
+.grid, .row { gap: var(--space-2); }
+.spacer { height: var(--space-3); }
+
+/* Table padding */
+th, td { padding: var(--space-2); vertical-align: middle; }
+.table-sm th, .table-sm td { padding: var(--space-1) var(--space-2); }
+
+/* Graph fix (aspect ratio, responsive) */
+#graphCard canvas { width: 100% !important; height: auto !important; aspect-ratio: 16 / 6; }
+
+
+/* === Fix: Konsistensi kolom "No." di semua tabel rincian === */
+#rincianTable th:first-child, #rincianTable td:first-child,
+#jajananTable3x10 th:first-child, #jajananTable3x10 td:first-child,
+#jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
+#sewaTable3x10 th:first-child, #sewaTable3x10 td:first-child {
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  text-align: center;
+}
+
+
+/* === Fix v2: Konsistensi & Simetris kolom "No." di semua tabel rincian === */
+#rincianTable th:first-child, #rincianTable td:first-child,
+#jajananTable3x10 th:first-child, #jajananTable3x10 td:first-child,
+#jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
+#sewaTable3x10 th:first-child, #sewaTable3x10 td:first-child {
+  box-sizing: border-box;
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 </style>
 <style id="ui-fix-0811">
 /* === UI Polishing: consistent proportions & spacing === */
@@ -465,7 +572,7 @@
 
 /* cards & subcards padding symmetry */
 .card .pad, .subcard .pad{ padding: var(--space-3) !important; }
-.card, .subcard{ border-radius: 14px !important; }
+.card, .subcard{ border-radius: calc(var(--radius) * 2) !important; }
 
 /* controls: same height/padding/radius */
 .input, .select, .btn, textarea{
@@ -485,7 +592,7 @@ textarea{ padding-top: 10px; padding-bottom: 10px; }
 }
 
 /* tables: consistent density & alignment */
-.table-sm th, .table-sm td{ padding: 10px 12px !important; }
+.table-sm th, .table-sm td{ padding: var(--space-2) 12px !important; }
 th, td{ vertical-align: middle; }
 th:first-child, td:first-child{ text-align: left; }
 
@@ -563,7 +670,7 @@ html { scroll-behavior: smooth; }
 .pill-merged{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap: var(--space-2);
   padding:8px 12px;
   background:var(--card2);
   border:1px solid var(--ring);
@@ -591,7 +698,7 @@ html { scroll-behavior: smooth; }
 .toolbar-row{
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+  gap: var(--space-2);
   align-items:center;
 }
 .toolbar-row .pill,
@@ -602,7 +709,7 @@ html { scroll-behavior: smooth; }
 .pill.metric{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap: var(--space-2);
   padding:8px 12px;
   background:var(--card2);
   border:1px solid var(--ring);
@@ -639,7 +746,7 @@ html { scroll-behavior: smooth; }
 /* === Catatan & Button precise alignment === */
 .catatan-row {
   display: flex;
-  gap: 12px;
+  gap: var(--space-2);
   align-items: flex-end;
 }
 
@@ -680,7 +787,7 @@ html { scroll-behavior: smooth; }
   border-collapse: collapse;
 }
 #jajananSettingsModal th, #jajananSettingsModal td {
-  padding: 6px;
+  padding: var(--space-1);
   border-bottom: 1px solid var(--ring);
 }
 </style>
@@ -706,10 +813,10 @@ html { scroll-behavior: smooth; }
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
+    gap: var(--space-2);
     width: 100%;
     text-align: left;
-    padding: 12px 18px;
+    padding: var(--space-2) 18px;
     border: 2px solid var(--ring);
     border-radius: 8px;
     background: var(--card2);
@@ -731,6 +838,58 @@ html { scroll-behavior: smooth; }
     border-color: #1C308A;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+<style>
+  /* Header tetap tengah */
+  table th {
+    text-align: center !important;
+  }
+
+  /* Default isi tabel kiri */
+  table td {
+    text-align: left !important;
+  }
+
+  /* Angka uang kanan */
+  table td.mono,
+  table td.right,
+  #rincianTotal, #jajananTotal3x10, #jasaTotal2x5, #sewaTotal3x10,
+  #recapBar .value, #grandTotal,
+  #sumHarian, #sumJajanan, #sumJasa, #sumSewa, #sumTotal, #sumMonth, #sumAll {
+    text-align: right !important;
+  }
+
+  /* Label TOTAL & TOTAL KESELURUHAN tetap kiri */
+  .total-row td:first-child,
+  .total-row td[colspan] {
+    text-align: left !important;
+  }
+</style>
+
+
+<style>
+  /* Pastikan baris TOTAL rapih dan simetris */
+  .total-row td {
+    font-weight: 800;
+  }
+  .total-row td[colspan] {
+    text-align: left !important;
+  }
+  .total-row td.mono {
+    text-align: right !important;
+    min-width: 120px; /* jaga konsistensi lebar kolom harga */
+  }
+</style>
+
 </head>
 <body>
 <div class="container">
@@ -759,7 +918,7 @@ html { scroll-behavior: smooth; }
 </div>
 </div>
 <!-- Row 2: Absen & Ruko -->
-<div class="grid g4" style="margin-top: 12px;">
+<div class="grid g4" style="margin-top: var(--space-2);">
 <div>
 <label>Absen Pagi</label>
 <input class="input" id="absenPagi" required="" type="time"/>
@@ -804,7 +963,7 @@ html { scroll-behavior: smooth; }
 <div><b>Rincian Pemasukan Harian</b> <span class="badge">10 baris</span></div>
 <div class="mini subtle">Kolom: 1) No. 2) Jenis PS 3) Jam Masuk 4) Jumlah Jam 5) Harga</div>
 </div>
-<div style="overflow:auto;margin-top:10px">
+<div style="overflow:auto;margin-top: var(--space-2)">
 <table class="table-sm" id="rincianTable">
 <thead>
 <tr>
@@ -828,7 +987,7 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
+<div class="row" style="margin-top: var(--space-2)">
 <button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
 <button class="btn primary" id="rincianAddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
@@ -843,7 +1002,7 @@ html { scroll-behavior: smooth; }
 <div><b>Rincian Pemasukan Jajanan</b> <span class="badge">3 kolom × 10 baris</span></div>
 <div class="mini subtle">Kolom: 1) Jenis • 2) Qty &amp; Jam • 3) Harga (otomatis)</div>
 </div>
-<div style="overflow:auto;margin-top:10px">
+<div style="overflow:auto;margin-top: var(--space-2)">
 <table class="table-sm" id="jajananTable3x10">
 <thead>
 <tr><th>No.</th><th>Jenis Jajanan</th><th>Qty &amp; Jam</th><th>Harga (Rp)</th></tr>
@@ -862,8 +1021,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian Jajanan</button>
+<div class="row" style="margin-top: var(--space-2)">
+<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian</button>
 <button class="btn primary" id="jajanan3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
 </div>
@@ -877,7 +1036,7 @@ html { scroll-behavior: smooth; }
 <div><b>Rincian Pemasukan Jasa &amp; Aksesoris</b> <span class="badge">3 kolom × 5 baris</span></div>
 <div class="mini subtle">Kolom: 1) Tipe (drop-down) • 2) Keterangan (manual) • 3) Harga (manual)</div>
 </div>
-<div style="overflow:auto;margin-top:10px">
+<div style="overflow:auto;margin-top: var(--space-2)">
 <table class="table-sm" id="jasaTable2x5"><colgroup><col style="width:5.2%"/><col style="width:31.6%"/><col style="width:31.6%"/><col style="width:31.6%"/></colgroup>
 <thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
 <tbody></tbody>
@@ -889,8 +1048,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian Jasa &amp; Aksesoris</button>
+<div class="row" style="margin-top: var(--space-2)">
+<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian</button>
 <button class="btn primary" id="jasa2x5AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
 </div>
@@ -904,7 +1063,7 @@ html { scroll-behavior: smooth; }
 <div><b>Rincian Pemasukan SEWA PS</b> <span class="badge">4 kolom × 5 baris</span></div>
 <div class="mini subtle">Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Keterangan (opsional) • 4) Harga (otomatis bisa diedit)</div>
 </div>
-<div style="overflow:auto;margin-top:10px">
+<div style="overflow:auto;margin-top: var(--space-2)">
 <table class="table-sm" id="sewaTable3x10">
 <thead>
 <tr>
@@ -924,8 +1083,8 @@ html { scroll-behavior: smooth; }
 </tfoot>
 </table>
 </div>
-<div class="row" style="margin-top:10px">
-<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian Sewa</button>
+<div class="row" style="margin-top: var(--space-2)">
+<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian </button>
 <button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
 </div>
@@ -980,7 +1139,7 @@ html { scroll-behavior: smooth; }
 <div><b>History Pembukuan</b></div>
 <div class="mini subtle">Riwayat semua pencatatan pemasukan</div>
 </div>
-<div style="overflow:auto;margin-top:10px">
+<div style="overflow:auto;margin-top: var(--space-2)">
 <table class="table-sm" id="table">
 <thead>
 <tr>
@@ -1024,7 +1183,7 @@ html { scroll-behavior: smooth; }
 </div>
 <div class="spacer"></div>
 <div class="card pad" id="graphCard">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap: var(--space-2);margin-bottom:8px">
 <div><b>Grafik Total</b> <span class="mini subtle">titik berwarna sesuai ambang</span></div>
 <button class="btn" id="saveGraphBtn" title="Simpan grafik sebagai gambar">Simpan Grafik</button>
 </div>
@@ -1269,7 +1428,7 @@ html { scroll-behavior: smooth; }
       var tr=document.createElement('tr');
       tr.innerHTML = '<td>'+(i+1)+'</td>' +
         '<td><select class="select mini j3-jenis"><option value="">-</option>'+items.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
-        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--space-1)">' +
             '<input type="number" min="0" step="1" placeholder="0" class="input mono mini j3-qty"/>' +
             '<input type="time" class="input mini j3-jam"/></div></td>' +
         '<td><input type="number" min="0" step="100" placeholder="0" readonly class="input mono mini j3-harga"/></td>';
@@ -1496,7 +1655,7 @@ function scrollToTopMobile() {
         var tr=document.createElement('tr');
         tr.innerHTML = '<td>'+(i+1)+'</td>' +
           '<td><select class="select mini j3-jenis"><option value="">-</option>'+items.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
-          '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+          '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--space-1)">' +
               '<input type="number" min="0" step="1" placeholder="0" class="input mono mini j3-qty"/>' +
               '<input type="time" class="input mini j3-jam"/></div></td>' +
           '<td><input type="number" min="0" step="100" placeholder="0" readonly class="input mono mini j3-harga"/></td>';
@@ -1551,7 +1710,7 @@ function scrollToTopMobile() {
         var tr=document.createElement('tr');
         tr.innerHTML = '<td>'+(i+1)+'</td>' +
           '<td><select class="select mini sewa-jenis"><option value="">-</option>'+SEWA_TYPES.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
-          '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+          '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--space-1)">' +
               '<select class="select mini sewa-durasi"><option value="">-</option><option value="12JAM">12 JAM</option><option value="1HARI">1 HARI</option><option value="2HARI">2 HARI</option><option value="3HARI">3 HARI</option></select>' +
               '<input type="text" placeholder="Isi Sendiri" class="input mini sewa-manual"/></div></td>' +
           '<td><input type="text" placeholder="note (optional)" class="input mini sewa-lama-note"/></td><td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
@@ -1739,14 +1898,14 @@ sumSewa3x10();
       list.forEach(function(e){
         var tr=document.createElement('tr');
         var tds=[
-          (function(){ var td=document.createElement('td'); td.appendChild(editableDateCell(e.date,function(v){ e.date=v; save(); render(); })); return td; })(),
+          (function(){ var td=document.createElement('td'); td.textContent = e.date; return td; })(),
           (function(){ var td=document.createElement('td'); td.textContent=getDayName(e.date); return td; })(),
-          (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.harian,function(v){ e.harian=v; save(); render(); })); return td; })(),
-          (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.jajanan,function(v){ e.jajanan=v; save(); render(); })); return td; })(),
-          (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.jasa,function(v){ e.jasa=v; save(); render(); })); return td; })(),
-          (function(){ var td=document.createElement('td'); td.className='mono right'; td.appendChild(editableMoneyCell(e.sewa,function(v){ e.sewa=v; save(); render(); })); return td; })(),
+          (function(){ var td=document.createElement('td'); td.className='mono right'; td.textContent = fmtIDR(e.harian); return td; })(),
+          (function(){ var td=document.createElement('td'); td.className='mono right'; td.textContent = fmtIDR(e.jajanan); return td; })(),
+          (function(){ var td=document.createElement('td'); td.className='mono right'; td.textContent = fmtIDR(e.jasa); return td; })(),
+          (function(){ var td=document.createElement('td'); td.className='mono right'; td.textContent = fmtIDR(e.sewa); return td; })(),
           (function(){ var td=document.createElement('td'); td.className='mono right'; var tot=cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa); td.textContent=fmtIDR(tot); return td; })(),
-          (function(){ var td=document.createElement('td'); td.appendChild(editableTextCell(e.catatan||'',function(v){ e.catatan=v; save(); render(); })); return td; })(),
+          (function(){ var td=document.createElement('td'); td.textContent = e.catatan || ''; return td; })(),
           (function(){
             var td=document.createElement('td'); td.className='right';
             var edit=document.createElement('button'); edit.className='btn'; edit.textContent='Edit'; edit.title='Load rincian ke form atas';
@@ -2279,7 +2438,7 @@ async function exportReportPDF(){
       var tr = document.createElement('tr');
       tr.innerHTML = '<td></td>' +
         '<td><select class="select mini j3-jenis"><option value="">-</option>'+items.map(function(x){return '<option>'+x+'</option>';}).join('')+'</select></td>' +
-        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--space-1)">' +
             '<input type="number" min="0" step="1" placeholder="0" class="input mono mini j3-qty"/>' +
             '<input type="time" class="input mini j3-jam"/></div></td>' +
         '<td><input type="number" min="0" step="100" placeholder="0" readonly class="input mono mini j3-harga"/></td>';
@@ -2310,7 +2469,7 @@ async function exportReportPDF(){
       var tr = document.createElement('tr');
       tr.innerHTML = '<td></td>' +
         '<td><select class="select mini sewa-jenis"><option value="">-</option>'+SEWA_TYPES.map(function(x){return '<option>'+x+'</option>';}).join('')+'</select></td>' +
-        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--space-1)">' +
             '<select class="select mini sewa-durasi"><option value="">-</option><option value="12JAM">12 JAM</option><option value="1HARI">1 HARI</option><option value="2HARI">2 HARI</option><option value="3HARI">3 HARI</option></select>' +
             '<input type="text" placeholder="Isi Sendiri" class="input mini sewa-manual"/></div></td>' +
         '<td><input type="text" placeholder="note (optional)" class="input mini sewa-lama-note"/></td><td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
@@ -2974,12 +3133,12 @@ document.querySelectorAll('.modal').forEach(modal => {
 <div class="modal-title">Pengaturan</div>
 <button class="modal-close" data-close="">✕</button>
 </div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
 <style>
-.settings-layout { display:flex; gap:16px; min-height:240px; }
-.settings-sidebar { flex:0 0 200px; background:var(--card2); border:1px solid var(--ring); border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px; }
+.settings-layout { display:flex; gap:16px; min-height: var(--ctrl-h); }
+.settings-sidebar { flex:0 0 200px; background:var(--card2); border:1px solid var(--ring); border-radius: var(--radius); padding:8px; display:flex; flex-direction:column; gap: var(--space-1); }
 .settings-sidebar .btn { justify-content:flex-start; }
-.settings-content { flex:1; display:flex; flex-direction:column; gap:12px; }
+.settings-content { flex:1; display:flex; flex-direction:column; gap: var(--space-2); }
 .settings-tab[hidden] { display:none !important; }
 @media(max-width:600px){
   .settings-layout { flex-direction:column; }
@@ -3050,7 +3209,7 @@ textarea:focus-visible {
   border-collapse: collapse;
 }
 #table th, #table td {
-  padding: 10px 12px;
+  padding: var(--space-2) 12px;
   vertical-align: middle;
 }
 #table th {
@@ -3063,7 +3222,7 @@ textarea:focus-visible {
 }
 /* Tombol Edit dan Hapus */
 #table .btn {
-  padding: 6px 10px;
+  padding: var(--space-1) 10px;
   font-size: 12px;
   border-radius: 8px;
   min-width: 50px;
@@ -3107,7 +3266,7 @@ textarea:focus-visible {
 </div>
 <!-- Tab: Jajanan -->
 <div class="settings-tab" data-tab="jajanan" hidden="">
-<div style="display:flex;flex-direction:column;gap:12px;">
+<div style="display:flex;flex-direction:column;gap: var(--space-2);">
 <button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
 <button class="btn" id="openJajananSettings">Item Jajanan</button>
 <button class="btn" id="openJasaAksesorisSettings">Item Jasa &amp; Aksesori</button>
@@ -3116,7 +3275,7 @@ textarea:focus-visible {
 </div>
 <!-- Tab: Backup & Restore -->
 <div class="settings-tab" data-tab="backup" hidden="">
-<div style="display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;flex-direction:column;gap: var(--space-2);">
 <button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
 <button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
 <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
@@ -3124,7 +3283,7 @@ textarea:focus-visible {
 </div>
 <!-- Tab: Export -->
 <div class="settings-tab" data-tab="export" hidden="">
-<div style="display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;flex-direction:column;gap: var(--space-2);">
 <button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
 </div>
 </div>
@@ -3144,7 +3303,7 @@ textarea:focus-visible {
 <div class="modal-title">Backup &amp; Restore Data</div>
 <button class="modal-close" data-close="">✕</button>
 </div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
+<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
 <button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
 <button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
 <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
@@ -3160,7 +3319,7 @@ textarea:focus-visible {
 <div class="modal-title">Export Data</div>
 <button class="modal-close" data-close="">✕</button>
 </div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: 10px;">
+<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
 <button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
 </div>
 <div class="modal-footer">
@@ -3178,7 +3337,7 @@ textarea:focus-visible {
 <div class="modal-body">
 <table id="jajananSettingsTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
 <thead>
-<tr><th style="text-align:left;padding:6px">Nama Jajanan</th><th style="text-align:left;padding:6px">Harga (Rp)</th><th style="padding:6px">Aksi</th></tr>
+<tr><th style="text-align:left;padding: var(--space-1)">Nama Jajanan</th><th style="text-align:left;padding: var(--space-1)">Harga (Rp)</th><th style="padding: var(--space-1)">Aksi</th></tr>
 </thead>
 <tbody></tbody>
 </table>
