@@ -741,7 +741,7 @@ html { scroll-behavior: smooth; }
 </div>
 <div class="row toolbar-row">
 <button class="btn" id="themeBtn" title="Ganti tema"><span class="emoji">🌙</span>Gelap</button>
-<button class="btn" id="exportReportBtn">Export Report</button>
+<button class="btn" id="exportReportBtn">📝 Download Laporan</button>
 <button class="btn" id="settingsBtn">⚙ Pengaturan</button>
 </div>
 </div>
@@ -1765,6 +1765,11 @@ sumSewa3x10();
               $('#rukoBuka').value = e.rukoBuka || '';
               $('#rukoTutup').value = e.rukoTutup || '';
               applyDetails(e.details || null);
+
+    // Update field Hari setelah tanggal di-set
+    if (typeof updateDayField === "function") {
+        updateDayField();
+    }
 var actionsRow = document.getElementById('formActions');
 if(actionsRow) actionsRow.classList.add('editing');
 if(window.sumGrandLive) window.sumGrandLive(); updateRecap();
@@ -2059,40 +2064,79 @@ document.addEventListener('click', function(e){
     }
 });
 
+
+// Ubah label tombol
+document.getElementById('exportReportBtn').textContent = "📝 Download Laporan";
+
+document.getElementById('exportReportBtn').addEventListener('click', function(){
+    exportReportPDF();
+});
+
+
 async function exportReportPDF(){
     try {
         const { jsPDF } = window.jspdf;
         var w = Math.max(document.documentElement.scrollWidth, document.body.scrollWidth);
         var h = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
         window.scrollTo(0,0);
+
         const canvas = await html2canvas(document.body, {
             useCORS: true,
             backgroundColor: getComputedStyle(document.body).backgroundColor,
             windowWidth: w,
             windowHeight: h,
-            scale: 1.2 // turunkan scale agar file lebih kecil
+            scale: 1.2
         });
-        const imgData = canvas.toDataURL('image/jpeg', 0.85); // JPEG dengan kualitas 85%
-        
-        // Ukuran PDF mengikuti proporsi gambar tapi diperkecil agar file tidak besar
-        const maxWidth = 1200; // batas lebar px untuk PDF
-        const scaleFactor = Math.min(1, maxWidth / canvas.width);
-        const pdfWidth = canvas.width * scaleFactor;
-        const pdfHeight = canvas.height * scaleFactor;
-        
-        const pdf = new jsPDF('p', 'pt', [pdfWidth, pdfHeight]);
-        
-        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, '', 'FAST');
-        
-        const today = new Date();
-        const tanggal = today.toISOString().slice(0,10);
-        const hari = today.toLocaleDateString('id-ID', { weekday: 'long' });
-        const fileName = `pembukuan_URVAN_LPG_${tanggal}_${hari}.pdf`;
-        pdf.save(fileName);
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.85);
+        const pdf = new jsPDF('p', 'pt', [canvas.width * 0.75, canvas.height * 0.75]);
+        pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width * 0.75, canvas.height * 0.75);
+
+        // Ambil dari field input form
+        const tanggalInput = document.getElementById('date').value;
+        const hariInput = document.getElementById('day').value || '';
+
+        let fileName;
+        if (tanggalInput) {
+            fileName = `pembukuan_URBAN_LPG_${tanggalInput}_${hariInput}.pdf`;
+        } else {
+            const today = new Date();
+            const tanggal = today.toISOString().slice(0,10);
+            const hari = today.toLocaleDateString('id-ID', { weekday: 'long' });
+            fileName = `pembukuan_URBAN_LPG_${tanggal}_${hari}.pdf`;
+        }
+
+        const pdfBlob = pdf.output('blob');
+        const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+
+        // ==== Jika Web Share API tersedia → langsung share ====
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+                title: "Laporan Pembukuan",
+                text: "Berikut laporan pembukuan dalam format PDF.",
+                files: [file]
+            }).catch(err => {
+                console.warn("Share dibatalkan/gagal:", err);
+            });
+            return;
+        }
+
+        // ==== Kalau tidak ada Web Share API → fallback download ====
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1500);
+
     } catch(err){
-        await themedAlert('Gagal export PDF: ' + err.message);
+        await themedAlert('Gagal download laporan: ' + err.message);
     }
 }
+
+
 
 
     
