@@ -1,545 +1,1086 @@
 <!DOCTYPE html>
-
 <html lang="id">
-<head>
-<meta charset="utf-8"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Pembukuan Rental PS - URBAN DIGITAL (Theme Toggle)</title>
-
-
-
-
-
-
-
-
-<link href="style.css" rel="stylesheet"/></head>
-<body>
-<div class="container">
-<div class="header">
-<div>
-<div class="title">PEMBUKUAN RENTAL PS — URBAN GAMING LAMPUNG DIGITAL</div>
-<div class="subtitle">URBAN PlayStation Lampung 🎮</div>
-</div>
-<div class="row toolbar-row">
-<button class="btn" id="themeBtn" title="Ganti tema"><span class="emoji">🌙</span>Gelap</button>
-<button class="btn" id="exportReportBtn">📝 Download Laporan</button>
-<button class="btn" id="settingsBtn">⚙ Pengaturan</button>
-</div>
-</div>
-<div class="spacer"></div>
-<div class="card pad">
-<!-- Row 1: Date & Day -->
-<div class="grid g2 top-form">
-<div>
-<label>Tanggal</label>
-<input class="input" id="date" type="date"/>
-</div>
-<div>
-<label>Hari</label>
-<input class="input" id="day" readonly="" style="background-color: var(--card2); color: var(--muted);" type="text"/>
-</div>
-</div>
-<!-- Row 2: Absen & Ruko -->
-<div class="grid g4" style="margin-top: var(--space-2);">
-<div>
-<label>Absen Pagi</label>
-<input class="input" id="absenPagi" required="" type="time"/>
-</div>
-<div>
-<label>Absen Siang</label>
-<input class="input" id="absenSiang" required="" type="time"/>
-</div>
-<div>
-<label>Ruko Buka</label>
-<input class="input" id="rukoBuka" required="" type="time"/>
-</div>
-<div>
-<label>Ruko Tutup</label>
-<input class="input" id="rukoTutup" required="" type="time"/>
-</div>
-</div>
-<!-- Hidden fields -->
-<input id="harian" type="hidden" value="0"/>
-<input id="jajanan" type="hidden" value="0"/>
-<input id="jasa" type="hidden" value="0"/>
-<input id="sewa" type="hidden" value="0"/>
-<div class="spacer"></div>
-<div class="row catatan-row">
-<div class="catatan-wrap">
-<label>Catatan (opsional)</label>
-<input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/>
-</div>
-<div class="actions-wrap">
-<label style="visibility:hidden">.</label>
-<div class="actions-row" id="formActions">
-<button class="btn warn" id="cancelEditBtn" style="display:none;">Batal</button>
-<button class="btn primary" id="addBtn">+ Tambah Pencatatan</button>
-</div>
-</div>
-</div>
-<div class="spacer"></div>
-<!-- Rincian Pemasukan Harian -->
-<div class="subcard">
-<div class="pad">
-<div class="row" style="justify-content:space-between;align-items:center">
-<div><b>Rincian Pemasukan Harian</b> <span class="badge">10 baris</span></div>
-<div class="mini subtle">Kolom: 1) No. 2) Jenis PS 3) Jam Masuk 4) Jumlah Jam 5) Harga</div>
-</div>
-<div style="overflow:auto;margin-top: var(--space-2)">
-<table class="table-sm" id="rincianTable">
-<thead>
-<tr>
-<th>No.</th>
-<th>Jenis PS</th>
-<th>Jam Masuk</th>
-<th>Jumlah Jam</th>
-<th>Harga (Rp)</th>
-</tr>
-</thead>
-<tbody></tbody>
-<tfoot>
-<tr class="total-row">
-<td class="right" colspan="4">TOTAL</td>
-<td class="mono right" id="rincianTotal">Rp 0</td>
-</tr>
-<tr class="total-row">
-<td colspan="9" style="text-align:left; padding-top:8px;">
-</td>
-</tr>
-</tfoot>
-</table>
-</div>
-<div class="row" style="margin-top: var(--space-2)">
-<button class="btn" id="rincianClear" type="button">Kosongkan Rincian</button>
-<button class="btn primary" id="rincianAddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle auto-note">Total otomatis masuk ke kolom <b>Pemasukan Harian</b>.</span>
-</div>
-</div>
-</div>
-<div class="spacer"></div>
-<!-- Rincian Pemasukan Jajanan (3 kolom × 10 baris) -->
-<div class="subcard">
-<div class="pad">
-<div class="row" style="justify-content:space-between;align-items:center">
-<div><b>Rincian Pemasukan Jajanan</b> <span class="badge">3 kolom × 10 baris</span></div>
-<div class="mini subtle">Kolom: 1) Jenis • 2) Qty &amp; Jam • 3) Harga (otomatis)</div>
-</div>
-<div style="overflow:auto;margin-top: var(--space-2)">
-<table class="table-sm" id="jajananTable3x10">
-<thead>
-<tr><th>No.</th><th>Jenis Jajanan</th><th>Qty &amp; Jam</th><th>Harga (Rp)</th></tr>
-</thead>
-<tbody></tbody>
-<tfoot>
-<tr class="total-row">
-<td class="right" colspan="2">TOTAL</td>
-<td></td>
-<td class="mono right" id="jajananTotal3x10">Rp 0</td>
-</tr>
-<tr class="total-row">
-<td colspan="9" style="text-align:left; padding-top:8px;">
-</td>
-</tr>
-</tfoot>
-</table>
-</div>
-<div class="row" style="margin-top: var(--space-2)">
-<button class="btn" id="jajanan3x10Clear" type="button">Kosongkan Rincian</button>
-<button class="btn primary" id="jajanan3x10AddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jajanan</b>.</span>
-</div>
-</div>
-</div>
-<div class="spacer"></div>
-<!-- Rincian Pemasukan Jasa & Aksesoris (3 kolom × 5 baris) -->
-<div class="subcard">
-<div class="pad">
-<div class="row" style="justify-content:space-between;align-items:center">
-<div><b>Rincian Pemasukan Jasa &amp; Aksesoris</b> <span class="badge">3 kolom × 5 baris</span></div>
-<div class="mini subtle">Kolom: 1) Tipe (drop-down) • 2) Keterangan (manual) • 3) Harga (manual)</div>
-</div>
-<div style="overflow:auto;margin-top: var(--space-2)">
-<table class="table-sm" id="jasaTable2x5"><colgroup><col style="width:5.2%"/><col style="width:31.6%"/><col style="width:31.6%"/><col style="width:31.6%"/></colgroup>
-<thead><tr><th>No.</th><th>Tipe</th><th>Keterangan</th><th>Harga (Rp)</th></tr></thead>
-<tbody></tbody>
-<tfoot><tr class="total-row"><td class="right" colspan="3">TOTAL</td><td class="mono right" id="jasaTotal2x5">Rp 0</td></tr>
-<tr class="total-row">
-<td colspan="9" style="text-align:left; padding-top:8px;">
-</td>
-</tr>
-</tfoot>
-</table>
-</div>
-<div class="row" style="margin-top: var(--space-2)">
-<button class="btn" id="jasa2x5Clear" type="button">Kosongkan Rincian</button>
-<button class="btn primary" id="jasa2x5AddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle auto-note">Total otomatis → kolom <b>Pemasukan Jasa &amp; Aksesoris</b> di atas.</span>
-</div>
-</div>
-</div>
-<div class="spacer"></div>
-<!-- Rincian Pemasukan SEWA PS (3 kolom × 10 baris) -->
-<div class="subcard">
-<div class="pad">
-<div class="row" style="justify-content:space-between;align-items:center">
-<div><b>Rincian Pemasukan SEWA PS</b> <span class="badge">4 kolom × 5 baris</span></div>
-<div class="mini subtle">Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Keterangan (opsional) • 4) Harga (otomatis bisa diedit)</div>
-</div>
-<div style="overflow:auto;margin-top: var(--space-2)">
-<table class="table-sm" id="sewaTable3x10">
-<thead>
-<tr>
-<th>No.</th><th>Jenis PS</th><th>Lama Sewa</th><th>Keterangan</th><th>Harga (Rp)</th>
-</tr>
-</thead>
-<tbody></tbody>
-<tfoot>
-<tr class="total-row">
-<td class="right" colspan="4">TOTAL</td>
-<td class="mono right" id="sewaTotal3x10">Rp 0</td>
-</tr>
-<tr class="total-row">
-<td colspan="9" style="text-align:left; padding-top:8px;">
-</td>
-</tr>
-</tfoot>
-</table>
-</div>
-<div class="row" style="margin-top: var(--space-2)">
-<button class="btn" id="sewa3x10Clear" type="button">Kosongkan Rincian </button>
-<button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
-<span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
-</div>
-<div class="spacer"></div>
-<!-- Recap ringkas di atas TOTAL KESELURUHAN -->
-<div class="recap" id="recapBar">
-<div class="recap-item"><div class="label">Pemasukan Harian</div><div class="value mono" id="recapHarian">Rp 0</div></div>
-<div class="recap-item"><div class="label">Pemasukan Jajanan</div><div class="value mono" id="recapJajanan">Rp 0</div></div>
-<div class="recap-item"><div class="label">Pemasukan Jasa &amp; Aksesoris</div><div class="value mono" id="recapJasa">Rp 0</div></div>
-<div class="recap-item"><div class="label">Pemasukan Sewa PS</div><div class="value mono" id="recapSewa">Rp 0</div></div>
-</div>
-<div class="spacer"></div>
-<div class="subcard">
-<div class="pad">
-<table style="width:100%;border-collapse:collapse">
-<tr class="total-row">
-<td class="right" colspan="3" style="text-align:left;font-weight:800;">TOTAL KESELURUHAN</td>
-<td class="mono right" id="grandTotal">Rp 0</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div><!-- /card pad -->
-<div class="spacer"></div>
-<!-- Filter & Rentang (clean, square-rounded, responsive) -->
-<div class="subcard filter-card">
-<div class="pad">
-<div class="filter-grid">
-<div class="f-row">
-<label for="monthFilter">Filter</label>
-<select class="select" id="monthFilter"></select>
-</div>
-<div class="f-row">
-<label for="dateFrom">Rentang</label>
-<div class="range-wrap">
-<input class="input" disabled="" id="dateFrom" type="date"/>
-<span class="sep">s/d</span>
-<input class="input" disabled="" id="dateTo" type="date"/>
-<button class="btn" disabled="" id="rangeApply" type="button">Terapkan</button>
-<button class="btn" disabled="" id="rangeClear" title="Kosongkan rentang" type="button">Bersihkan</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="spacer"></div>
-<div class="card pad">
-<div style="overflow:auto;">
-<div class="row" style="justify-content:space-between;align-items:center">
-<div><b>History Pembukuan</b></div>
-<div class="mini subtle">Riwayat semua pencatatan pemasukan</div>
-</div>
-<div style="overflow:auto;margin-top: var(--space-2)">
-<table class="table-sm" id="table">
-<thead>
-<tr>
-<th colspan="2" style="text-align:center;">Tanggal &amp; Hari</th>
-<th rowspan="2">Harian</th>
-<th rowspan="2">Jajanan</th>
-<th rowspan="2">Jasa &amp; Aksesoris</th>
-<th rowspan="2">Sewa PS</th>
-<th rowspan="2">Total</th>
-<th rowspan="2">Catatan</th>
-<th rowspan="2">Aksi</th>
-</tr>
-<tr>
-<th style="min-width:130px">Tanggal</th>
-<th>Hari</th>
-</tr>
-</thead>
-<tbody></tbody>
-<tfoot>
-<tr>
-<td>Subtotal (tampil)</td><td></td>
-<td class="mono right" id="sumHarian">Rp 0</td>
-<td class="mono right" id="sumJajanan">Rp 0</td>
-<td class="mono right" id="sumJasa">Rp 0</td>
-<td class="mono right" id="sumSewa">Rp 0</td>
-<td class="mono right" id="sumTotal">Rp 0</td>
-<td colspan="2"></td>
-</tr>
-<tr class="total-row"><td colspan="6">Total bulan ini</td><td class="mono right" id="sumMonth">Rp 0</td><td colspan="2"></td></tr>
-<tr class="total-row"><td colspan="6">Total semua</td><td class="mono right" id="sumAll">Rp 0</td><td colspan="2"></td></tr>
-<tr class="total-row">
-<td colspan="9" style="text-align:left; padding-top:8px;">
-<button class="btn warn" id="clearBtn" title="Hapus semua data">Bersihkan Semua History</button>
-</td>
-</tr>
-</tfoot>
-</table>
-</div>
-<div class="note">Tombol <b>Edit</b> nge-load semua rincian ke form di atas biar bisa diperbaiki total.</div>
-</div>
-</div>
-<div class="spacer"></div>
-<div class="card pad" id="graphCard">
-<div style="display:flex;justify-content:space-between;align-items:center;gap: var(--space-2);margin-bottom:8px">
-<div><b>Grafik Total</b> <span class="mini subtle">titik berwarna sesuai ambang</span></div>
-<button class="btn" id="saveGraphBtn" title="Simpan grafik sebagai gambar">Simpan Grafik</button>
-</div>
-<canvas height="260" id="dailyGraph" style="width:100%;display:block"></canvas>
-<div class="mini subtle" id="graphCaption" style="margin-top:8px"></div>
-</div><div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
-    © <span id="year"></span> URBAN GAMING LAMPUNG
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Pembukuan Rental PS - URBAN DIGITAL (Theme Toggle)
+  </title>
+  <link href="style.css" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <div>
+     <div class="title">
+      PEMBUKUAN RENTAL PS — URBAN GAMING LAMPUNG DIGITAL
+     </div>
+     <div class="subtitle">
+      URBAN PlayStation Lampung 🎮
+     </div>
+    </div>
+    <div class="row toolbar-row">
+     <button class="btn" id="themeBtn" title="Ganti tema">
+      <span class="emoji">
+       🌙
+      </span>
+      Gelap
+     </button>
+     <button class="btn" id="exportReportBtn">
+      📝 Download Laporan
+     </button>
+     <button class="btn" id="settingsBtn">
+      ⚙ Pengaturan
+     </button>
+    </div>
+   </div>
+   <div class="spacer">
+   </div>
+   <div class="card pad">
+    <!-- Row 1: Date & Day -->
+    <div class="grid g2 top-form">
+     <div>
+      <label>
+       Tanggal
+      </label>
+      <input class="input" id="date" type="date"/>
+     </div>
+     <div>
+      <label>
+       Hari
+      </label>
+      <input class="input" id="day" readonly="" style="background-color: var(--card2); color: var(--muted);" type="text"/>
+     </div>
+    </div>
+    <!-- Row 2: Absen & Ruko -->
+    <div class="grid g4" style="margin-top: var(--space-2);">
+     <div>
+      <label>
+       Absen Pagi
+      </label>
+      <input class="input" id="absenPagi" required="" type="time"/>
+     </div>
+     <div>
+      <label>
+       Absen Siang
+      </label>
+      <input class="input" id="absenSiang" required="" type="time"/>
+     </div>
+     <div>
+      <label>
+       Ruko Buka
+      </label>
+      <input class="input" id="rukoBuka" required="" type="time"/>
+     </div>
+     <div>
+      <label>
+       Ruko Tutup
+      </label>
+      <input class="input" id="rukoTutup" required="" type="time"/>
+     </div>
+    </div>
+    <!-- Hidden fields -->
+    <input id="harian" type="hidden" value="0"/>
+    <input id="jajanan" type="hidden" value="0"/>
+    <input id="jasa" type="hidden" value="0"/>
+    <input id="sewa" type="hidden" value="0"/>
+    <div class="spacer">
+    </div>
+    <div class="row catatan-row">
+     <div class="catatan-wrap">
+      <label>
+       Catatan (opsional)
+      </label>
+      <input class="input" id="catatan" placeholder="misal : Ada yang belum bayar" type="text"/>
+     </div>
+     <div class="actions-wrap">
+      <label style="visibility:hidden">
+       .
+      </label>
+      <div class="actions-row" id="formActions">
+       <button class="btn warn" id="cancelEditBtn" style="display:none;">
+        Batalkan Edit
+       </button>
+       <button class="btn primary" id="addBtn">
+        + Tambah Pencatatan
+       </button>
+      </div>
+     </div>
+    </div>
+    <div class="spacer">
+    </div>
+    <!-- Rincian Pemasukan Harian -->
+    <div class="subcard">
+     <div class="pad">
+      <div class="row" style="justify-content:space-between;align-items:center">
+       <div>
+        <b>
+         Rincian Pemasukan Harian
+        </b>
+        <span class="badge">
+         10 baris
+        </span>
+       </div>
+       <div class="mini subtle">
+        Kolom: 1) No. 2) Jenis PS 3) Jam Masuk 4) Jumlah Jam 5) Harga
+       </div>
+      </div>
+      <div style="overflow:auto;margin-top: var(--space-2)">
+       <table class="table-sm" id="rincianTable">
+        <thead>
+         <tr>
+          <th>
+           No.
+          </th>
+          <th>
+           Jenis PS
+          </th>
+          <th>
+           Jam Masuk
+          </th>
+          <th>
+           Jumlah Jam
+          </th>
+          <th>
+           Harga (Rp)
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+         <tr class="total-row">
+          <td class="right" colspan="4">
+           TOTAL
+          </td>
+          <td class="mono right" id="rincianTotal">
+           Rp 0
+          </td>
+         </tr>
+         <tr class="total-row">
+          <td colspan="9" style="text-align:left; padding-top:8px;">
+          </td>
+         </tr>
+        </tfoot>
+       </table>
+      </div>
+      <div class="row" style="margin-top: var(--space-2)">
+       <button class="btn" id="rincianClear" type="button">
+        Kosongkan Rincian
+       </button>
+       <button class="btn primary" id="rincianAddRow" type="button">
+        + Tambah Baris
+       </button>
+       <span class="mini subtle auto-note">
+        Total otomatis masuk ke kolom
+        <b>
+         Pemasukan Harian
+        </b>
+        .
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="spacer">
+    </div>
+    <!-- Rincian Pemasukan Jajanan (3 kolom × 10 baris) -->
+    <div class="subcard">
+     <div class="pad">
+      <div class="row" style="justify-content:space-between;align-items:center">
+       <div>
+        <b>
+         Rincian Pemasukan Jajanan
+        </b>
+        <span class="badge">
+         3 kolom × 10 baris
+        </span>
+       </div>
+       <div class="mini subtle">
+        Kolom: 1) Jenis • 2) Qty &amp; Jam • 3) Harga (otomatis)
+       </div>
+      </div>
+      <div style="overflow:auto;margin-top: var(--space-2)">
+       <table class="table-sm" id="jajananTable3x10">
+        <thead>
+         <tr>
+          <th>
+           No.
+          </th>
+          <th>
+           Jenis Jajanan
+          </th>
+          <th>
+           Qty &amp; Jam
+          </th>
+          <th>
+           Harga (Rp)
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+         <tr class="total-row">
+          <td class="right" colspan="2">
+           TOTAL
+          </td>
+          <td>
+          </td>
+          <td class="mono right" id="jajananTotal3x10">
+           Rp 0
+          </td>
+         </tr>
+         <tr class="total-row">
+          <td colspan="9" style="text-align:left; padding-top:8px;">
+          </td>
+         </tr>
+        </tfoot>
+       </table>
+      </div>
+      <div class="row" style="margin-top: var(--space-2)">
+       <button class="btn" id="jajanan3x10Clear" type="button">
+        Kosongkan Rincian
+       </button>
+       <button class="btn primary" id="jajanan3x10AddRow" type="button">
+        + Tambah Baris
+       </button>
+       <span class="mini subtle auto-note">
+        Total otomatis → kolom
+        <b>
+         Pemasukan Jajanan
+        </b>
+        .
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="spacer">
+    </div>
+    <!-- Rincian Pemasukan Jasa & Aksesoris (3 kolom × 5 baris) -->
+    <div class="subcard">
+     <div class="pad">
+      <div class="row" style="justify-content:space-between;align-items:center">
+       <div>
+        <b>
+         Rincian Pemasukan Jasa &amp; Aksesoris
+        </b>
+        <span class="badge">
+         3 kolom × 5 baris
+        </span>
+       </div>
+       <div class="mini subtle">
+        Kolom: 1) Tipe (drop-down) • 2) Keterangan (manual) • 3) Harga (manual)
+       </div>
+      </div>
+      <div style="overflow:auto;margin-top: var(--space-2)">
+       <table class="table-sm" id="jasaTable2x5">
+        <colgroup>
+         <col style="width:5.2%"/>
+         <col style="width:31.6%"/>
+         <col style="width:31.6%"/>
+         <col style="width:31.6%"/>
+        </colgroup>
+        <thead>
+         <tr>
+          <th>
+           No.
+          </th>
+          <th>
+           Tipe
+          </th>
+          <th>
+           Keterangan
+          </th>
+          <th>
+           Harga (Rp)
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+         <tr class="total-row">
+          <td class="right" colspan="3">
+           TOTAL
+          </td>
+          <td class="mono right" id="jasaTotal2x5">
+           Rp 0
+          </td>
+         </tr>
+         <tr class="total-row">
+          <td colspan="9" style="text-align:left; padding-top:8px;">
+          </td>
+         </tr>
+        </tfoot>
+       </table>
+      </div>
+      <div class="row" style="margin-top: var(--space-2)">
+       <button class="btn" id="jasa2x5Clear" type="button">
+        Kosongkan Rincian
+       </button>
+       <button class="btn primary" id="jasa2x5AddRow" type="button">
+        + Tambah Baris
+       </button>
+       <span class="mini subtle auto-note">
+        Total otomatis → kolom
+        <b>
+         Pemasukan Jasa &amp; Aksesoris
+        </b>
+        di atas.
+       </span>
+      </div>
+     </div>
+    </div>
+    <div class="spacer">
+    </div>
+    <!-- Rincian Pemasukan SEWA PS (3 kolom × 10 baris) -->
+    <div class="subcard">
+     <div class="pad">
+      <div class="row" style="justify-content:space-between;align-items:center">
+       <div>
+        <b>
+         Rincian Pemasukan SEWA PS
+        </b>
+        <span class="badge">
+         4 kolom × 5 baris
+        </span>
+       </div>
+       <div class="mini subtle">
+        Kolom: 1) Jenis PS • 2) Lama Sewa • 3) Keterangan (opsional) • 4) Harga (otomatis bisa diedit)
+       </div>
+      </div>
+      <div style="overflow:auto;margin-top: var(--space-2)">
+       <table class="table-sm" id="sewaTable3x10">
+        <thead>
+         <tr>
+          <th>
+           No.
+          </th>
+          <th>
+           Jenis PS
+          </th>
+          <th>
+           Lama Sewa
+          </th>
+          <th>
+           Keterangan
+          </th>
+          <th>
+           Harga (Rp)
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+         <tr class="total-row">
+          <td class="right" colspan="4">
+           TOTAL
+          </td>
+          <td class="mono right" id="sewaTotal3x10">
+           Rp 0
+          </td>
+         </tr>
+         <tr class="total-row">
+          <td colspan="9" style="text-align:left; padding-top:8px;">
+          </td>
+         </tr>
+        </tfoot>
+       </table>
+      </div>
+      <div class="row" style="margin-top: var(--space-2)">
+       <button class="btn" id="sewa3x10Clear" type="button">
+        Kosongkan Rincian
+       </button>
+       <button class="btn primary" id="sewa3x10AddRow" type="button">
+        + Tambah Baris
+       </button>
+       <span class="mini subtle auto-note">
+        Total otomatis → kolom
+        <b>
+         Sewa PS
+        </b>
+        di atas.
+       </span>
+      </div>
+      <div class="spacer">
+      </div>
+      <!-- Recap ringkas di atas TOTAL KESELURUHAN -->
+      <div class="recap" id="recapBar">
+       <div class="recap-item">
+        <div class="label">
+         Pemasukan Harian
+        </div>
+        <div class="value mono" id="recapHarian">
+         Rp 0
+        </div>
+       </div>
+       <div class="recap-item">
+        <div class="label">
+         Pemasukan Jajanan
+        </div>
+        <div class="value mono" id="recapJajanan">
+         Rp 0
+        </div>
+       </div>
+       <div class="recap-item">
+        <div class="label">
+         Pemasukan Jasa &amp; Aksesoris
+        </div>
+        <div class="value mono" id="recapJasa">
+         Rp 0
+        </div>
+       </div>
+       <div class="recap-item">
+        <div class="label">
+         Pemasukan Sewa PS
+        </div>
+        <div class="value mono" id="recapSewa">
+         Rp 0
+        </div>
+       </div>
+      </div>
+      <div class="spacer">
+      </div>
+      <div class="subcard">
+       <div class="pad">
+        <table style="width:100%;border-collapse:collapse">
+         <tr class="total-row">
+          <td class="right" colspan="3" style="text-align:left;font-weight:800;">
+           TOTAL KESELURUHAN
+          </td>
+          <td class="mono right" id="grandTotal">
+           Rp 0
+          </td>
+         </tr>
+        </table>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- /card pad -->
+   <div class="spacer">
+   </div>
+   <!-- Filter & Rentang (clean, square-rounded, responsive) -->
+   <div class="subcard filter-card">
+    <div class="pad">
+     <div class="filter-grid">
+      <div class="f-row">
+       <label for="monthFilter">
+        Filter
+       </label>
+       <select class="select" id="monthFilter">
+       </select>
+      </div>
+      <div class="f-row" id="customMonthRow" style="display:none;">
+       <label for="customMonth">
+        Pilih Bulan
+       </label>
+       <div class="row" style="gap: var(--space-2);">
+        <input class="input" id="customMonth" type="month"/>
+        <button class="btn" id="applyCustomMonth" type="button">
+         Terapkan
+        </button>
+       </div>
+      </div>
+      <div class="f-row">
+       <label for="dateFrom">
+        Rentang
+       </label>
+       <div class="range-wrap">
+        <input class="input" disabled="" id="dateFrom" type="date"/>
+        <span class="sep">
+         s/d
+        </span>
+        <input class="input" disabled="" id="dateTo" type="date"/>
+        <button class="btn" disabled="" id="rangeApply" type="button">
+         Terapkan
+        </button>
+        <button class="btn" disabled="" id="rangeClear" title="Kosongkan rentang" type="button">
+         Bersihkan
+        </button>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="spacer">
+   </div>
+   <div class="card pad">
+    <div style="overflow:auto;">
+     <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+       <b>
+        History Pembukuan
+       </b>
+      </div>
+      <div class="mini subtle">
+       Riwayat semua pencatatan pemasukan
+      </div>
+     </div>
+     <div style="overflow:auto;margin-top: var(--space-2)">
+      <table class="table-sm" id="table">
+       <thead>
+        <tr>
+         <th colspan="2" style="text-align:center;">
+          Tanggal &amp; Hari
+         </th>
+         <th rowspan="2">
+          Harian
+         </th>
+         <th rowspan="2">
+          Jajanan
+         </th>
+         <th rowspan="2">
+          Jasa &amp; Aksesoris
+         </th>
+         <th rowspan="2">
+          Sewa PS
+         </th>
+         <th rowspan="2">
+          Total
+         </th>
+         <th rowspan="2">
+          Catatan
+         </th>
+         <th rowspan="2">
+          Aksi
+         </th>
+        </tr>
+        <tr>
+         <th style="min-width:130px">
+          Tanggal
+         </th>
+         <th>
+          Hari
+         </th>
+        </tr>
+       </thead>
+       <tbody>
+       </tbody>
+       <tfoot>
+        <tr>
+         <td>
+          Subtotal (tampil)
+         </td>
+         <td>
+         </td>
+         <td class="mono right" id="sumHarian">
+          Rp 0
+         </td>
+         <td class="mono right" id="sumJajanan">
+          Rp 0
+         </td>
+         <td class="mono right" id="sumJasa">
+          Rp 0
+         </td>
+         <td class="mono right" id="sumSewa">
+          Rp 0
+         </td>
+         <td class="mono right" id="sumTotal">
+          Rp 0
+         </td>
+         <td colspan="2">
+         </td>
+        </tr>
+        <tr class="total-row">
+         <td colspan="6">
+          Total bulan ini
+         </td>
+         <td class="mono right" id="sumMonth">
+          Rp 0
+         </td>
+         <td colspan="2">
+         </td>
+        </tr>
+        <tr class="total-row">
+         <td colspan="6">
+          Total semua
+         </td>
+         <td class="mono right" id="sumAll">
+          Rp 0
+         </td>
+         <td colspan="2">
+         </td>
+        </tr>
+        <tr class="total-row">
+         <td colspan="9" style="text-align:left; padding-top:8px;">
+          <button class="btn warn" id="clearBtn" title="Hapus semua data">
+           Bersihkan Semua History
+          </button>
+         </td>
+        </tr>
+       </tfoot>
+      </table>
+     </div>
+     <div class="note">
+      Tombol
+      <b>
+       Edit
+      </b>
+      nge-load semua rincian ke form di atas biar bisa diperbaiki total.
+     </div>
+    </div>
+   </div>
+   <div class="spacer">
+   </div>
+   <div class="card pad" id="graphCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap: var(--space-2);margin-bottom:8px">
+     <div>
+      <b>
+       Grafik Total
+      </b>
+      <span class="mini subtle">
+       titik berwarna sesuai ambang
+      </span>
+     </div>
+     <button class="btn" id="saveGraphBtn" title="Simpan grafik sebagai gambar">
+      Simpan Grafik
+     </button>
+    </div>
+    <canvas height="260" id="dailyGraph" style="width:100%;display:block">
+    </canvas>
+    <div class="mini subtle" id="graphCaption" style="margin-top:8px">
+    </div>
+   </div>
+   <div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
+    ©
+    <span id="year">
+    </span>
+    URBAN GAMING LAMPUNG
+   </div>
+   <div class="spacer">
+   </div>
   </div>
-<div class="spacer"></div>
-</div>
-<input accept=".csv" id="fileInput" style="display:none" type="file"/>
-
-
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<!-- === Themed Popups (Alert & Confirm) === -->
-<div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
-<div class="modal" hidden="" id="themedConfirm">
-<div>
-<div class="modal-header">
-<div class="modal-title">Konfirmasi</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body"></div>
-<div class="modal-footer">
-<button class="btn" data-cancel="">Batal</button>
-<button class="btn primary" data-ok="">OK</button>
-</div>
-</div>
-</div>
-<div class="modal" hidden="" id="themedAlert">
-<div>
-<div class="modal-header">
-<div class="modal-title">Info</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body"></div>
-<div class="modal-footer">
-<button class="btn primary" data-ok="">OK</button>
-</div>
-</div>
-</div>
-<!-- Themed Password Modal -->
-<div class="modal" hidden="" id="themedPassword">
-<div>
-<div class="modal-header">
-<div class="modal-title">Verifikasi</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body">
-<label class="mini subtle" for="pwdInput">Masukkan password untuk melanjutkan</label>
-<input autocomplete="current-password" class="input" id="pwdInput" placeholder="Password admin" type="password"/>
-</div>
-<div class="modal-footer">
-<button class="btn" data-cancel="">Batal</button>
-<button class="btn primary" data-ok="">OK</button>
-</div>
-</div>
-</div>
-<!-- === /Themed Popups === -->
-<!-- Main Settings Modal -->
-<div class="modal" hidden="" id="settingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Pengaturan</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-
-<div class="settings-layout">
-<!-- Sidebar kiri -->
-<div class="settings-sidebar">
-<button class="btn" data-settings-tab="theme"><span class="emoji">⚙️</span> General</button>
-<button class="btn" data-settings-tab="jajanan"><span class="emoji">📝</span>Edit Rincian</button>
-<button class="btn" data-settings-tab="backup"><span class="emoji">📦</span>Backup &amp; Restore Data</button>
-<button class="btn" data-settings-tab="export"><span class="emoji">📤</span>Export Data</button>
-</div>
-<!-- Konten kanan -->
-<div class="settings-content" id="settingsContentArea">
-<!-- Tab: Theme -->
-<div class="settings-tab" data-tab="theme">
-<div style="display:flex;align-items:center;justify-content:space-between;">
-<span>Mode Tema</span>
-<button class="btn" id="themeToggleInSettings"><span class="emoji">🌙</span>Gelap</button>
-</div>
-</div>
-<!-- Tab: Jajanan -->
-<div class="settings-tab" data-tab="jajanan" hidden="">
-<div style="display:flex;flex-direction:column;gap: var(--space-2);">
-<button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
-<button class="btn" id="openJajananSettings">Item Jajanan</button>
-<button class="btn" id="openJasaAksesorisSettings">Item Jasa &amp; Aksesori</button>
-<button class="btn" id="openJenisPSSewaSettings">Item Jenis PS Pemasukan Sewa PS</button>
-</div>
-</div>
-<!-- Tab: Backup & Restore -->
-<div class="settings-tab" data-tab="backup" hidden="">
-<div style="display:flex;flex-direction:column;gap: var(--space-2);">
-<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
-<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
-<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-</div>
-</div>
-<!-- Tab: Export -->
-<div class="settings-tab" data-tab="export" hidden="">
-<div style="display:flex;flex-direction:column;gap: var(--space-2);">
-<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="modal-footer">
-<button class="btn" data-close="">Batal</button>
-</div>
-</div>
-</div>
-<!-- Export Data Modal -->
-<!-- Backup & Restore Data Modal -->
-<div class="modal" hidden="" id="backupRestoreSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Backup &amp; Restore Data</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
-<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
-<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-</div>
-<div class="modal-footer">
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<div class="modal" hidden="" id="exportDataSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Export Data</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
-</div>
-<div class="modal-footer">
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Pengaturan Jajanan Modal -->
-<div class="modal" hidden="" id="jajananSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Pengaturan Jajanan</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body">
-<table id="jajananSettingsTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead>
-<tr><th style="text-align:left;padding: var(--space-1)">Nama Jajanan</th><th style="text-align:left;padding: var(--space-1)">Harga (Rp)</th><th style="padding: var(--space-1)">Aksi</th></tr>
-</thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJajananItemBtn" type="button">+ Tambah Item</button>
-</div>
-<div class="modal-footer">
-<button class="btn" data-cancel="">Batal</button>
-<button class="btn primary" id="saveJajananSettingsBtn">Simpan</button>
-</div>
-</div>
-</div>
-<!-- Jenis PS Harian Modal -->
-<div class="modal" hidden="" id="jenisPSHarianSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Item Jenis PS Pemasukan Harian</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="max-height:60vh;overflow:auto;">
-<table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJenisPSHarianBtn" type="button">+ Tambah Jenis PS</button>
-</div>
-<div class="modal-footer">
-<button class="btn" id="saveJenisPSHarianBtn">Simpan</button>
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Jasa & Aksesoris Modal -->
-<div class="modal" hidden="" id="jasaAksesorisSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Item Jasa &amp; Aksesoris</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="max-height:60vh;overflow:auto;">
-<table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead><tr><th>Nama Jasa/Aksesoris</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJasaAksesorisBtn" type="button">+ Tambah Jasa/Aksesoris</button>
-</div>
-<div class="modal-footer">
-<button class="btn" id="saveJasaAksesorisBtn">Simpan</button>
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Jenis PS Sewa Modal -->
-<div class="modal" hidden="" id="jenisPSSewaSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Item Jenis PS Pemasukan Sewa PS</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="max-height:60vh;overflow:auto;">
-<table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJenisPSSewaBtn" type="button">+ Tambah Jenis PS</button>
-</div>
-<div class="modal-footer">
-<button class="btn" id="saveJenisPSSewaBtn">Simpan</button>
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-
-<script src="app.js"></script></body>
+  <input accept=".csv" id="fileInput" style="display:none" type="file"/>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+  </script>
+  <!-- === Themed Popups (Alert & Confirm) === -->
+  <div class="modal-backdrop" hidden="" id="popupBackdrop">
+  </div>
+  <div class="modal" hidden="" id="themedConfirm">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Konfirmasi
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+     <button class="btn" data-cancel="">
+      Batal
+     </button>
+     <button class="btn primary" data-ok="">
+      OK
+     </button>
+    </div>
+   </div>
+  </div>
+  <div class="modal" hidden="" id="themedAlert">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Info
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+     <button class="btn primary" data-ok="">
+      OK
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Themed Password Modal -->
+  <div class="modal" hidden="" id="themedPassword">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Verifikasi
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body">
+     <label class="mini subtle" for="pwdInput">
+      Masukkan password untuk melanjutkan
+     </label>
+     <input autocomplete="current-password" class="input" id="pwdInput" placeholder="Password admin" type="password"/>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" data-cancel="">
+      Batal
+     </button>
+     <button class="btn primary" data-ok="">
+      OK
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- === /Themed Popups === -->
+  <!-- Main Settings Modal -->
+  <div class="modal" hidden="" id="settingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Pengaturan
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
+     <div class="settings-layout">
+      <!-- Sidebar kiri -->
+      <div class="settings-sidebar">
+       <button class="btn" data-settings-tab="theme">
+        <span class="emoji">
+         ⚙️
+        </span>
+        General
+       </button>
+       <button class="btn" data-settings-tab="jajanan">
+        <span class="emoji">
+         📝
+        </span>
+        Edit Rincian
+       </button>
+       <button class="btn" data-settings-tab="backup">
+        <span class="emoji">
+         📦
+        </span>
+        Backup &amp; Restore Data
+       </button>
+       <button class="btn" data-settings-tab="export">
+        <span class="emoji">
+         📤
+        </span>
+        Export Data
+       </button>
+       <button class="btn" id="resetSettingsBtn">
+        <span class="emoji">
+         ♻️
+        </span>
+        Reset Setting
+       </button>
+      </div>
+      <!-- Konten kanan -->
+      <div class="settings-content" id="settingsContentArea">
+       <!-- Tab: Theme -->
+       <div class="settings-tab" data-tab="theme">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+         <span>
+          Mode Tema
+         </span>
+         <button class="btn" id="themeToggleInSettings">
+          <span class="emoji">
+           🌙
+          </span>
+          Gelap
+         </button>
+        </div>
+       </div>
+       <!-- Tab: Jajanan -->
+       <div class="settings-tab" data-tab="jajanan" hidden="">
+        <div style="display:flex;flex-direction:column;gap: var(--space-2);">
+         <button class="btn" id="openJenisPSHarianSettings">
+          Item Jenis PS Pemasukan Harian
+         </button>
+         <button class="btn" id="openJajananSettings">
+          Item Jajanan
+         </button>
+         <button class="btn" id="openJasaAksesorisSettings">
+          Item Jasa &amp; Aksesori
+         </button>
+         <button class="btn" id="openJenisPSSewaSettings">
+          Item Jenis PS Pemasukan Sewa PS
+         </button>
+        </div>
+       </div>
+       <!-- Tab: Backup & Restore -->
+       <div class="settings-tab" data-tab="backup" hidden="">
+        <div style="display:flex;flex-direction:column;gap: var(--space-2);">
+         <button class="btn" id="backupDataBtn">
+          <span class="emoji">
+           💾
+          </span>
+          Backup Data
+         </button>
+         <button class="btn" id="restoreDataBtn">
+          <span class="emoji">
+           📂
+          </span>
+          Restore Data
+         </button>
+         <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+        </div>
+       </div>
+       <!-- Tab: Export -->
+       <div class="settings-tab" data-tab="export" hidden="">
+        <div style="display:flex;flex-direction:column;gap: var(--space-2);">
+         <button class="btn" id="exportCSVBtn">
+          <span class="emoji">
+           📄
+          </span>
+          Ekspor CSV
+         </button>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" data-close="">
+      Tutup
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Export Data Modal -->
+  <!-- Backup & Restore Data Modal -->
+  <div class="modal" hidden="" id="backupRestoreSettingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Backup &amp; Restore Data
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
+     <button class="btn" id="backupDataBtn">
+      <span class="emoji">
+       💾
+      </span>
+      Backup Data
+     </button>
+     <button class="btn" id="restoreDataBtn">
+      <span class="emoji">
+       📂
+      </span>
+      Restore Data
+     </button>
+     <input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" data-close="">
+      Tutup
+     </button>
+    </div>
+   </div>
+  </div>
+  <div class="modal" hidden="" id="exportDataSettingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Export Data
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
+     <button class="btn" id="exportCSVBtn">
+      <span class="emoji">
+       📄
+      </span>
+      Ekspor CSV
+     </button>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" data-close="">
+      Tutup
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Pengaturan Jajanan Modal -->
+  <div class="modal" hidden="" id="jajananSettingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Pengaturan Jajanan
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body">
+     <table id="jajananSettingsTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+      <thead>
+       <tr>
+        <th style="text-align:left;padding: var(--space-1)">
+         Nama Jajanan
+        </th>
+        <th style="text-align:left;padding: var(--space-1)">
+         Harga (Rp)
+        </th>
+        <th style="padding: var(--space-1)">
+         Aksi
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+      </tbody>
+     </table>
+     <button class="btn" id="addJajananItemBtn" type="button">
+      + Tambah Item
+     </button>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" data-cancel="">
+      Batal
+     </button>
+     <button class="btn primary" id="saveJajananSettingsBtn">
+      Simpan
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Jenis PS Harian Modal -->
+  <div class="modal" hidden="" id="jenisPSHarianSettingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Item Jenis PS Pemasukan Harian
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow:auto;">
+     <table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+      <thead>
+       <tr>
+        <th>
+         Jenis PS
+        </th>
+        <th>
+         Harga (Rp)
+        </th>
+        <th>
+         Aksi
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+      </tbody>
+     </table>
+     <button class="btn" id="addJenisPSHarianBtn" type="button">
+      + Tambah Jenis PS
+     </button>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" id="saveJenisPSHarianBtn">
+      Simpan
+     </button>
+     <button class="btn" data-close="">
+      Tutup
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Jasa & Aksesoris Modal -->
+  <div class="modal" hidden="" id="jasaAksesorisSettingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Item Jasa &amp; Aksesoris
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow:auto;">
+     <table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+      <thead>
+       <tr>
+        <th>
+         Nama Jasa/Aksesoris
+        </th>
+        <th>
+         Harga (Rp)
+        </th>
+        <th>
+         Aksi
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+      </tbody>
+     </table>
+     <button class="btn" id="addJasaAksesorisBtn" type="button">
+      + Tambah Jasa/Aksesoris
+     </button>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" id="saveJasaAksesorisBtn">
+      Simpan
+     </button>
+     <button class="btn" data-close="">
+      Tutup
+     </button>
+    </div>
+   </div>
+  </div>
+  <!-- Jenis PS Sewa Modal -->
+  <div class="modal" hidden="" id="jenisPSSewaSettingsModal">
+   <div>
+    <div class="modal-header">
+     <div class="modal-title">
+      Item Jenis PS Pemasukan Sewa PS
+     </div>
+     <button class="modal-close" data-close="">
+      ✕
+     </button>
+    </div>
+    <div class="modal-body" style="max-height:60vh;overflow:auto;">
+     <table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+      <thead>
+       <tr>
+        <th>
+         Jenis PS
+        </th>
+        <th>
+         Harga (Rp)
+        </th>
+        <th>
+         Aksi
+        </th>
+       </tr>
+      </thead>
+      <tbody>
+      </tbody>
+     </table>
+     <button class="btn" id="addJenisPSSewaBtn" type="button">
+      + Tambah Jenis PS
+     </button>
+    </div>
+    <div class="modal-footer">
+     <button class="btn" id="saveJenisPSSewaBtn">
+      Simpan
+     </button>
+     <button class="btn" data-close="">
+      Tutup
+     </button>
+    </div>
+   </div>
+  </div>
+  <script src="script.js">
+  </script>
+ </body>
 </html>

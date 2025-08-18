@@ -1,4 +1,3 @@
-
 // === Themed Popup Helpers ===
 (function(){
   function $(sel){ return document.querySelector(sel); }
@@ -69,9 +68,79 @@
 })();
 // === /Themed Popup Helpers ===
 
+// === Jenis PS Harian Settings ===
+;(function(){
+  var addBtn = document.getElementById('addJenisPSHarianBtn');
+  if(addBtn){
+    addBtn.addEventListener('click', function(){
+      var tbody = document.querySelector('#jenisPSHarianTable tbody');
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><input type="text" class="input" placeholder="Nama Jenis PS"></td>' +
+        '<td><input type="number" class="input mono" placeholder="Harga"></td>' +
+        '<td><button class="btn warn remove-item" type="button">Hapus</button></td>';
+      tbody.appendChild(tr);
+    });
+  }
+  var table = document.querySelector('#jenisPSHarianTable');
+  if(table){
+    table.addEventListener('click', function(e){
+      if(e.target.classList.contains('remove-item')){
+        e.target.closest('tr').remove();
+      }
+    });
+  }
+})();
 
+// === Jasa & Aksesoris Settings ===
+;(function(){
+  var addBtn = document.getElementById('addJasaAksesorisBtn');
+  if(addBtn){
+    addBtn.addEventListener('click', function(){
+      var tbody = document.querySelector('#jasaAksesorisTable tbody');
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><input type="text" class="input" placeholder="Nama Jasa/Aksesoris"></td>' +
+        '<td><input type="number" class="input mono" placeholder="Harga"></td>' +
+        '<td><button class="btn warn remove-item" type="button">Hapus</button></td>';
+      tbody.appendChild(tr);
+    });
+  }
+  var table = document.querySelector('#jasaAksesorisTable');
+  if(table){
+    table.addEventListener('click', function(e){
+      if(e.target.classList.contains('remove-item')){
+        e.target.closest('tr').remove();
+      }
+    });
+  }
+})();
 
-  // === Themed Password Prompt (matches existing modal/backdrop) ===
+// === Jenis PS Sewa Settings ===
+;(function(){
+  var addBtn = document.getElementById('addJenisPSSewaBtn');
+  if(addBtn){
+    addBtn.addEventListener('click', function(){
+      var tbody = document.querySelector('#jenisPSSewaTable tbody');
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><input type="text" class="input" placeholder="Jenis PS"></td>' +
+        '<td><input type="number" class="input mono" placeholder="Harga"></td>' +
+        '<td><button class="btn warn remove-item" type="button">Hapus</button></td>';
+      tbody.appendChild(tr);
+    });
+  }
+  var table = document.querySelector('#jenisPSSewaTable');
+  if(table){
+    table.addEventListener('click', function(e){
+      if(e.target.classList.contains('remove-item')){
+        e.target.closest('tr').remove();
+      }
+    });
+  }
+})();
+
+// === Themed Password Prompt (matches existing modal/backdrop) ===
   window.themedPromptPassword = function(options){
     return new Promise(function(resolve){
       var modal = document.getElementById('themedPassword');
@@ -127,8 +196,6 @@
       show();
     });
   };
-
-
 
 (function(){
   function onReady(fn){
@@ -286,7 +353,7 @@
     applyTheme(getTheme());
 
     // ===== State & Persistence
-    var state = { entries:[], filter:'ALL', range:null, editingId:null };
+    var state = { entries:[], filter:'WEEK', range:null, editingId:null };
     function save(){ try{ localStorage.setItem('urban_ps_pembukuan', JSON.stringify(state.entries)); }catch(e){} }
     function load(){ try{ state.entries = JSON.parse(localStorage.getItem('urban_ps_pembukuan')||'[]'); }catch(e){ state.entries=[]; } }
 
@@ -304,12 +371,20 @@
       optAll.textContent='Semua Bulan'; 
       sel.appendChild(optAll);
 
-      for(var j=0;j<months.length;j++){ 
-        var o=document.createElement('option'); 
-        o.value=months[j]; 
-        o.textContent=prettyMonth(months[j]); 
-        sel.appendChild(o); 
-      }
+// Tambahkan opsi Pilih Bulan setelah Semua Bulan
+var optCustom=document.createElement('option');
+optCustom.value='CUSTOM_MONTH';
+optCustom.textContent='Pilih Bulan';
+sel.appendChild(optCustom);
+
+      // Tambahkan opsi Satu Minggu setelah Semua Bulan
+      var optWeek=document.createElement('option'); 
+      optWeek.value='WEEK'; 
+      optWeek.textContent='Satu Minggu (Senin - Minggu)'; 
+      sel.insertBefore(optWeek, sel.children[1]);
+
+
+      // bulan otomatis dihilangkan
 
       // Append Rentang option at the bottom
       var optRange=document.createElement('option'); 
@@ -317,7 +392,7 @@
       optRange.textContent='Rentang'; 
       sel.appendChild(optRange);
 
-      sel.value=state.filter;
+      sel.value = (state.filter === 'CUSTOM_MONTH') ? 'CUSTOM_MONTH' : state.filter;
       // Append Rentang option
     }
 
@@ -331,11 +406,69 @@
           return [];
         }
         list = state.entries.slice();
+
+      } else if (state.filter === 'WEEK') {
+        var today = new Date();
+        var day = today.getDay(); // 0=Sunday, 1=Monday
+        var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diff);
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        list = state.entries.filter(function(e){ return e.date >= from && e.date <= to; });
+
+      } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
       } else {
         list = state.entries.filter(function(e){ return monthKey(e.date) === state.filter; });
       }
 
-      if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+      if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay(); // 0=Sunday, 1=Monday
+    var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var weekList = state.entries.filter(function(e){
+        return e.date >= from && e.date <= to;
+    });
+    monthSum = calcSums(weekList).total;
+} else if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay(); // 0=Sunday, 1=Monday
+    var diff = (day === 0 ? -6 : 1 - day); // geser ke Senin
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+
+    var list = state.entries.filter(function(e){
+        return e.date >= from && e.date <= to;
+    });
+    var map = {};
+    list.forEach(function(e){
+        var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+        map[e.date] = (map[e.date]||0) + tot;
+    });
+
+    for (var dt = new Date(monday); dt <= sunday; dt.setDate(dt.getDate() + 1)) {
+        var iso = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        data.push({date: iso, value: map[iso]||0});
+    }
+
+    if(caption) caption.textContent = 'Minggu ini: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
+} else if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
         var from = state.range.from || '0000-01-01';
         var to   = state.range.to   || '9999-12-31';
         list = list.filter(function(e){
@@ -356,6 +489,21 @@
     window.sumGrandLive = function(){
       var g = cleanNum($('#harian').value)+cleanNum($('#jajanan').value)+cleanNum($('#jasa').value)+cleanNum($('#sewa').value);
       $('#grandTotal').textContent = fmtIDR(g); updateRecap();
+// Handler tombol Terapkan Custom Bulan
+(function(){
+  var btn = document.getElementById('applyCustomMonth');
+  if(btn){
+    btn.addEventListener('click', function(){
+      var val = document.getElementById('customMonth').value;
+      if(val){
+        state.filter = 'CUSTOM_MONTH';       // tetap di mode custom
+        state.customMonthValue = val;        // simpan bulan yg dipilih, contoh "2025-08"
+        render();
+      }
+    });
+  }
+})();
+
     };
 
 
@@ -440,7 +588,7 @@ function scrollToTopMobile() {
       });
       $all('.r-harga').forEach(function(inp){ inp.addEventListener('input', sumRincian); });
     }
-    $('#rincianClear').addEventListener('click', function(){ $all('#rincianTable input').forEach(function(i){ i.value=''; }); sumRincian(); });
+    $('#rincianClear').addEventListener('click', function(){ $all('#rincianTable input, #rincianTable select').forEach(function(i){ i.value=''; }); sumRincian(); });
 
     // JAJANAN 3x10 (5 rows)
     var JAJ_PRICE = {
@@ -728,6 +876,16 @@ sumSewa3x10();
               $('#rukoTutup').value = e.rukoTutup || '';
               applyDetails(e.details || null);
 
+    // Pastikan total terhitung ulang setelah edit
+    try {
+      sumRincian();
+      sumJajanan3x10();
+      sumJasa2x5();
+      sumSewa3x10();
+      if(window.sumGrandLive) window.sumGrandLive();
+      updateRecap();
+    } catch(err) { console.error('Recalc error after edit', err); }
+
     // Update field Hari setelah tanggal di-set
     if (typeof updateDayField === "function") {
         updateDayField();
@@ -740,7 +898,20 @@ scrollToTopMobile();
             td.appendChild(edit);
             var sp=document.createElement('span'); sp.style.display='inline-block'; sp.style.width='6px'; td.appendChild(sp);
             var del=document.createElement('button'); del.className='btn warn'; del.textContent='Hapus'; del.title='Hapus baris ini';
-            del.onclick = async function(){ if(await themedConfirm('Hapus baris ini?')){ state.entries = state.entries.filter(function(it){ return it!==e; }); save(); render(); } };
+            del.onclick = async function(){ if(await themedConfirm('Hapus baris ini?')){ state.entries = state.entries.filter(function(it){ return it!==e; }); save(); render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    } } };
             td.appendChild(del); return td;
           })()
         ];
@@ -755,7 +926,48 @@ scrollToTopMobile();
 
       var monthList = [];
     var monthSum;
-if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay(); // 0=Sunday, 1=Monday
+    var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var weekList = state.entries.filter(function(e){
+        return e.date >= from && e.date <= to;
+    });
+    monthSum = calcSums(weekList).total;
+} else if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay(); // 0=Sunday, 1=Monday
+    var diff = (day === 0 ? -6 : 1 - day); // geser ke Senin
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+
+    var list = state.entries.filter(function(e){
+        return e.date >= from && e.date <= to;
+    });
+    var map = {};
+    list.forEach(function(e){
+        var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+        map[e.date] = (map[e.date]||0) + tot;
+    });
+
+    for (var dt = new Date(monday); dt <= sunday; dt.setDate(dt.getDate() + 1)) {
+        var iso = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        data.push({date: iso, value: map[iso]||0});
+    }
+
+    if(caption) caption.textContent = 'Minggu ini: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
+} else if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
     var from = state.range.from || '0000-01-01';
     var to   = state.range.to   || '9999-12-31';
     var rangeList = state.entries.filter(function(e){
@@ -786,7 +998,15 @@ if (state.filter === 'RENTANG' && state.range && (state.range.from || state.rang
     if(saRow) saRow.style.display = '';
     if(smEl){
         var labelCell = smEl.closest('tr').querySelector('td[colspan="6"]');
-        if(labelCell) labelCell.textContent = 'Total Bulan Ini';
+        if(state.filter === "WEEK"){
+            if(labelCell) labelCell.textContent = "Total Minggu Ini";
+        } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
+      } else {
+            if(labelCell) labelCell.textContent = "Total Bulan Ini";
+        }
     }
 
     if(state.filter === 'RENTANG'){
@@ -850,7 +1070,15 @@ if (state.filter === 'RENTANG' && state.range && (state.range.from || state.rang
     if(saRow) saRow.style.display = '';
     if(smEl){
         var labelCell = smEl.closest('tr').querySelector('td[colspan="6"]');
-        if(labelCell) labelCell.textContent = 'Total Bulan Ini';
+        if(state.filter === "WEEK"){
+            if(labelCell) labelCell.textContent = "Total Minggu Ini";
+        } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
+      } else {
+            if(labelCell) labelCell.textContent = "Total Bulan Ini";
+        }
     }
 
     if(state.filter === 'RENTANG'){
@@ -902,6 +1130,17 @@ if (state.filter === 'RENTANG' && state.range && (state.range.from || state.rang
       };
     }
     async function addOrUpdateEntry(){
+
+  // Validasi input wajib
+  var absenPagi = document.getElementById('absenPagi').value;
+  var absenSiang = document.getElementById('absenSiang').value;
+  var rukoBuka = document.getElementById('rukoBuka').value;
+  var rukoTutup = document.getElementById('rukoTutup').value;
+
+  if(!absenPagi || !absenSiang || !rukoBuka || !rukoTutup){
+    await themedAlert('Absen Pagi, Absen Siang, Ruko Buka, dan Ruko Tutup wajib diisi.');
+    return;
+  }
       // Guard: don't save empty forms
       if(formIsTrulyEmpty()){
         await themedAlert('Form masih kosong. Isi setidaknya satu nilai atau rincian sebelum menyimpan.');
@@ -920,6 +1159,19 @@ if(actionsRow) actionsRow.classList.remove('editing');
         state.entries.push(newEntry);
       }
       save(); clearForm(); render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
     }
 
     function clearForm(){
@@ -955,6 +1207,19 @@ if(actionsRow) actionsRow.classList.remove('editing');
           if(obj.date){ state.entries.push(obj); }
         }
         save(); render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
       };
       reader.readAsText(file);
     }
@@ -992,9 +1257,50 @@ document.getElementById('addBtn').addEventListener('click', async function(){
         ['harian','jajanan','jasa','sewa'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ if(window.sumGrandLive) window.sumGrandLive(); updateRecap(); }); });
     ['harian','jajanan','jasa','sewa','catatan'].forEach(function(id){ $('#'+id).addEventListener('keydown', function(e){ if(e.key==='Enter'){ addOrUpdateEntry(); }}); });
     $('#monthFilter').addEventListener('change', function(e){
-      state.filter=e.target.value;
+      state.filter = e.target.value;
       setRangeControlsEnabled(state.filter==='RENTANG');
       render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
+
+      // tampilkan / sembunyikan section Rentang
+      var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+      if(rentangRow){
+        rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+      }
+
+    // === Weekly auto-reset ===
+    (function(){
+      try {
+        var today = new Date();
+        var isMonday = today.getDay() === 1; // Monday=1
+        var todayStrIso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var lastReset = localStorage.getItem('urban_ps_week_reset') || '';
+        if(isMonday && lastReset !== todayStrIso){
+          state.filter = 'WEEK';
+          localStorage.setItem('urban_ps_week_reset', todayStrIso);
+          setTimeout(function(){
+            themedAlert('Filter Mingguan sudah direset karena hari Senin.');
+          }, 300);
+        }
+        // Default ke WEEK jika tidak ada filter lain diset
+        if(!state.filter){
+          state.filter = 'WEEK';
+        }
+      } catch(e){ console.error('Weekly reset error', e); }
+    })();
+
     setRangeControlsEnabled(state.filter==='RENTANG');
     });
     
@@ -1015,6 +1321,41 @@ document.getElementById('addBtn').addEventListener('click', async function(){
     state.entries = [];
     save();
     render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
+
+    // === Weekly auto-reset ===
+    (function(){
+      try {
+        var today = new Date();
+        var isMonday = today.getDay() === 1; // Monday=1
+        var todayStrIso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var lastReset = localStorage.getItem('urban_ps_week_reset') || '';
+        if(isMonday && lastReset !== todayStrIso){
+          state.filter = 'WEEK';
+          localStorage.setItem('urban_ps_week_reset', todayStrIso);
+          setTimeout(function(){
+            themedAlert('Filter Mingguan sudah direset karena hari Senin.');
+          }, 300);
+        }
+        // Default ke WEEK jika tidak ada filter lain diset
+        if(!state.filter){
+          state.filter = 'WEEK';
+        }
+      } catch(e){ console.error('Weekly reset error', e); }
+    })();
+
     setRangeControlsEnabled(state.filter==='RENTANG');
     await themedAlert('Semua data dihapus.');
   }
@@ -1061,7 +1402,24 @@ async function exportReportPDF(){
         let fileName;
         if (tanggalInput) {
             fileName = `pembukuan_URBAN_LPG_${tanggalInput}_${hariInput}.pdf`;
-        } else {
+  
+      } else if (state.filter === 'WEEK') {
+        var today = new Date();
+        var day = today.getDay(); // 0=Sunday, 1=Monday
+        var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diff);
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        list = state.entries.filter(function(e){ return e.date >= from && e.date <= to; });
+
+      } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
+      } else {
             const today = new Date();
             const tanggal = today.toISOString().slice(0,10);
             const hari = today.toLocaleDateString('id-ID', { weekday: 'long' });
@@ -1157,6 +1515,23 @@ async function exportReportPDF(){
     setTimeout(function(){
       if (typeof showJajananSettingsModal === 'function') {
         showJajananSettingsModal();
+
+      } else if (state.filter === 'WEEK') {
+        var today = new Date();
+        var day = today.getDay(); // 0=Sunday, 1=Monday
+        var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diff);
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        list = state.entries.filter(function(e){ return e.date >= from && e.date <= to; });
+
+      } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
       } else {
         console.error('showJajananSettingsModal function not found.');
       }
@@ -1176,6 +1551,41 @@ async function exportReportPDF(){
         var t = _to && _to.value ? _to.value : '';
         state.range = (f || t) ? {from:f, to:t} : null;
         render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
+
+    // === Weekly auto-reset ===
+    (function(){
+      try {
+        var today = new Date();
+        var isMonday = today.getDay() === 1; // Monday=1
+        var todayStrIso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var lastReset = localStorage.getItem('urban_ps_week_reset') || '';
+        if(isMonday && lastReset !== todayStrIso){
+          state.filter = 'WEEK';
+          localStorage.setItem('urban_ps_week_reset', todayStrIso);
+          setTimeout(function(){
+            themedAlert('Filter Mingguan sudah direset karena hari Senin.');
+          }, 300);
+        }
+        // Default ke WEEK jika tidak ada filter lain diset
+        if(!state.filter){
+          state.filter = 'WEEK';
+        }
+      } catch(e){ console.error('Weekly reset error', e); }
+    })();
+
     setRangeControlsEnabled(state.filter==='RENTANG');
         try { drawDailyGraph(); } catch(e) {}
       }); }
@@ -1184,6 +1594,41 @@ async function exportReportPDF(){
         if(_to) _to.value='';
         state.range = null;
         render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
+
+    // === Weekly auto-reset ===
+    (function(){
+      try {
+        var today = new Date();
+        var isMonday = today.getDay() === 1; // Monday=1
+        var todayStrIso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var lastReset = localStorage.getItem('urban_ps_week_reset') || '';
+        if(isMonday && lastReset !== todayStrIso){
+          state.filter = 'WEEK';
+          localStorage.setItem('urban_ps_week_reset', todayStrIso);
+          setTimeout(function(){
+            themedAlert('Filter Mingguan sudah direset karena hari Senin.');
+          }, 300);
+        }
+        // Default ke WEEK jika tidak ada filter lain diset
+        if(!state.filter){
+          state.filter = 'WEEK';
+        }
+      } catch(e){ console.error('Weekly reset error', e); }
+    })();
+
     setRangeControlsEnabled(state.filter==='RENTANG');
         try { drawDailyGraph(); } catch(e) {}
       }); }
@@ -1195,6 +1640,7 @@ async function exportReportPDF(){
       var cbtn = document.getElementById('cancelEditBtn');
       if(cbtn){
         cbtn.addEventListener('click', function(){
+  clearForm();
   try{
     clearForm();
     state.editingId = null;
@@ -1369,6 +1815,41 @@ async function exportReportPDF(){
 
     sumRincian(); sumJajanan3x10(); sumJasa2x5(); sumSewa3x10();
     render();
+// tampilkan/sembunyikan input custom bulan
+var customRow = document.getElementById('customMonthRow');
+if(state.filter === 'CUSTOM_MONTH'){
+  if(customRow) customRow.style.display = '';
+} else {
+  if(customRow) customRow.style.display = 'none';
+}
+
+    // atur visibilitas rentang sesuai filter awal
+    var rentangRow = document.querySelector('label[for="dateFrom"]').parentElement;
+    if(rentangRow){
+      rentangRow.style.display = (state.filter === 'RENTANG') ? '' : 'none';
+    }
+
+    // === Weekly auto-reset ===
+    (function(){
+      try {
+        var today = new Date();
+        var isMonday = today.getDay() === 1; // Monday=1
+        var todayStrIso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var lastReset = localStorage.getItem('urban_ps_week_reset') || '';
+        if(isMonday && lastReset !== todayStrIso){
+          state.filter = 'WEEK';
+          localStorage.setItem('urban_ps_week_reset', todayStrIso);
+          setTimeout(function(){
+            themedAlert('Filter Mingguan sudah direset karena hari Senin.');
+          }, 300);
+        }
+        // Default ke WEEK jika tidak ada filter lain diset
+        if(!state.filter){
+          state.filter = 'WEEK';
+        }
+      } catch(e){ console.error('Weekly reset error', e); }
+    })();
+
     setRangeControlsEnabled(state.filter==='RENTANG');
 updateRecap();
 var actionsRow=document.getElementById('formActions');
@@ -1397,7 +1878,48 @@ updateRecap();
     
 function getMonthlySeries(){
   // RENTANG mode → build directly from range
-  if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+  if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay(); // 0=Sunday, 1=Monday
+    var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var weekList = state.entries.filter(function(e){
+        return e.date >= from && e.date <= to;
+    });
+    monthSum = calcSums(weekList).total;
+} else if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay(); // 0=Sunday, 1=Monday
+    var diff = (day === 0 ? -6 : 1 - day); // geser ke Senin
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+
+    var list = state.entries.filter(function(e){
+        return e.date >= from && e.date <= to;
+    });
+    var map = {};
+    list.forEach(function(e){
+        var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+        map[e.date] = (map[e.date]||0) + tot;
+    });
+
+    for (var dt = new Date(monday); dt <= sunday; dt.setDate(dt.getDate() + 1)) {
+        var iso = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        data.push({date: iso, value: map[iso]||0});
+    }
+
+    if(caption) caption.textContent = 'Minggu ini: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
+} else if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
     var from = state.range.from || '0000-01-01';
     var to   = state.range.to   || '9999-12-31';
     var list = state.entries.filter(function(e){
@@ -1461,34 +1983,79 @@ function drawDailyGraph(){
   var data = [];
   var caption = document.getElementById('graphCaption');
 
-  if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
-    var from = state.range.from || '0000-01-01';
-    var to   = state.range.to   || '9999-12-31';
-    var list = state.entries.filter(function(e){
-      var d = e.date || '';
-      return d && d >= from && d <= to;
-    });
+  // === WEEK MODE ===
+  if (state.filter === 'WEEK') {
+    var today = new Date();
+    var day = today.getDay();
+    var diff = (day === 0 ? -6 : 1 - day);
+    var monday = new Date(today);
+    monday.setDate(today.getDate() + diff);
+    var sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+
+    var list = state.entries.filter(e => e.date >= from && e.date <= to);
     var map = {};
-    list.forEach(function(e){
+    list.forEach(e => {
       var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
       map[e.date] = (map[e.date]||0) + tot;
     });
-    var start = new Date(from);
-    var end = new Date(to);
-    for (var dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+
+    for (var dt = new Date(monday); dt <= sunday; dt.setDate(dt.getDate() + 1)) {
       var iso = new Date(dt.getTime() - dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
       data.push({date: iso, value: map[iso]||0});
     }
-    if(caption) caption.textContent = 'Periode: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
-  } else {
-    // Month mode
-    var monthPick = (state.filter==='ALL') ? (new Date().toISOString().slice(0,7)) : state.filter;
-    var list = state.entries.filter(function(x){ return (x.date||'').slice(0,7) === monthPick; });
+
+    if(caption) caption.textContent = 'Minggu ini: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
+  }
+
+  // === RENTANG MODE ===
+  else if (state.filter === 'RENTANG' && state.range && (state.range.from || state.range.to)) {
+    var from = state.range.from || '0000-01-01';
+    var to   = state.range.to   || '9999-12-31';
+    var list = state.entries.filter(e => e.date && e.date >= from && e.date <= to);
+
     var map = {};
-    list.forEach(function(e){
+    list.forEach(e => {
       var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
       map[e.date] = (map[e.date]||0) + tot;
     });
+
+    for (var dt = new Date(from); dt <= new Date(to); dt.setDate(dt.getDate()+1)) {
+      var iso = new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,10);
+      data.push({date: iso, value: map[iso]||0});
+    }
+    if(caption) caption.textContent = 'Periode: ' + from + ' s/d ' + to + ' • ' + data.length + ' hari';
+  }
+
+  // === ALL MODE ===
+  else if (state.filter === 'ALL') {
+    var map = {};
+    state.entries.forEach(e => {
+      var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+      map[e.date] = (map[e.date]||0) + tot;
+    });
+
+    var dates = Object.keys(map).sort();
+    data = dates.map(d => ({date: d, value: map[d]}));
+
+    if(caption && dates.length){
+      caption.textContent = 'Semua Bulan: ' + dates[0] + ' s/d ' + dates[dates.length-1] + ' • ' + data.length + ' hari';
+    }
+  }
+
+  // === BULAN MODE ===
+  else {
+    var monthPick = state.filter;
+    var list = state.entries.filter(x => (x.date||'').slice(0,7) === monthPick);
+    var map = {};
+    list.forEach(e => {
+      var tot = cleanNum(e.harian)+cleanNum(e.jajanan)+cleanNum(e.jasa)+cleanNum(e.sewa);
+      map[e.date] = (map[e.date]||0) + tot;
+    });
+
     var p = monthPick.split('-');
     var y = +p[0], m = (+p[1])-1;
     var last = new Date(y, m+1, 0);
@@ -1505,8 +2072,9 @@ function drawDailyGraph(){
     }
   }
 
+  // === DRAW ===
   var maxV = 0;
-  data.forEach(function(r){ if(r.value>maxV) maxV=r.value; });
+  data.forEach(r => { if(r.value>maxV) maxV=r.value; });
   var padL = 48, padR = 12, padT = 16, padB = 42;
   var W = (graphCanvas.clientWidth||cssW), H = (graphCanvas.clientHeight||cssH);
   var plotW = Math.max(10, W - padL - padR);
@@ -1547,8 +2115,7 @@ function drawDailyGraph(){
   }
 
   for (var i=1; i<data.length; i++){
-    var prev = data[i-1];
-    var curr = data[i];
+    var prev = data[i-1], curr = data[i];
     var x1 = xAt(i-1), y1 = yAt(prev.value);
     var x2 = xAt(i), y2 = yAt(curr.value);
     graphCtx.strokeStyle = colorForValue(curr.value);
@@ -1559,9 +2126,7 @@ function drawDailyGraph(){
     graphCtx.stroke();
   }
 
-  graphCtx.textAlign = 'center';
-  graphCtx.textBaseline = 'bottom';
-  data.forEach(function(r, i){
+  data.forEach(function(r,i){
     var x = xAt(i), y = yAt(r.value);
     var c = colorForValue(r.value);
     graphCtx.beginPath();
@@ -1642,7 +2207,24 @@ document.addEventListener("click", function(e){
                         backdrop.classList.add('is-visible');
                         settingsModal.classList.add('is-visible');
                     });
-                } else {
+          
+      } else if (state.filter === 'WEEK') {
+        var today = new Date();
+        var day = today.getDay(); // 0=Sunday, 1=Monday
+        var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diff);
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        list = state.entries.filter(function(e){ return e.date >= from && e.date <= to; });
+
+      } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
+      } else {
                     backdrop.hidden = true;
                 }
             }, 200);
@@ -1763,7 +2345,24 @@ document.addEventListener("click", function(e){
                         backdrop.classList.add('is-visible');
                         settingsModal.classList.add('is-visible');
                     });
-                } else {
+          
+      } else if (state.filter === 'WEEK') {
+        var today = new Date();
+        var day = today.getDay(); // 0=Sunday, 1=Monday
+        var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diff);
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        list = state.entries.filter(function(e){ return e.date >= from && e.date <= to; });
+
+      } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
+      } else {
                     backdrop.hidden = true;
                 }
             }, 200);
@@ -1868,6 +2467,23 @@ function trapFocus(modal) {
           e.preventDefault();
           lastEl.focus();
         }
+
+      } else if (state.filter === 'WEEK') {
+        var today = new Date();
+        var day = today.getDay(); // 0=Sunday, 1=Monday
+        var diff = (day === 0 ? -6 : 1 - day); // shift to Monday
+        var monday = new Date(today);
+        monday.setDate(today.getDate() + diff);
+        var sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        var from = new Date(monday.getTime() - monday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        var to   = new Date(sunday.getTime() - sunday.getTimezoneOffset()*60000).toISOString().slice(0,10);
+        list = state.entries.filter(function(e){ return e.date >= from && e.date <= to; });
+
+      } else if (state.filter === 'CUSTOM_MONTH' && state.customMonthValue) {
+        list = state.entries.filter(function(e){
+          return monthKey(e.date) === state.customMonthValue;
+        });
       } else { // Tab
         if (document.activeElement === lastEl) {
           e.preventDefault();
@@ -1882,9 +2498,6 @@ document.querySelectorAll('.modal').forEach(modal => {
     if (!modal.hidden) trapFocus(modal);
   });
 });
-
-
-
 
 (function(){
   function updateDayField(){
@@ -1913,3 +2526,240 @@ document.querySelectorAll('.modal').forEach(modal => {
     window.updateDayField = updateDayField;
   }
 })();
+
+// === Jenis PS Harian Settings ===
+document.getElementById('addJenisPSHarianBtn').addEventListener('click', function(){
+  var tbody = document.querySelector('#jenisPSHarianTable tbody');
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text" class="input" placeholder="Nama Jenis PS"></td>' +
+    '<td><input type="number" class="input mono" placeholder="Harga"></td>' +
+    '<td><button class="btn warn remove-item" type="button">Hapus</button></td>';
+  tbody.appendChild(tr);
+});
+document.querySelector('#jenisPSHarianTable').addEventListener('click', function(e){
+  if(e.target.classList.contains('remove-item')){
+    e.target.closest('tr').remove();
+  }
+});
+
+// === Jasa & Aksesoris Settings ===
+document.getElementById('addJasaAksesorisBtn').addEventListener('click', function(){
+  var tbody = document.querySelector('#jasaAksesorisTable tbody');
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text" class="input" placeholder="Nama Jasa/Aksesoris"></td>' +
+    '<td><input type="number" class="input mono" placeholder="Harga"></td>' +
+    '<td><button class="btn warn remove-item" type="button">Hapus</button></td>';
+  tbody.appendChild(tr);
+});
+document.querySelector('#jasaAksesorisTable').addEventListener('click', function(e){
+  if(e.target.classList.contains('remove-item')){
+    e.target.closest('tr').remove();
+  }
+});
+
+// === Jenis PS Sewa Settings ===
+document.getElementById('addJenisPSSewaBtn').addEventListener('click', function(){
+  var tbody = document.querySelector('#jenisPSSewaTable tbody');
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><input type="text" class="input" placeholder="Jenis PS"></td>' +
+    '<td><input type="number" class="input mono" placeholder="Harga"></td>' +
+    '<td><button class="btn warn remove-item" type="button">Hapus</button></td>';
+  tbody.appendChild(tr);
+});
+document.querySelector('#jenisPSSewaTable').addEventListener('click', function(e){
+  if(e.target.classList.contains('remove-item')){
+    e.target.closest('tr').remove();
+  }
+});
+
+// === Save Jenis PS Harian Settings ===
+document.getElementById('saveJenisPSHarianBtn').addEventListener('click', function(){
+  var newData = {};
+  document.querySelectorAll('#jenisPSHarianTable tbody tr').forEach(function(tr){
+    var name = tr.querySelector('td:nth-child(1) input').value.trim();
+    var price = parseInt(tr.querySelector('td:nth-child(2) input').value) || 0;
+    if(name) newData[name] = price;
+  });
+  localStorage.setItem('urban_ps_jenispsharian_settings', JSON.stringify(newData));
+  themedAlert('Jenis PS Harian berhasil disimpan.');
+});
+
+// === Save Jasa & Aksesoris Settings ===
+document.getElementById('saveJasaAksesorisBtn').addEventListener('click', function(){
+  var newData = {};
+  document.querySelectorAll('#jasaAksesorisTable tbody tr').forEach(function(tr){
+    var name = tr.querySelector('td:nth-child(1) input').value.trim();
+    var price = parseInt(tr.querySelector('td:nth-child(2) input').value) || 0;
+    if(name) newData[name] = price;
+  });
+  localStorage.setItem('urban_ps_jasaaksesoris_settings', JSON.stringify(newData));
+  themedAlert('Jasa & Aksesoris berhasil disimpan.');
+});
+
+// === Save Jenis PS Sewa Settings ===
+document.getElementById('saveJenisPSSewaBtn').addEventListener('click', function(){
+  var newData = {};
+  document.querySelectorAll('#jenisPSSewaTable tbody tr').forEach(function(tr){
+    var name = tr.querySelector('td:nth-child(1) input').value.trim();
+    var price = parseInt(tr.querySelector('td:nth-child(2) input').value) || 0;
+    if(name) newData[name] = price;
+  });
+  localStorage.setItem('urban_ps_jenispssewa_settings', JSON.stringify(newData));
+  themedAlert('Jenis PS Sewa berhasil disimpan.');
+});
+
+// === Loaders for Settings ===
+function loadJenisPSHarianSettings(){
+  try { return JSON.parse(localStorage.getItem('urban_ps_jenispsharian_settings') || '{}'); }
+  catch(e){ return {}; }
+}
+function loadJasaAksesorisSettings(){
+  try { return JSON.parse(localStorage.getItem('urban_ps_jasaaksesoris_settings') || '{}'); }
+  catch(e){ return {}; }
+}
+function loadJenisPSSewaSettings(){
+  try { return JSON.parse(localStorage.getItem('urban_ps_jenispssewa_settings') || '{}'); }
+  catch(e){ return {}; }
+}
+
+// === Patch buildRincianRows to use Jenis PS Harian settings ===
+if(typeof buildRincianRows === "function"){
+  var originalBuildRincianRows = buildRincianRows;
+  buildRincianRows = function(){
+    rincianBody.innerHTML='';
+    var psList = Object.keys(loadJenisPSHarianSettings());
+    if(psList.length === 0) psList = ["PS3","PS4"]; // fallback
+    for(var i=1;i<=10;i++){
+      var tr=document.createElement('tr');
+      tr.innerHTML = '<td>'+i+'</td>' +
+        '<td><select class="select mini r-jenis"><option value="">-</option>'+psList.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
+        '<td><input type="time" class="input mini r-jam"/></td>' +
+        '<td><input type="number" min="0" step="0.5" placeholder="0" class="input mono mini r-jumlah"/></td>' +
+        '<td><input type="number" min="0" step="100" placeholder="0" class="input mono mini rincian-harga r-harga"/></td>';
+      rincianBody.appendChild(tr);
+    }
+    wireRincianEvents();
+  }
+}
+
+// === Patch buildJasa2x5 to use Jasa & Aksesoris settings ===
+if(typeof buildJasa2x5 === "function"){
+  var originalBuildJasa2x5 = buildJasa2x5;
+  buildJasa2x5 = function(){
+    var tb=$('#jasaTable2x5 tbody'); tb.innerHTML='';
+    var jasaList = Object.keys(loadJasaAksesorisSettings());
+    if(jasaList.length === 0) jasaList = ["Isi Game","Stik & Aksesoris","Upgrade HEN","Aksesoris"];
+    for(var i=0;i<5;i++){
+      var tr=document.createElement('tr');
+      tr.innerHTML = '<td>'+ (i+1) +'</td>' +
+        '<td><select class="select mini jasa-type"><option value="">-</option>'+jasaList.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
+        '<td><input type="text" class="input mini jasa-note" placeholder="keterangan (opsional)"/></td>' +
+        '<td><input type="number" min="0" step="100" placeholder="0" class="input mono mini jasa-price"/></td>';
+      tb.appendChild(tr);
+    }
+    $all('.jasa-price').forEach(function(inp){ inp.addEventListener('input', sumJasa2x5); });
+  }
+}
+
+// === Patch buildSewa3x10 to use Jenis PS Sewa settings ===
+if(typeof buildSewa3x10 === "function"){
+  var originalBuildSewa3x10 = buildSewa3x10;
+  buildSewa3x10 = function(){
+    var tb=$('#sewaTable3x10 tbody'); tb.innerHTML='';
+    var sewaList = Object.keys(loadJenisPSSewaSettings());
+    if(sewaList.length === 0) sewaList = ["PS3","PS4","PS3 + TV","PS4 + TV","PS3 Portable","PS4 Portable","Hanya TV"];
+    for(var i=0;i<5;i++){
+      var tr=document.createElement('tr');
+      tr.innerHTML = '<td>'+(i+1)+'</td>' +
+        '<td><select class="select mini sewa-jenis"><option value="">-</option>'+sewaList.map(x=>'<option>'+x+'</option>').join('')+'</select></td>' +
+        '<td><div style="display:grid;grid-template-columns:1fr 1fr;gap: var(--space-1)">' +
+            '<select class="select mini sewa-durasi"><option value="">-</option><option value="12JAM">12 JAM</option><option value="1HARI">1 HARI</option><option value="2HARI">2 HARI</option><option value="3HARI">3 HARI</option></select>' +
+            '<input type="text" placeholder="Isi Sendiri" class="input mini sewa-manual"/></div></td>' +
+        '<td><input type="text" placeholder="note (optional)" class="input mini sewa-lama-note"/></td><td><input type="number" min="0" step="1000" placeholder="0" class="input mono mini sewa-harga"/></td>';
+      tb.appendChild(tr);
+    }
+    $all('#sewaTable3x10 tbody tr').forEach(function(tr){
+      var selJ=tr.querySelector('.sewa-jenis'); var selD=tr.querySelector('.sewa-durasi'); var inM=tr.querySelector('.sewa-manual'); var inH=tr.querySelector('.sewa-harga');
+      function recalc(){
+        var manualVal = (inM.value || '').trim();
+        if(manualVal){ return; }
+        var jam = hoursFromDurasiSelect(selD.value, '');
+        var price = calcSewaPrice(selJ.value, jam);
+        if(price>0){ inH.value = price; } else { inH.value=''; }
+        sumSewa3x10();
+      }
+      selJ.addEventListener('change', recalc); selD.addEventListener('change', recalc); inM.addEventListener('input', recalc); inH.addEventListener('input', sumSewa3x10);
+    });
+  }
+}
+
+// Default Jenis PS
+const DEFAULT_PS = {
+  "PS3": 5000,
+  "PS4": 7000
+};
+
+// Load setting Jenis PS Harian + gabung dengan default
+function loadJenisPSHarianSettings(){
+  try { 
+    var custom = JSON.parse(localStorage.getItem('urban_ps_jenispsharian_settings') || '{}'); 
+    return Object.assign({}, DEFAULT_PS, custom);
+  }
+  catch(e){ 
+    return Object.assign({}, DEFAULT_PS);
+  }
+}
+
+// Refresh dropdown Jenis PS
+function refreshJenisPSDropdowns(){
+  var psList = Object.keys(loadJenisPSHarianSettings());
+  document.querySelectorAll("select.r-jenis").forEach(function(sel){
+    var val = sel.value; // simpan pilihan lama
+    sel.innerHTML = '<option value="">-</option>' + psList.map(x=>'<option>'+x+'</option>').join('');
+    if(val && psList.includes(val)) sel.value = val;
+  });
+}
+
+// Auto refresh setelah halaman load
+document.addEventListener("DOMContentLoaded", function(){
+  refreshJenisPSDropdowns();
+});
+
+// Patch tombol Simpan di modal Jenis PS Harian
+(function(){
+  var btn = document.getElementById('saveJenisPSHarianBtn');
+  if(btn){
+    btn.addEventListener('click', function(){
+      setTimeout(function(){
+        if(typeof buildRincianRows === 'function'){
+          buildRincianRows();
+        }
+        refreshJenisPSDropdowns();
+        if(typeof sumRincian === 'function'){
+          sumRincian();
+        }
+      }, 200);
+    });
+  }
+})();
+
+// === Reset Settings ===
+document.addEventListener("DOMContentLoaded", function(){
+  var btn = document.getElementById('resetSettingsBtn');
+  if(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      if(confirm("Yakin ingin reset semua setting? Data transaksi tidak akan terhapus.")){
+        localStorage.removeItem('urban_ps_jenispsharian_settings');
+        localStorage.removeItem('urban_item_settings');
+        // tambahkan key setting lain jika ada
+        themedAlert("✅ Semua setting berhasil direset.");
+        if(typeof buildRincianRows === 'function') buildRincianRows();
+        if(typeof refreshJenisPSDropdowns === 'function') refreshJenisPSDropdowns();
+      }
+    });
+  }
+});

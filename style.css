@@ -1,5 +1,4 @@
-
-  /* ========= THEME TOKENS ========= */
+/* ========= THEME TOKENS ========= */
   :root {
     /* Dark (default) — using your original palette */
     --bg:#0b1020;
@@ -545,6 +544,37 @@ th, td { padding: var(--space-2); vertical-align: middle; }
   padding-right: 0;
 }
 
+/* === Custom Month UI Polishing (0818) === */
+#customMonthRow label{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+  margin-bottom:6px;
+  display:block;
+}
+#customMonthRow .row{align-items:center;}
+#customMonthRow .input,#customMonthRow .btn{
+  height:var(--ctrl-h);
+  border-radius:var(--radius);
+}
+#customMonthRow .btn{
+  padding:0 16px;
+  min-width:100px;
+}
+/* === Custom Month Row Alignment (0818b) === */
+#customMonthRow .row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+#customMonthRow .input {
+  flex: 1 1 auto;
+  min-width: 180px;
+}
+#customMonthRow .btn {
+  flex: 0 0 auto;
+}
 
 
 
@@ -875,6 +905,28 @@ html { scroll-behavior: smooth; }
     text-align: right !important;
     min-width: 120px; /* jaga konsistensi lebar kolom harga */
   }
+
+
+
+#popupBackdrop {
+  z-index: 900 !important;
+}
+#themedConfirm,
+#themedAlert,
+#themedPassword {
+  z-index: 2001 !important;
+}
+
+
+
+#popupBackdrop {
+  z-index: 900 !important;   /* backdrop di bawah modal */
+}
+#themedConfirm,
+#themedAlert,
+#themedPassword {
+  z-index: 2001 !important;  /* popup box di atas modal */
+}
 
 
 
