@@ -1202,23 +1202,17 @@ html:not([data-theme="light"]) .card-body {
 
 </style>
 <style>
-/* === CUSTOM BACKGROUND FIX === */
+/* === CUSTOM BACKGROUND FIX (FIXED VERSION) === */
 /* Dark theme: only when html has no data-theme="light" */
 html:not([data-theme="light"]) body {
-  background: url('bg_dark.jpg.jpg') no-repeat center center fixed;
+  background-image:
+    linear-gradient(rgba(11, 16, 32, 0.65), rgba(11, 16, 32, 0.65)),
+    url('bg_dark.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   background-size: cover;
-  position: relative;
+  background-position: center;
 }
-html:not([data-theme="light"]) body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(11, 16, 32, 0.65);
-  backdrop-filter: blur(6px) saturate(120%);
-  z-index: -1;
-}
-
-/* Light theme: keep default background (defined by --bg) */
 html[data-theme="light"] body {
   background: var(--bg);
   background-image: none;
