@@ -892,6 +892,7 @@ html { scroll-behavior: smooth; }
     text-align: left !important;
   }
 </style>
+
 <style>
   /* Pastikan baris Total rapih dan simetris */
   .total-row td {
@@ -905,7 +906,6 @@ html { scroll-behavior: smooth; }
     min-width: 120px; /* jaga konsistensi lebar kolom harga */
   }
 </style>
-
 
 <style>
 /* === Semua tab dalam Pengaturan fix height 400px === */
@@ -1034,7 +1034,6 @@ body, .card, .subcard, .modal {
 }
 
 </style>
-
 <style>
 .settings-layout { display:flex; gap:16px; min-height: var(--ctrl-h); }
 .settings-sidebar .btn { justify-content:flex-start; }
@@ -1190,7 +1189,239 @@ textarea:focus-visible {
   }
 }
 </style>
+<style>
+/* === CARD Frosted Glass Effect (Dark Theme Only) === */
+html:not([data-theme="light"]) .card,
+html:not([data-theme="light"]) .card-body {
+  background: rgba(30, 30, 30, 0.55); /* abu-abu gelap semi transparan */
+  border-radius: 16px;
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* garis halus */
+}
 
+</style>
+<style>
+/* === CUSTOM BACKGROUND FIX === */
+/* Dark theme: only when html has no data-theme="light" */
+html:not([data-theme="light"]) body {
+  background: url('bg_dark.jpg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+}
+html:not([data-theme="light"]) body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 16, 32, 0.65);
+  backdrop-filter: blur(6px) saturate(120%);
+  z-index: -1;
+}
+
+/* Light theme: keep default background (defined by --bg) */
+html[data-theme="light"] body {
+  background: var(--bg);
+  background-image: none;
+}
+html[data-theme="light"] body::before {
+  content: none;
+}
+</style>
+<style>
+/* === Neon Pink Glow Smooth + Pulse Lambat untuk Tombol Utama di Dark Theme === */
+html:not([data-theme="light"]) #themeBtn,
+html:not([data-theme="light"]) #exportReportBtn,
+html:not([data-theme="light"]) #settingsBtn {
+  transition: box-shadow 0.35s ease, transform 0.25s ease;
+}
+
+html:not([data-theme="light"]) #themeBtn:hover,
+html:not([data-theme="light"]) #exportReportBtn:hover,
+html:not([data-theme="light"]) #settingsBtn:hover {
+  box-shadow: 
+    0 0 8px rgba(255, 20, 147, 0.7),
+    0 0 16px rgba(255, 20, 147, 0.6),
+    0 0 32px rgba(255, 20, 147, 0.5),
+    0 0 48px rgba(255, 20, 147, 0.3);
+  transform: translateY(-2px);
+  animation: neonPulse 3s infinite alternate ease-in-out;
+}
+
+@keyframes neonPulse {
+  0% {
+    box-shadow: 
+      0 0 6px rgba(255, 20, 147, 0.5),
+      0 0 12px rgba(255, 20, 147, 0.4),
+      0 0 24px rgba(255, 20, 147, 0.3);
+  }
+  100% {
+    box-shadow: 
+      0 0 10px rgba(255, 20, 147, 0.8),
+      0 0 24px rgba(255, 20, 147, 0.6),
+      0 0 40px rgba(255, 20, 147, 0.5),
+      0 0 60px rgba(255, 20, 147, 0.4);
+  }
+}
+</style>
+<style>
+/* === Neon Pink Glow untuk Input Tanggal & Absen (Dark Theme) === */
+html:not([data-theme="light"]) input[type="date"]:focus,
+html:not([data-theme="light"]) input[type="text"]:focus,
+html:not([data-theme="light"]) select:focus,
+html:not([data-theme="light"]) textarea:focus,
+html:not([data-theme="light"]) .btn.absen:focus,
+html:not([data-theme="light"]) .btn.absen:hover {
+  box-shadow: 
+    0 0 8px rgba(255, 20, 147, 0.7),
+    0 0 16px rgba(255, 20, 147, 0.6),
+    0 0 32px rgba(255, 20, 147, 0.5),
+    0 0 48px rgba(255, 20, 147, 0.3);
+  animation: neonPulse 3s infinite alternate ease-in-out;
+}
+</style>
+<style>
+/* === Neon Pink Glow untuk Absen & Ruko Buttons (Dark Theme) === */
+html:not([data-theme="light"]) #absenPagiBtn:hover,
+html:not([data-theme="light"]) #absenSiangBtn:hover,
+html:not([data-theme="light"]) #rukoBukaBtn:hover,
+html:not([data-theme="light"]) #rukoTutupBtn:hover,
+html:not([data-theme="light"]) #absenPagiBtn:focus,
+html:not([data-theme="light"]) #absenSiangBtn:focus,
+html:not([data-theme="light"]) #rukoBukaBtn:focus,
+html:not([data-theme="light"]) #rukoTutupBtn:focus {
+  box-shadow: 
+    0 0 8px rgba(255, 20, 147, 0.7),
+    0 0 16px rgba(255, 20, 147, 0.6),
+    0 0 32px rgba(255, 20, 147, 0.5),
+    0 0 48px rgba(255, 20, 147, 0.3);
+  animation: neonPulse 3s infinite alternate ease-in-out;
+}
+</style>
+<style>
+/* === Neon Pink Glow Dark Theme (Full) === */
+html:not([data-theme="light"]) #themeBtn,
+html:not([data-theme="light"]) #exportReportBtn,
+html:not([data-theme="light"]) #settingsBtn,
+html:not([data-theme="light"]) #absenPagiBtn,
+html:not([data-theme="light"]) #absenSiangBtn,
+html:not([data-theme="light"]) #rukoBukaBtn,
+html:not([data-theme="light"]) #rukoTutupBtn,
+html:not([data-theme="light"]) .btn.absen,
+html:not([data-theme="light"]) input[type="date"],
+html:not([data-theme="light"]) input[type="time"],
+html:not([data-theme="light"]) input[type="text"],
+html:not([data-theme="light"]) select,
+html:not([data-theme="light"]) textarea {
+  transition: box-shadow 0.35s ease, transform 0.25s ease;
+}
+
+/* Hover & Focus states with Neon Pink Glow */
+html:not([data-theme="light"]) #themeBtn:hover,
+html:not([data-theme="light"]) #exportReportBtn:hover,
+html:not([data-theme="light"]) #settingsBtn:hover,
+html:not([data-theme="light"]) #absenPagiBtn:hover,
+html:not([data-theme="light"]) #absenSiangBtn:hover,
+html:not([data-theme="light"]) #rukoBukaBtn:hover,
+html:not([data-theme="light"]) #rukoTutupBtn:hover,
+html:not([data-theme="light"]) .btn.absen:hover,
+html:not([data-theme="light"]) input[type="date"]:focus,
+html:not([data-theme="light"]) input[type="time"]:focus,
+html:not([data-theme="light"]) input[type="text"]:focus,
+html:not([data-theme="light"]) select:focus,
+html:not([data-theme="light"]) textarea:focus,
+html:not([data-theme="light"]) #absenPagiBtn:focus,
+html:not([data-theme="light"]) #absenSiangBtn:focus,
+html:not([data-theme="light"]) #rukoBukaBtn:focus,
+html:not([data-theme="light"]) #rukoTutupBtn:focus {
+  box-shadow: 
+    0 0 8px rgba(255, 20, 147, 0.7),
+    0 0 16px rgba(255, 20, 147, 0.6),
+    0 0 32px rgba(255, 20, 147, 0.5),
+    0 0 48px rgba(255, 20, 147, 0.3);
+  transform: translateY(-2px);
+  animation: neonPulse 3s infinite alternate ease-in-out;
+}
+
+/* Pulse animation */
+@keyframes neonPulse {
+  0% {
+    box-shadow: 
+      0 0 6px rgba(255, 20, 147, 0.5),
+      0 0 12px rgba(255, 20, 147, 0.4),
+      0 0 24px rgba(255, 20, 147, 0.3);
+  }
+  100% {
+    box-shadow: 
+      0 0 10px rgba(255, 20, 147, 0.8),
+      0 0 24px rgba(255, 20, 147, 0.6),
+      0 0 40px rgba(255, 20, 147, 0.5),
+      0 0 60px rgba(255, 20, 147, 0.4);
+  }
+}
+</style>
+<style>
+/* === Neon Pink Glow Dark Theme (Universal Inputs & Buttons) === */
+html:not([data-theme="light"]) #themeBtn,
+html:not([data-theme="light"]) #exportReportBtn,
+html:not([data-theme="light"]) #settingsBtn,
+html:not([data-theme="light"]) #absenPagiBtn,
+html:not([data-theme="light"]) #absenSiangBtn,
+html:not([data-theme="light"]) #rukoBukaBtn,
+html:not([data-theme="light"]) #rukoTutupBtn,
+html:not([data-theme="light"]) .btn,
+html:not([data-theme="light"]) input,
+html:not([data-theme="light"]) select,
+html:not([data-theme="light"]) textarea {
+  transition: box-shadow 0.35s ease, transform 0.25s ease;
+}
+
+/* Hover & Focus states with Neon Pink Glow */
+html:not([data-theme="light"]) #themeBtn:hover,
+html:not([data-theme="light"]) #exportReportBtn:hover,
+html:not([data-theme="light"]) #settingsBtn:hover,
+html:not([data-theme="light"]) #absenPagiBtn:hover,
+html:not([data-theme="light"]) #absenSiangBtn:hover,
+html:not([data-theme="light"]) #rukoBukaBtn:hover,
+html:not([data-theme="light"]) #rukoTutupBtn:hover,
+html:not([data-theme="light"]) .btn:hover,
+html:not([data-theme="light"]) input:focus,
+html:not([data-theme="light"]) select:focus,
+html:not([data-theme="light"]) textarea:focus {
+  outline: none;
+  box-shadow: 
+    0 0 8px rgba(255, 20, 147, 0.7),
+    0 0 16px rgba(255, 20, 147, 0.6),
+    0 0 32px rgba(255, 20, 147, 0.5),
+    0 0 48px rgba(255, 20, 147, 0.3);
+  transform: translateY(-2px);
+  animation: neonPulse 3s infinite alternate ease-in-out;
+}
+
+/* Pulse animation */
+@keyframes neonPulse {
+  0% {
+    box-shadow: 
+      0 0 6px rgba(255, 20, 147, 0.5),
+      0 0 12px rgba(255, 20, 147, 0.4),
+      0 0 24px rgba(255, 20, 147, 0.3);
+  }
+  100% {
+    box-shadow: 
+      0 0 10px rgba(255, 20, 147, 0.8),
+      0 0 24px rgba(255, 20, 147, 0.6),
+      0 0 40px rgba(255, 20, 147, 0.5),
+      0 0 60px rgba(255, 20, 147, 0.4);
+  }
+}
+</style>
+<style>
+/* Ikon kalender & jam putih polos di dark theme */
+html:not([data-theme="light"]) input[type="date"]::-webkit-calendar-picker-indicator,
+html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+</style>
 
 
 </head>
@@ -1646,7 +1877,7 @@ textarea:focus-visible {
 </div>
 <!-- Versi aplikasi -->
 <div style="margin-top:8px;">
-<p style="color:var(--muted);font-size:12px;">Build: <b>v1.81</b></p>
+<p style="color:var(--muted);font-size:12px;">Build: <b>v2.0</b></p>
 </div>
 </div>
 </div>
