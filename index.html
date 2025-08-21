@@ -914,6 +914,285 @@ html { scroll-behavior: smooth; }
   overflow-y: auto;
 }
 </style>
+
+<style>
+@media (max-width: 600px) {
+  .range-wrap .sep {
+    display: none !important;
+  }
+}
+
+/* === Modern UI Enhancements (Kustom Injected) === */
+
+/* Card shadow + hover lift */
+.card, .subcard {
+  box-shadow: 0 4px 12px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.08);
+  transition: all 0.25s ease;
+}
+.card:hover, .subcard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.16);
+}
+
+/* Tombol micro animation */
+.btn {
+  transition: all .2s ease;
+}
+.btn:hover {
+  transform: translateY(-1px) scale(1.02);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+/* Recap items animation */
+.recap-item {
+  animation: fadeUp .4s ease both;
+}
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(8px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* Focus glow on input */
+.input:focus, .select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(110,168,254,0.35);
+  transition: all .2s ease;
+}
+
+/* Smooth Tema transition */
+body, .card, .subcard, .modal {
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease;
+}
+
+/* Rounded buttons & gradient primary */
+:root {
+  --radius: 12px;
+}
+.btn.primary {
+  background: linear-gradient(135deg, #6ea8fe, #2557e0);
+  box-shadow: 0 4px 10px rgba(37,87,224,.3);
+  border: none;
+}
+
+/* === Soft Shadow pada input penting (lebih lembut) === */
+#date, #day, #absenPagi, #absenSiang, #rukoBuka, #rukoTutup, #catatan {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease;
+}
+#date:focus, #day:focus, #absenPagi:focus, #absenSiang:focus, 
+#rukoBuka:focus, #rukoTutup:focus, #catatan:focus {
+  box-shadow: 0 8px 20px rgba(110,168,254,0.25);
+}
+
+/* === Soft Shadow pada tombol utama (Tema, Download Laporan, Pengaturan) === */
+#themeBtn, #exportReportBtn, #settingsBtn {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+#themeBtn:hover, #exportReportBtn:hover, #settingsBtn:hover {
+  box-shadow: 0 8px 20px rgba(110,168,254,0.25);
+  transform: translateY(-2px);
+}
+
+/* Toolbar tombol kanan (desktop) */
+.header .toolbar-row {
+  margin-left: auto;
+}
+@media(max-width: 900px){
+  .header .toolbar-row {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+.btn.warn:active {
+  animation: shake 0.3s;
+}
+
+/* === Default glow + Hover glow + Shake for warn buttons === */
+.btn.warn {
+  box-shadow: 0 3px 10px rgba(217,48,37,0.25);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.btn.warn:hover {
+  box-shadow: 0 6px 18px rgba(217,48,37,0.4);
+  transform: translateY(-2px);
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+.btn.warn:active {
+  animation: shake 0.3s;
+}
+
+</style>
+
+<style>
+.settings-layout { display:flex; gap:16px; min-height: var(--ctrl-h); }
+.settings-sidebar .btn { justify-content:flex-start; }
+.settings-content { flex:1; display:flex; flex-direction:column; gap: var(--space-2); }
+.settings-tab[hidden] { display:none !important; }
+@media(max-width:600px){
+  .settings-layout { flex-direction:column; }
+  .settings-sidebar { flex:0 0 auto; }
+}
+
+/* === UX ENHANCEMENTS === */
+/* Hover & Active Buttons */
+.btn {
+  transition: transform 0.15s ease, filter 0.15s ease, background-color 0.25s ease;
+}
+.btn:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Hover Baris on Tabel */
+table tbody tr {
+  transition: background-color 0.2s ease;
+}
+table tbody tr:hover {
+  background-color: rgba(110,168,254,0.08);
+}
+
+/* Sticky header for scrollable tables */
+table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  z-index: 2;
+}
+
+/* Smooth Tema transition */
+body, .card, .subcard, .modal > * {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* Jendela Dialog open animation */
+.modal > * {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.modal.is-visible > * {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* Focus-visible styles for accessibility */
+button:focus-visible,
+.btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(110,168,254,0.5);
+}
+
+
+/* === Riwayat Tabel UI Polishing === */
+#table {
+  width: 100%;
+  border-collapse: collapse;
+}
+#table th, #table td {
+  padding: var(--space-2) 12px;
+  vertical-align: middle;
+}
+#table th {
+  color: var(--muted);
+  font-size: 13px;
+  background: var(--card2);
+}
+#table tbody tr:hover {
+  background-color: rgba(110, 168, 254, 0.08);
+}
+/* Tombol Edit dan Hapus */
+#table .btn {
+  padding: var(--space-1) 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  min-width: 50px;
+}
+#table .btn.warn {
+  background: #d93025 !important;
+  border-color: #a12016 !important;
+  color: #fff !important;
+}
+#table .btn.warn:hover {
+  filter: brightness(1.1);
+}
+/* Responsif */
+@media (max-width: 600px) {
+  #table th, #table td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  #table .btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+/* === Rentang Filter Alignment === */
+.range-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+.range-wrap input[type="date"] {
+  flex: 1 1 auto;
+  min-width: 150px;
+}
+.range-wrap .sep {
+  flex: 0 0 auto;
+  text-align: center;
+  min-width: 24px;
+  color: var(--muted);
+}
+.range-wrap button {
+  flex: 0 0 auto;
+  min-width: 90px;
+}
+
+/* === Responsive Fix Rentang Filter === */
+@media (max-width: 600px) {
+  .range-wrap {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .range-wrap input[type="date"] {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+  .range-wrap .sep {
+    flex: 0 0 100%;
+    text-align: center;
+    margin: 0;
+  }
+  .range-wrap button {
+    flex: 1 1 auto;
+    min-width: 48%;
+  }
+}
+</style>
+
+
+
 </head>
 <body>
 <div class="container">
@@ -1237,6 +1516,264 @@ html { scroll-behavior: smooth; }
 <div class="spacer"></div>
 </div>
 <input accept=".csv" id="fileInput" style="display:none" type="file"/>
+
+<!-- === Themed Popups (Alert & Confirm) === -->
+<div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
+<div class="modal" hidden="" id="themedConfirm">
+<div>
+<div class="modal-header">
+<div class="modal-title">Konfirmasi</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body"></div>
+<div class="modal-footer">
+<button class="btn" data-cancel="">Batal</button>
+<button class="btn primary" data-ok="">OK</button>
+</div>
+</div>
+</div>
+<div class="modal" hidden="" id="themedAlert">
+<div>
+<div class="modal-header">
+<div class="modal-title">Info</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body"></div>
+<div class="modal-footer">
+<button class="btn primary" data-ok="">OK</button>
+</div>
+</div>
+</div>
+<!-- Themed Password Modal -->
+<div class="modal" hidden="" id="themedPassword">
+<div>
+<div class="modal-header">
+<div class="modal-title">Verifikasi</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body">
+<label class="mini subtle" for="pwdInput">Masukkan password untuk melanjutkan</label>
+<input autocomplete="current-password" class="input" id="pwdInput" placeholder="Password admin" type="password"/>
+</div>
+<div class="modal-footer">
+<button class="btn" data-cancel="">Batal</button>
+<button class="btn primary" data-ok="">OK</button>
+</div>
+</div>
+</div>
+<!-- === /Themed Popups === -->
+<!-- Main Settings Modal -->
+<div class="modal" hidden="" id="settingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Pengaturan</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
+
+<div class="settings-layout">
+<!-- Sidebar kiri -->
+<div class="settings-sidebar">
+<button class="btn" data-settings-tab="theme"><span class="emoji">⚙️</span> General</button>
+<button class="btn" data-settings-tab="jajanan"><span class="emoji">📝</span>Edit Rincian</button>
+<button class="btn" data-settings-tab="backup"><span class="emoji">📦</span>Backup &amp; Restore Data</button>
+<button class="btn" data-settings-tab="export"><span class="emoji">📤</span>Export Data</button>
+<button class="btn" id="resetSettingsBtn"><span class="emoji">♻️</span>Reset Setting</button><button class="btn" data-settings-tab="info"><span class="emoji">ℹ️</span> Info</button>
+</div>
+<!-- Konten kanan -->
+<div class="settings-content" id="settingsContentArea">
+<!-- Tab: Theme -->
+<div class="settings-tab" data-tab="theme">
+<div class="setting-row"><span>Mode Tema</span><button class="btn setting-btn" id="themeToggleInSettings"><span class="emoji">🌙</span>Gelap</button></div>
+<div class="setting-row"><span>Kualitas Gambar</span><button class="btn setting-btn" id="qualityToggleInSettings"><span class="emoji">✨</span>Tinggi</button></div>
+</div>
+<!-- Tab: Jajanan -->
+<div class="settings-tab" data-tab="jajanan" hidden="">
+<div style="display:flex;flex-direction:column;gap: var(--space-2);">
+<button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
+<button class="btn" id="openJajananSettings">Item Jajanan</button>
+<button class="btn" id="openJasaAksesorisSettings">Item Jasa &amp; Aksesori</button>
+<button class="btn" id="openJenisPSSewaSettings">Item Jenis PS Pemasukan Sewa PS</button>
+</div>
+</div>
+<!-- Tab: Backup & Restore -->
+<div class="settings-tab" data-tab="backup" hidden="">
+<div style="display:flex;flex-direction:column;gap: var(--space-2);">
+<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
+<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
+<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+</div>
+</div>
+<!-- Tab: Export -->
+<div class="settings-tab" data-tab="export" hidden="">
+<div style="display:flex;flex-direction:column;gap: var(--space-2);">
+<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
+</div>
+</div>
+
+
+
+<div class="settings-tab" data-tab="info" hidden="">
+<div style="display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.5;">
+<!-- Apa ini -->
+<div>
+<h3 style="margin:0;font-size:16px;">📌 Tentang Aplikasi</h3>
+<p>Aplikasi ini digunakan untuk mencatat transaksi, pemasukan, dan pengeluaran
+        <b>URBAN PlayStation Lampung</b>. Aplikasi bersifat pribadi untuk kebutuhan internal.</p>
+</div>
+
+<!-- Bagaimana cara pakai -->
+<div>
+  <h3 style="margin:0;font-size:16px;">📝 Panduan Singkat</h3>
+  <ul style="padding-left:18px; margin:6px 0;">
+    <li>Aplikasi ini sudah dilengkapi fitur <b>penjumlahan otomatis</b>, <b>grafik</b>, <b>tarik data</b>, <b>backup & restore</b>, <b>filter tanggal</b>, serta pilihan <b>tema Gelap/Terang</b>.</li>
+    <li>Untuk <b>mengganti tema</b>, tekan tombol <b>Gelap/Terang</b> di pojok kanan atas.</li>
+    <li><b>Menambah atau mengedit item rincian</b> (PS, jajanan, jasa, sewa) bisa diakses melalui menu <b>Edit Rincian</b>.</li>
+    <li><b>Backup seluruh data</b> bisa dilakukan lewat menu <b>Backup & Restore Data</b>.</li>
+    <li><b>Ekspor data ke CSV</b> dapat diakses pada menu <b>Export Data</b>.</li>
+    <li><b>Reset Setting</b> tersedia di menu <b>Reset Setting</b> untuk mengembalikan pengaturan default (data transaksi tetap aman).</li>
+  </ul>
+  <p style="margin-top:8px;color:var(--muted);font-size:13px;">
+    💡 Tips: Jangan lupa lakukan backup data secara berkala agar catatan tidak hilang.
+  </p>
+</div>
+
+<!-- Siapa pembuat & kontak -->
+<div>
+<h3 style="margin:0;font-size:16px;">📞 Kontak</h3>
+<p>URBAN PlayStation Lampung<br/>
+      Telp/WA: <a href="tel:085709647790">085709647790</a></p>
+</div>
+<!-- Versi aplikasi -->
+<div style="margin-top:8px;">
+<p style="color:var(--muted);font-size:12px;">Build: <b>v1.81</b></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<!-- Export Data Modal -->
+<!-- Backup & Restore Data Modal -->
+<div class="modal" hidden="" id="backupRestoreSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Backup &amp; Restore Data</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
+<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
+<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
+<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
+</div>
+<div class="modal-footer">
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<div class="modal" hidden="" id="exportDataSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Export Data</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
+<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
+</div>
+<div class="modal-footer">
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<!-- Pengaturan Jajanan Modal -->
+<div class="modal" hidden="" id="jajananSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Pengaturan Jajanan</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body">
+<table id="jajananSettingsTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead>
+<tr><th style="text-align:left;padding: var(--space-1)">Nama Jajanan</th><th style="text-align:left;padding: var(--space-1)">Harga (Rp)</th><th style="padding: var(--space-1)">Aksi</th></tr>
+</thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJajananItemBtn" type="button">+ Tambah Item</button>
+</div>
+<div class="modal-footer">
+<button class="btn" data-cancel="">Batal</button>
+<button class="btn primary" id="saveJajananSettingsBtn">Simpan</button>
+</div>
+</div>
+</div>
+<!-- Jenis PS Harian Modal -->
+<div class="modal" hidden="" id="jenisPSHarianSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Item Jenis PS Pemasukan Harian</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="max-height:60vh;overflow:auto;">
+<table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJenisPSHarianBtn" type="button">+ Tambah Jenis PS</button>
+</div>
+<div class="modal-footer">
+<button class="btn" id="saveJenisPSHarianBtn">Simpan</button>
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<!-- Jasa & Aksesoris Modal -->
+<div class="modal" hidden="" id="jasaAksesorisSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Item Jasa &amp; Aksesoris</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="max-height:60vh;overflow:auto;">
+<table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead><tr><th>Nama Jasa/Aksesoris</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJasaAksesorisBtn" type="button">+ Tambah Jasa/Aksesoris</button>
+</div>
+<div class="modal-footer">
+<button class="btn" id="saveJasaAksesorisBtn">Simpan</button>
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+<!-- Jenis PS Sewa Modal -->
+<div class="modal" hidden="" id="jenisPSSewaSettingsModal">
+<div>
+<div class="modal-header">
+<div class="modal-title">Item Jenis PS Pemasukan Sewa PS</div>
+<button class="modal-close" data-close="">✕</button>
+</div>
+<div class="modal-body" style="max-height:60vh;overflow:auto;">
+<table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
+<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
+<tbody></tbody>
+</table>
+<button class="btn" id="addJenisPSSewaBtn" type="button">+ Tambah Jenis PS</button>
+</div>
+<div class="modal-footer">
+<button class="btn" id="saveJenisPSSewaBtn">Simpan</button>
+<button class="btn" data-close="">Tutup</button>
+</div>
+</div>
+</div>
+
+
 <script>
 // === Themed Jendela Muncul Helpers ===
 (function(){
@@ -3908,415 +4445,7 @@ document.querySelectorAll('.modal').forEach(modal => {
 });
 
 </script>
-<!-- === Themed Popups (Alert & Confirm) === -->
-<div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
-<div class="modal" hidden="" id="themedConfirm">
-<div>
-<div class="modal-header">
-<div class="modal-title">Konfirmasi</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body"></div>
-<div class="modal-footer">
-<button class="btn" data-cancel="">Batal</button>
-<button class="btn primary" data-ok="">OK</button>
-</div>
-</div>
-</div>
-<div class="modal" hidden="" id="themedAlert">
-<div>
-<div class="modal-header">
-<div class="modal-title">Info</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body"></div>
-<div class="modal-footer">
-<button class="btn primary" data-ok="">OK</button>
-</div>
-</div>
-</div>
-<!-- Themed Password Modal -->
-<div class="modal" hidden="" id="themedPassword">
-<div>
-<div class="modal-header">
-<div class="modal-title">Verifikasi</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body">
-<label class="mini subtle" for="pwdInput">Masukkan password untuk melanjutkan</label>
-<input autocomplete="current-password" class="input" id="pwdInput" placeholder="Password admin" type="password"/>
-</div>
-<div class="modal-footer">
-<button class="btn" data-cancel="">Batal</button>
-<button class="btn primary" data-ok="">OK</button>
-</div>
-</div>
-</div>
-<!-- === /Themed Popups === -->
-<!-- Main Settings Modal -->
-<div class="modal" hidden="" id="settingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Pengaturan</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-<style>
-.settings-layout { display:flex; gap:16px; min-height: var(--ctrl-h); }
-.settings-sidebar .btn { justify-content:flex-start; }
-.settings-content { flex:1; display:flex; flex-direction:column; gap: var(--space-2); }
-.settings-tab[hidden] { display:none !important; }
-@media(max-width:600px){
-  .settings-layout { flex-direction:column; }
-  .settings-sidebar { flex:0 0 auto; }
-}
 
-/* === UX ENHANCEMENTS === */
-/* Hover & Active Buttons */
-.btn {
-  transition: transform 0.15s ease, filter 0.15s ease, background-color 0.25s ease;
-}
-.btn:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-}
-.btn:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-/* Hover Baris on Tabel */
-table tbody tr {
-  transition: background-color 0.2s ease;
-}
-table tbody tr:hover {
-  background-color: rgba(110,168,254,0.08);
-}
-
-/* Sticky header for scrollable tables */
-table thead th {
-  position: sticky;
-  top: 0;
-  background: var(--card);
-  z-index: 2;
-}
-
-/* Smooth Tema transition */
-body, .card, .subcard, .modal > * {
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
-
-/* Jendela Dialog open animation */
-.modal > * {
-  opacity: 0;
-  transform: translateY(10px) scale(0.98);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-.modal.is-visible > * {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-
-/* Focus-visible styles for accessibility */
-button:focus-visible,
-.btn:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(110,168,254,0.5);
-}
-
-
-/* === Riwayat Tabel UI Polishing === */
-#table {
-  width: 100%;
-  border-collapse: collapse;
-}
-#table th, #table td {
-  padding: var(--space-2) 12px;
-  vertical-align: middle;
-}
-#table th {
-  color: var(--muted);
-  font-size: 13px;
-  background: var(--card2);
-}
-#table tbody tr:hover {
-  background-color: rgba(110, 168, 254, 0.08);
-}
-/* Tombol Edit dan Hapus */
-#table .btn {
-  padding: var(--space-1) 10px;
-  font-size: 12px;
-  border-radius: 8px;
-  min-width: 50px;
-}
-#table .btn.warn {
-  background: #d93025 !important;
-  border-color: #a12016 !important;
-  color: #fff !important;
-}
-#table .btn.warn:hover {
-  filter: brightness(1.1);
-}
-/* Responsif */
-@media (max-width: 600px) {
-  #table th, #table td {
-    padding: 8px 6px;
-    font-size: 12px;
-  }
-  #table .btn {
-    padding: 4px 8px;
-    font-size: 11px;
-  }
-}
-
-/* === Rentang Filter Alignment === */
-.range-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: nowrap;
-}
-.range-wrap input[type="date"] {
-  flex: 1 1 auto;
-  min-width: 150px;
-}
-.range-wrap .sep {
-  flex: 0 0 auto;
-  text-align: center;
-  min-width: 24px;
-  color: var(--muted);
-}
-.range-wrap button {
-  flex: 0 0 auto;
-  min-width: 90px;
-}
-
-/* === Responsive Fix Rentang Filter === */
-@media (max-width: 600px) {
-  .range-wrap {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .range-wrap input[type="date"] {
-    flex: 1 1 100%;
-    min-width: 100%;
-  }
-  .range-wrap .sep {
-    flex: 0 0 100%;
-    text-align: center;
-    margin: 0;
-  }
-  .range-wrap button {
-    flex: 1 1 auto;
-    min-width: 48%;
-  }
-}
-</style>
-<div class="settings-layout">
-<!-- Sidebar kiri -->
-<div class="settings-sidebar">
-<button class="btn" data-settings-tab="theme"><span class="emoji">⚙️</span> General</button>
-<button class="btn" data-settings-tab="jajanan"><span class="emoji">📝</span>Edit Rincian</button>
-<button class="btn" data-settings-tab="backup"><span class="emoji">📦</span>Backup &amp; Restore Data</button>
-<button class="btn" data-settings-tab="export"><span class="emoji">📤</span>Export Data</button>
-<button class="btn" id="resetSettingsBtn"><span class="emoji">♻️</span>Reset Setting</button><button class="btn" data-settings-tab="info"><span class="emoji">ℹ️</span> Info</button>
-</div>
-<!-- Konten kanan -->
-<div class="settings-content" id="settingsContentArea">
-<!-- Tab: Theme -->
-<div class="settings-tab" data-tab="theme">
-<div class="setting-row"><span>Mode Tema</span><button class="btn setting-btn" id="themeToggleInSettings"><span class="emoji">🌙</span>Gelap</button></div>
-<div class="setting-row"><span>Kualitas Gambar</span><button class="btn setting-btn" id="qualityToggleInSettings"><span class="emoji">✨</span>Tinggi</button></div>
-</div>
-<!-- Tab: Jajanan -->
-<div class="settings-tab" data-tab="jajanan" hidden="">
-<div style="display:flex;flex-direction:column;gap: var(--space-2);">
-<button class="btn" id="openJenisPSHarianSettings">Item Jenis PS Pemasukan Harian</button>
-<button class="btn" id="openJajananSettings">Item Jajanan</button>
-<button class="btn" id="openJasaAksesorisSettings">Item Jasa &amp; Aksesori</button>
-<button class="btn" id="openJenisPSSewaSettings">Item Jenis PS Pemasukan Sewa PS</button>
-</div>
-</div>
-<!-- Tab: Backup & Restore -->
-<div class="settings-tab" data-tab="backup" hidden="">
-<div style="display:flex;flex-direction:column;gap: var(--space-2);">
-<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
-<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
-<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-</div>
-</div>
-<!-- Tab: Export -->
-<div class="settings-tab" data-tab="export" hidden="">
-<div style="display:flex;flex-direction:column;gap: var(--space-2);">
-<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
-</div>
-</div>
-
-
-
-<div class="settings-tab" data-tab="info" hidden="">
-<div style="display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.5;">
-<!-- Apa ini -->
-<div>
-<h3 style="margin:0;font-size:16px;">📌 Tentang Aplikasi</h3>
-<p>Aplikasi ini digunakan untuk mencatat transaksi, pemasukan, dan pengeluaran
-        <b>URBAN PlayStation Lampung</b>. Aplikasi bersifat pribadi untuk kebutuhan internal.</p>
-</div>
-
-<!-- Bagaimana cara pakai -->
-<div>
-  <h3 style="margin:0;font-size:16px;">📝 Panduan Singkat</h3>
-  <ul style="padding-left:18px; margin:6px 0;">
-    <li>Aplikasi ini sudah dilengkapi fitur <b>penjumlahan otomatis</b>, <b>grafik</b>, <b>tarik data</b>, <b>backup & restore</b>, <b>filter tanggal</b>, serta pilihan <b>tema Gelap/Terang</b>.</li>
-    <li>Untuk <b>mengganti tema</b>, tekan tombol <b>Gelap/Terang</b> di pojok kanan atas.</li>
-    <li><b>Menambah atau mengedit item rincian</b> (PS, jajanan, jasa, sewa) bisa diakses melalui menu <b>Edit Rincian</b>.</li>
-    <li><b>Backup seluruh data</b> bisa dilakukan lewat menu <b>Backup & Restore Data</b>.</li>
-    <li><b>Ekspor data ke CSV</b> dapat diakses pada menu <b>Export Data</b>.</li>
-    <li><b>Reset Setting</b> tersedia di menu <b>Reset Setting</b> untuk mengembalikan pengaturan default (data transaksi tetap aman).</li>
-  </ul>
-  <p style="margin-top:8px;color:var(--muted);font-size:13px;">
-    💡 Tips: Jangan lupa lakukan backup data secara berkala agar catatan tidak hilang.
-  </p>
-</div>
-
-<!-- Siapa pembuat & kontak -->
-<div>
-<h3 style="margin:0;font-size:16px;">📞 Kontak</h3>
-<p>URBAN PlayStation Lampung<br/>
-      Telp/WA: <a href="tel:085709647790">085709647790</a></p>
-</div>
-<!-- Versi aplikasi -->
-<div style="margin-top:8px;">
-<p style="color:var(--muted);font-size:12px;">Build: <b>v1.81</b></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="modal-footer">
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Export Data Modal -->
-<!-- Backup & Restore Data Modal -->
-<div class="modal" hidden="" id="backupRestoreSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Backup &amp; Restore Data</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-<button class="btn" id="backupDataBtn"><span class="emoji">💾</span>Backup Data</button>
-<button class="btn" id="restoreDataBtn"><span class="emoji">📂</span>Restore Data</button>
-<input accept=".json" id="restoreFileInput" style="display:none;" type="file"/>
-</div>
-<div class="modal-footer">
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<div class="modal" hidden="" id="exportDataSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Export Data</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-<button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
-</div>
-<div class="modal-footer">
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Pengaturan Jajanan Modal -->
-<div class="modal" hidden="" id="jajananSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Pengaturan Jajanan</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body">
-<table id="jajananSettingsTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead>
-<tr><th style="text-align:left;padding: var(--space-1)">Nama Jajanan</th><th style="text-align:left;padding: var(--space-1)">Harga (Rp)</th><th style="padding: var(--space-1)">Aksi</th></tr>
-</thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJajananItemBtn" type="button">+ Tambah Item</button>
-</div>
-<div class="modal-footer">
-<button class="btn" data-cancel="">Batal</button>
-<button class="btn primary" id="saveJajananSettingsBtn">Simpan</button>
-</div>
-</div>
-</div>
-<!-- Jenis PS Harian Modal -->
-<div class="modal" hidden="" id="jenisPSHarianSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Item Jenis PS Pemasukan Harian</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="max-height:60vh;overflow:auto;">
-<table id="jenisPSHarianTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJenisPSHarianBtn" type="button">+ Tambah Jenis PS</button>
-</div>
-<div class="modal-footer">
-<button class="btn" id="saveJenisPSHarianBtn">Simpan</button>
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Jasa & Aksesoris Modal -->
-<div class="modal" hidden="" id="jasaAksesorisSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Item Jasa &amp; Aksesoris</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="max-height:60vh;overflow:auto;">
-<table id="jasaAksesorisTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead><tr><th>Nama Jasa/Aksesoris</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJasaAksesorisBtn" type="button">+ Tambah Jasa/Aksesoris</button>
-</div>
-<div class="modal-footer">
-<button class="btn" id="saveJasaAksesorisBtn">Simpan</button>
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
-<!-- Jenis PS Sewa Modal -->
-<div class="modal" hidden="" id="jenisPSSewaSettingsModal">
-<div>
-<div class="modal-header">
-<div class="modal-title">Item Jenis PS Pemasukan Sewa PS</div>
-<button class="modal-close" data-close="">✕</button>
-</div>
-<div class="modal-body" style="max-height:60vh;overflow:auto;">
-<table id="jenisPSSewaTable" style="width:100%;border-collapse:collapse;margin-bottom:12px">
-<thead><tr><th>Jenis PS</th><th>Harga (Rp)</th><th>Aksi</th></tr></thead>
-<tbody></tbody>
-</table>
-<button class="btn" id="addJenisPSSewaBtn" type="button">+ Tambah Jenis PS</button>
-</div>
-<div class="modal-footer">
-<button class="btn" id="saveJenisPSSewaBtn">Simpan</button>
-<button class="btn" data-close="">Tutup</button>
-</div>
-</div>
-</div>
 <script>
 (function(){
   function updateDayField(){
@@ -4589,133 +4718,6 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 </script>
 
-<style>
-@media (max-width: 600px) {
-  .range-wrap .sep {
-    display: none !important;
-  }
-}
-
-/* === Modern UI Enhancements (Kustom Injected) === */
-
-/* Card shadow + hover lift */
-.card, .subcard {
-  box-shadow: 0 4px 12px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.08);
-  transition: all 0.25s ease;
-}
-.card:hover, .subcard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,.16);
-}
-
-/* Tombol micro animation */
-.btn {
-  transition: all .2s ease;
-}
-.btn:hover {
-  transform: translateY(-1px) scale(1.02);
-}
-.btn:active {
-  transform: translateY(1px) scale(0.96);
-}
-
-/* Recap items animation */
-.recap-item {
-  animation: fadeUp .4s ease both;
-}
-@keyframes fadeUp {
-  from { opacity:0; transform: translateY(8px); }
-  to   { opacity:1; transform: translateY(0); }
-}
-
-/* Focus glow on input */
-.input:focus, .select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(110,168,254,0.35);
-  transition: all .2s ease;
-}
-
-/* Smooth Tema transition */
-body, .card, .subcard, .modal {
-  transition: background-color .35s ease, color .35s ease, border-color .35s ease;
-}
-
-/* Rounded buttons & gradient primary */
-:root {
-  --radius: 12px;
-}
-.btn.primary {
-  background: linear-gradient(135deg, #6ea8fe, #2557e0);
-  box-shadow: 0 4px 10px rgba(37,87,224,.3);
-  border: none;
-}
-
-
-
-/* === Soft Shadow pada input penting (lebih lembut) === */
-#date, #day, #absenPagi, #absenSiang, #rukoBuka, #rukoTutup, #catatan {
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  transition: box-shadow 0.3s ease;
-}
-#date:focus, #day:focus, #absenPagi:focus, #absenSiang:focus, 
-#rukoBuka:focus, #rukoTutup:focus, #catatan:focus {
-  box-shadow: 0 8px 20px rgba(110,168,254,0.25);
-}
-
-
-
-/* === Soft Shadow pada tombol utama (Tema, Download Laporan, Pengaturan) === */
-#themeBtn, #exportReportBtn, #settingsBtn {
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-#themeBtn:hover, #exportReportBtn:hover, #settingsBtn:hover {
-  box-shadow: 0 8px 20px rgba(110,168,254,0.25);
-  transform: translateY(-2px);
-}
-
-
-/* Toolbar tombol kanan (desktop) */
-.header .toolbar-row {
-  margin-left: auto;
-}
-@media(max-width: 900px){
-  .header .toolbar-row {
-    margin-left: 0;
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-
-
-
-.btn.warn:active {
-  animation: shake 0.3s;
-}
-
-
-/* === Default glow + Hover glow + Shake for warn buttons === */
-.btn.warn {
-  box-shadow: 0 3px 10px rgba(217,48,37,0.25);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-.btn.warn:hover {
-  box-shadow: 0 6px 18px rgba(217,48,37,0.4);
-  transform: translateY(-2px);
-}
-@keyframes shake {
-  0% { transform: translateX(0); }
-  20% { transform: translateX(-3px); }
-  40% { transform: translateX(3px); }
-  60% { transform: translateX(-2px); }
-  80% { transform: translateX(2px); }
-  100% { transform: translateX(0); }
-}
-.btn.warn:active {
-  animation: shake 0.3s;
-}
-
-</style>
 
 </body>
 </html>
