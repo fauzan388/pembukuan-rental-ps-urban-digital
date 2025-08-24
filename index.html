@@ -1,41 +1,84 @@
+
 <!DOCTYPE html>
 
 <html lang="id">
 <head>
+<style>
+body, .card, .subcard, .modal {
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.btn.warn {
+  background: #d93025;
+  border-color: #a12016;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(217,48,37,0.25);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+.btn.warn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 6px 18px rgba(217,48,37,0.4);
+  transform: translateY(-2px);
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) 10px;
+  background: var(--card2);
+  border: 1px solid var(--ring);
+  border-radius: 999px;
+}
+.pill select,
+.pill input[type="date"],
+.pill button {
+  height: var(--ctrl-h);
+  line-height: var(--ctrl-h);
+  padding: 0 10px;
+  font-size: 13px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #0b1020;
+  --text: #e9eef9;
+  --muted: #9aa3b2;
+  --accent: #6ea8fe;
+  --ring: #2a3358;
+  --card: #111833;
+  --card2: #0e1530;
+  --input-bg: #0e1530;
+  --btn-bg: #0f1a3d;
+  --warn-bg: #2d1f00;
+  --warn-ring: #5b3f00;
+  --table-border: #232c52;
+  --shadow: 0 10px 30px rgba(0,0,0,.25);
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 20px;
+  --space-5: clamp(32px, 4vw, 40px);
+  --ctrl-h: 40px;
+  --radius: 12px;
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-md: 16px;
+  --font-lg: 20px;
+  --font-xl: 24px;
+  --font-2xl: 32px;
+}
+</style>
 <meta charset="utf-8"/>
 <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Pembukuan Rental PS - URBAN DIGITAL (Theme Toggle)</title>
 <style>
   /* ========= Tema TOKENS ========= */
-  :root {
-    /* Dark (default) — using your original palette */
-    --bg:#0b1020;
-    --text:#e9eef9;
-    --muted:#9aa3b2;
-    --accent:#6ea8fe;
-    --ring:#2a3358;
+  
 
-    --card:#111833;   /* main card */
-    --card2:#0e1530;  /* sub card */
-    --input-bg:#0e1530;
-    --btn-bg:#0f1a3d;
-    --warn-bg:#2d1f00;
-    --warn-ring:#5b3f00;
 
-    --table-border:#232c52;
-    --shadow:0 10px 30px rgba(0,0,0,.25);
-  }
-
-:root {
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 16px;
-  --space-4: 24px;
-  --space-5: 32px;
-  --ctrl-h: 40px;
-  --radius: 8px;
-}
 
   /* Light Tema overrides */
   [data-theme="light"]{
@@ -63,6 +106,17 @@
   .container{max-width:1100px;margin:24px auto;padding:0 16px}
 
   .header{display:flex;align-items:center;justify-content:space-between;gap: var(--space-2)}
+/* Keep the top header visible while scrolling */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--bg);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--ring);
+  backdrop-filter: saturate(120%) blur(4px);
+}
+
 
   .card{background:var(--card);border:1px solid var(--ring);border-radius: calc(var(--radius) * 2);box-shadow:var(--shadow)}
   .pad{padding: var(--space-3)}
@@ -79,10 +133,7 @@
   
 
   .row{display:flex;gap: var(--space-2);flex-wrap:wrap;align-items:center}
-  .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;background:var(--card2);border:1px solid var(--ring);border-radius:999px}
-  .pill .select{padding: var(--space-1) 10px}
-
-  table{width:100%;border-collapse:collapse}
+  
   th,td{padding: var(--space-2); vertical-align: middle;}
   th:first-child,td:first-child{text-align:left}
   th{color:var(--muted);font-size:13px}
@@ -114,67 +165,27 @@
 
 
 /* === Kustom red warning buttons === */
-.btn.warn {
-  background: #d93025 !important; /* Red tone */
-  border-color: #a12016 !important;
-  color: #fff !important;
-}
-.btn.warn:hover {
-  filter: brightness(1.1);
-}
+
+
 
 
 /* === Filter bar consistency === */
-.pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: var(--space-1) 10px;
-  background: var(--card2);
-  border: 1px solid var(--ring);
-  border-radius: 999px;
-}
 
-.pill select,
-.pill input,
-.pill button {
-  height: var(--ctrl-h);            /* consistent height */
-  padding: 0 10px;
-  font-size: 13px;
-  border-radius: 6px;
-}
 
-.pill select {
-  min-width: 130px;        /* proportion for dropdown */
-}
 
-.pill input[type="date"] {
-  min-width: 140px;        /* proportion for date inputs */
-}
 
-.pill button {
-  white-space: nowrap;
-}
+
+
+
+
+
 
 
 /* Force all controls inside pill to be equal height */
-.pill select,
-.pill input[type="date"],
-.pill button {
-  height: var(--ctrl-h) !important;       /* exact same height */
-  line-height: var(--ctrl-h);
-  padding: 0 10px !important;     /* same padding */
-  font-size: 13px;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
+
 
 /* Make date picker icon vertically aligned */
-.pill input[type="date"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
+
 
 
 /* ===== Jendela Dialog ===== */
@@ -373,14 +384,7 @@
 .g2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap: var(--space-2); }
 
 /* === Responsive Typography (8pt Grid System) === */
-:root {
-  --font-xs: 12px;
-  --font-sm: 14px;
-  --font-md: 16px;
-  --font-lg: 20px;
-  --font-xl: 24px;
-  --font-2xl: 32px;
-}
+
 
 /* Base text */
 body {
@@ -416,15 +420,7 @@ label, .mini, .note, .subtle {
 
 
 /* === Fluid Typography & Spacing (8pt Grid System with clamp) === */
-:root {
-  --space-1: clamp(4px, 0.5vw, 6px);
-  --space-2: clamp(8px, 1vw, 12px);
-  --space-3: clamp(16px, 2vw, 20px);
-  --space-4: clamp(24px, 3vw, 32px);
-  --space-5: clamp(32px, 4vw, 40px);
-  --ctrl-h: clamp(36px, 5vw, 48px);
-  --radius: 8px;
-}
+
 
 /* Typography */
 body { font-size: clamp(14px, 1.6vw, 16px); line-height: 1.5; }
@@ -459,9 +455,9 @@ th, td { padding: var(--space-2); vertical-align: middle; }
 #jajananTable3x10 th:first-child, #jajananTable3x10 td:first-child,
 #jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
 #sewaTable3x10 th:first-child, #sewaTable3x10 td:first-child {
-  width: 48px;
-  min-width: 48px;
-  max-width: 48px;
+  width: 32px;
+  min-width: 32px;
+  max-width: 32px;
   text-align: center;
 }
 
@@ -472,9 +468,9 @@ th, td { padding: var(--space-2); vertical-align: middle; }
 #jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
 #sewaTable3x10 th:first-child, #sewaTable3x10 td:first-child {
   box-sizing: border-box;
-  width: 48px;
-  min-width: 48px;
-  max-width: 48px;
+  width: 32px;
+  min-width: 32px;
+  max-width: 32px;
   text-align: center;
   padding-left: 0;
   padding-right: 0;
@@ -565,12 +561,7 @@ body[data-quality="tinggi"] {
 }
 
 /* Gunakan variabel animasi di elemen utama */
-body, .card, .subcard, .modal {
-  transition: background-color var(--anim-speed) ease, 
-              color var(--anim-speed) ease, 
-              border-color var(--anim-speed) ease, 
-              box-shadow var(--anim-speed) ease !important;
-}
+
 
 
 /* === Setting rows aligned & tidy === */
@@ -603,14 +594,7 @@ html, body {
 </style>
 <style>
 /* === UI Polishing: consistent proportions & spacing === */
-:root{
-  --space-1:8px;
-  --space-2:12px;
-  --space-3:16px;
-  --space-4:20px;
-  --ctrl-h:40px;
-  --radius:12px;
-}
+
 
 /* normalize gaps */
 .row{ gap: var(--space-2) !important; }
@@ -630,16 +614,7 @@ html, body {
 textarea{ padding-top: 10px; padding-bottom: 10px; }
 
 /* pills: ensure same inner heights and spacing */
-.pill{ gap: var(--space-1) !important; }
-.pill select, .pill input[type="date"], .pill button{
-  height: calc(var(--ctrl-h) - 4px) !important;
-  line-height: calc(var(--ctrl-h) - 4px);
-  padding: 0 10px !important;
-  border-radius: 8px;
-}
 
-/* tables: consistent density & alignment */
-.table-sm th, .table-sm td{ padding: var(--space-2) 12px !important; }
 th, td{ vertical-align: middle; }
 th:first-child, td:first-child{ text-align: left; }
 
@@ -696,39 +671,19 @@ html, body { overflow-x: hidden; }
 }
 
 /* Make pills/filters not stretch awkwardly on mobile */
-.pill{ width: 100%; max-width: 100%; }
-@media (min-width: 601px){
-  .pill{ width: auto; }
+
 }
 
 /* Smooth scrolling for in-app navigation */
 html { scroll-behavior: smooth; }
 
 /* === Merged Filter + Rentang pill === */
-.pill-merged{
-  display:flex;
-  align-items:center;
-  gap: var(--space-2);
-  padding:8px 12px;
-  background:var(--card2);
-  border:1px solid var(--ring);
-  border-radius:999px;
-}
-.pill-merged .seg{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.pill-merged .divider{
-  width:1px;
-  align-self:stretch;
-  background:var(--ring);
-  opacity:.6;
-}
+
+
+
 /* Make the merged pill full-width on small screens for symmetry */
 @media (max-width: 600px){
-  .pill-merged{ width:100%; }
+  
 }
 
 
@@ -739,45 +694,20 @@ html { scroll-behavior: smooth; }
   gap: var(--space-2);
   align-items:center;
 }
-.toolbar-row .pill,
-.toolbar-row .pill-merged{
-  min-height: calc(var(--ctrl-h) + 4px);
-}
+.toolbar-row 
 /* Metric pill (for totals) */
-.pill.metric{
-  display:flex;
-  align-items:center;
-  gap: var(--space-2);
-  padding:8px 12px;
-  background:var(--card2);
-  border:1px solid var(--ring);
-  border-radius:999px;
-}
-.pill.metric .label{
-  font-size:12px;
-  color:var(--muted);
-}
-.pill.metric .value{
-  font-weight:800;
-  font-variant-numeric: tabular-nums;
-}
+
+
+
 /* Keep danger Tombol aligned in the pill */
-.pill.metric .btn{
-  height: calc(var(--ctrl-h) - 4px) !important;
-  line-height: calc(var(--ctrl-h) - 4px);
-  padding: 0 12px !important;
-  border-radius: 8px;
-}
+
 
 /* Responsive: make items fill nicely on small screens */
 @media (max-width: 900px){
   .toolbar-row > *{ flex:1 1 auto; }
 }
 @media (max-width: 600px){
-  .toolbar-row .pill-merged,
-  .toolbar-row .pill.metric{
-    width:100%;
-  }
+  .toolbar-row 
 }
 
 
@@ -892,7 +822,6 @@ html { scroll-behavior: smooth; }
     text-align: left !important;
   }
 </style>
-
 <style>
   /* Pastikan baris Total rapih dan simetris */
   .total-row td {
@@ -906,7 +835,6 @@ html { scroll-behavior: smooth; }
     min-width: 120px; /* jaga konsistensi lebar kolom harga */
   }
 </style>
-
 <style>
 /* === Semua tab dalam Pengaturan fix height 400px === */
 .settings-tab {
@@ -914,7 +842,6 @@ html { scroll-behavior: smooth; }
   overflow-y: auto;
 }
 </style>
-
 <style>
 @media (max-width: 600px) {
   .range-wrap .sep {
@@ -962,14 +889,10 @@ html { scroll-behavior: smooth; }
 }
 
 /* Smooth Tema transition */
-body, .card, .subcard, .modal {
-  transition: background-color .35s ease, color .35s ease, border-color .35s ease;
-}
+
 
 /* Rounded buttons & gradient primary */
-:root {
-  --radius: 12px;
-}
+
 .btn.primary {
   background: linear-gradient(135deg, #6ea8fe, #2557e0);
   box-shadow: 0 4px 10px rgba(37,87,224,.3);
@@ -1008,19 +931,11 @@ body, .card, .subcard, .modal {
   }
 }
 
-.btn.warn:active {
-  animation: shake 0.3s;
-}
+
 
 /* === Default glow + Hover glow + Shake for warn buttons === */
-.btn.warn {
-  box-shadow: 0 3px 10px rgba(217,48,37,0.25);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-.btn.warn:hover {
-  box-shadow: 0 6px 18px rgba(217,48,37,0.4);
-  transform: translateY(-2px);
-}
+
+
 @keyframes shake {
   0% { transform: translateX(0); }
   20% { transform: translateX(-3px); }
@@ -1029,9 +944,7 @@ body, .card, .subcard, .modal {
   80% { transform: translateX(2px); }
   100% { transform: translateX(0); }
 }
-.btn.warn:active {
-  animation: shake 0.3s;
-}
+
 
 </style>
 <style>
@@ -1074,9 +987,7 @@ table thead th {
 }
 
 /* Smooth Tema transition */
-body, .card, .subcard, .modal > * {
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
+
 
 /* Jendela Dialog open animation */
 .modal > * {
@@ -1126,14 +1037,8 @@ textarea:focus-visible {
   border-radius: 8px;
   min-width: 50px;
 }
-#table .btn.warn {
-  background: #d93025 !important;
-  border-color: #a12016 !important;
-  color: #fff !important;
-}
-#table .btn.warn:hover {
-  filter: brightness(1.1);
-}
+#table 
+#table 
 /* Responsif */
 @media (max-width: 600px) {
   #table th, #table td {
@@ -1416,8 +1321,607 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
   cursor: pointer;
 }
 </style>
+<style !important;="" (prefers-color-scheme:="" (sticky="" *="" +="" --bg-rgb="" --bg-rgb:="" -webkit-backdrop-filter:="" .35rem;="" .5rem="" .5rem;="" .75rem;="" .85;="" .btn="" .emoji="" .header="" .main,="" .subtitle="" .title="" .toolbar-row="" 0="" 0.7)="" 0;="" 1.1em;="" 1.2;="" 1000;="" 18),="" 18,="" 18;="" 1px="" 245,="" 245;="" 24px="" 6px="" 700;="" 72px;="" 999px;="" <="" @media="" add="" align-items:="" always-visible="" backdrop-filter:="" background-color:="" background:="" blur(2px);="" blur(8px)="" body="" border-bottom:="" border-radius:="" border:="" box-shadow:="" center;="" content="" cover="" dark)="" defined="" display:="" doesn't="" fallback="" flex-wrap:="" flex;="" font-weight:="" frosted="" gap:="" header="" height:="" id="topbar-frosted-overrides-OLD" if="" inline-flex;="" it="" left:="" light="" line-height:="" main="" main,="" not="" opacity:="" overrides="" padding="" padding:="" position:="" relative;="" rgb="" rgba(0,0,0,.15);="" rgba(255,255,255,.06);="" rgba(255,255,255,.08))="" rgba(255,255,255,.12));="" rgba(var(--bg-rgb,="" right:="" saturate(140%)="" scroll-padding-top:="" so="" solid="" sticky="" style="" to="" toolbar)="*/" top="" top:="" var(--ring,="" width:="" wrap;="" z-index:="" {="" }="">
+<style id="topbar-dark-rounded">
 
+/* === Dark Theme Rounded Frosted Header Bar === */
+.header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  backdrop-filter: saturate(160%) blur(10px) !important;
+  -webkit-backdrop-filter: saturate(160%) blur(10px) !important;
+  background-color: rgba(20, 20, 20, 0.7) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.35);
+  border-radius: 0 0 20px 20px; /* rounded bottom bar */
+  margin: 0 auto;
+  max-width: 1100px;
+}
 
+/* Title & Subtitle contrast in dark mode */
+html:not([data-theme="light"]) .header .title {
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0,0,0,.6);
+}
+html:not([data-theme="light"]) .header .subtitle {
+  color: #d0d0d0;
+}
+
+/* Buttons inside header with subtle rounded glow */
+.header .btn {
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #f5f5f5;
+  transition: all 0.25s ease;
+}
+.header .btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-1px);
+}
+
+/* Add padding to body so content doesn't overlap */
+body {
+  scroll-padding-top: 80px;
+}
+
+</style>
+<style id="topbar-dark-fix">
+
+/* === Fix Dark Theme Frosted Header Buttons/Text === */
+.header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+  background-color: rgba(25, 25, 25, 0.6) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  border-radius: 0 0 18px 18px;
+  margin: 0 auto;
+  max-width: 1200px;
+  color: #fff;
+}
+
+.header .title {
+  color: #fff !important;
+  font-weight: 700;
+}
+.header .subtitle {
+  color: #ddd !important;
+}
+
+/* Buttons high contrast */
+.header .btn {
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0,0,0,.8);
+  transition: all .25s ease;
+}
+.header .btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+  transform: translateY(-1px);
+}
+
+/* Emoji icon inside button should stay visible */
+.header .btn .emoji {
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.8));
+}
+
+</style>
+<style id="topbar-auto-theme">
+
+/* === Auto Light/Dark Theme for Header === */
+
+/* Default (light mode) */
+.header {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  color: #111 !important;
+}
+.header .title { color: #111 !important; }
+.header .subtitle { color: #444 !important; }
+.header .btn {
+  background: rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  color: #111 !important;
+  text-shadow: none !important;
+}
+.header .btn:hover {
+  background: rgba(0,0,0,0.12) !important;
+}
+
+/* Dark mode override */
+@media (prefers-color-scheme: dark) {
+  .header {
+    background-color: rgba(25, 25, 25, 0.6) !important;
+    color: #fff !important;
+  }
+  .header .title { color: #fff !important; }
+  .header .subtitle { color: #ddd !important; }
+  .header .btn {
+    background: rgba(255,255,255,0.15) !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,.8) !important;
+  }
+  .header .btn:hover {
+    background: rgba(255,255,255,0.25) !important;
+  }
+}
+
+</style>
+<style id="topbar-toggle-theme">
+
+/* === Manual Theme Toggle Support === */
+
+/* Light Theme (default) */
+body:not(.dark-theme) .header {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  color: #111 !important;
+}
+body:not(.dark-theme) .header .title { color: #111 !important; }
+body:not(.dark-theme) .header .subtitle { color: #444 !important; }
+body:not(.dark-theme) .header .btn {
+  background: rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  color: #111 !important;
+  text-shadow: none !important;
+}
+body:not(.dark-theme) .header .btn:hover {
+  background: rgba(0,0,0,0.12) !important;
+}
+
+/* Dark Theme */
+body.dark-theme .header {
+  background-color: rgba(25, 25, 25, 0.6) !important;
+  color: #fff !important;
+}
+body.dark-theme .header .title { color: #fff !important; }
+body.dark-theme .header .subtitle { color: #ddd !important; }
+body.dark-theme .header .btn {
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.8) !important;
+}
+body.dark-theme .header .btn:hover {
+  background: rgba(255,255,255,0.25) !important;
+}
+
+</style>
+<style id="lightmode-soft-shadow">
+
+/* === Softer Shadow for Light Mode === */
+body:not(.dark-theme) .header {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+</style>
+<style id="header-theme-datatheme">
+/* Light Theme Header */
+html[data-theme="light"] .header {
+  background-color: rgba(255,255,255,0.7) !important;
+  color: #111 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.15) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+}
+html[data-theme="light"] .header .title { color: #111 !important; }
+html[data-theme="light"] .header .subtitle { color: #444 !important; }
+html[data-theme="light"] .header .btn {
+  background: rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  color: #111 !important;
+}
+
+/* Dark Theme Header */
+html:not([data-theme="light"]) .header {
+  background-color: rgba(25,25,25,0.6) !important;
+  color: #fff !important;
+  border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,.35) !important;
+}
+html:not([data-theme="light"]) .header .title { color: #fff !important; }
+html:not([data-theme="light"]) .header .subtitle { color: #ddd !important; }
+html:not([data-theme="light"]) .header .btn {
+  background: rgba(255,255,255,0.15) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+}
+</style>
+<style id="header-buttons-darkblue">
+/* Light Theme Buttons */
+html[data-theme="light"] .header .btn {
+  background: rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  color: #111 !important;
+}
+
+/* Dark Theme Buttons: Deep Blue */
+html:not([data-theme="light"]) .header .btn {
+  background: #0d47a1 !important;   /* dark blue */
+  border: 1px solid #1565c0 !important;
+  color: #fff !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.8) !important;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+html:not([data-theme="light"]) .header .btn:hover {
+  background: #1565c0 !important;   /* lighter blue */
+  transform: translateY(-2px);
+}
+</style>
+<style id="header-buttons-darkblue-glow">
+/* Dark Theme Buttons: Add Glow */
+html:not([data-theme="light"]) .header .btn {
+  box-shadow: 0 0 8px rgba(21,101,192,0.6) !important; /* blue glow */
+}
+html:not([data-theme="light"]) .header .btn:hover {
+  box-shadow: 0 0 12px rgba(21,101,192,0.9) !important;
+}
+</style>
+<style id="header-buttons-deepblue-ripple-softer">
+/* Ripple effect adjustments */
+.header .btn .ripple {
+  transform: scale(0);
+  animation: ripple-animation-soft 900ms ease-out; /* slower and softer */
+  opacity: 0.75;
+}
+@keyframes ripple-animation-soft {
+  to {
+    transform: scale(6); /* larger ripple */
+    opacity: 0;
+  }
+}
+</style>
+<style id="header-buttons-darktheme-frosted">
+/* Light Theme Buttons (default) */
+html[data-theme="light"] .header .btn {
+  background: rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  color: #111 !important;
+}
+
+/* Dark Theme Buttons - Deep Dark Blue (#0E1531) with Frosted Glass */
+html:not([data-theme="light"]) .header .btn {
+  background: rgba(14,21,49,0.65) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: #fff !important;
+  backdrop-filter: blur(8px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(150%) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+html:not([data-theme="light"]) .header .btn:hover {
+  background: rgba(14,21,49,0.85) !important;
+  transform: translateY(-2px);
+}
+</style>
+<style id="header-buttons-darktheme-frosted-strong">
+/* Dark Theme Buttons - Force #0E1531 with frosted glass */
+html:not([data-theme="light"]) .header .toolbar-row .btn {
+  background-color: rgba(14,21,49,0.85) !important; /* #0E1531 solid navy */
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(10px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+  transition: all 0.3s ease !important;
+}
+html:not([data-theme="light"]) .header .toolbar-row .btn:hover {
+  background-color: rgba(14,21,49,1) !important; /* darker on hover */
+  box-shadow: 0 0 10px rgba(14,21,49,0.7) !important;
+  transform: translateY(-2px);
+}
+</style>
+<style>
+/* === FIX: Hilangkan text-shadow di tulisan tombol Light Theme === */
+html[data-theme="light"] .header .btn {
+  text-shadow: none !important;
+}
+</style>
+<style>
+/* === Center title & subtitle on mobile (custom inject) === */
+@media (max-width: 600px) {
+  .header > div {
+    text-align: center;
+    width: 100%;
+  }
+  .header .title,
+  .header .subtitle {
+    text-align: center;
+  }
+}
+</style><style>
+/* === Resize toolbar buttons on mobile (custom inject) === */
+@media (max-width: 600px) {
+  .header .toolbar-row .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: auto;
+    flex: 1; /* biar ukurannya proporsional */
+  }
+  .header .toolbar-row {
+    gap: 6px;
+  }
+}
+</style><style>
+/* === Mobile: toolbar buttons smaller & proportional (option 1) === */
+@media (max-width: 600px) {
+  .header .toolbar-row {
+    gap: 6px;
+    justify-content: center;
+  }
+  .header .toolbar-row .btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 6px 8px;
+    min-width: unset;
+    max-width: 100px; /* batasi biar seragam */
+    text-align: center;
+  }
+}
+</style><style>
+/* === Fix Download Laporan button one-line on mobile === */
+@media (max-width: 600px) {
+  .header .toolbar-row .btn {
+    flex: 1;
+    font-size: 11px;
+    padding: 6px 6px;
+    min-width: unset;
+    text-align: center;
+    white-space: nowrap; /* cegah line break */
+  }
+  /* khusus tombol Download Laporan lebih lebar */
+  #exportReportBtn {
+    max-width: 130px;
+  }
+}
+</style><style>
+/* === Light theme button pressed effect === */
+.light-theme .btn:active,
+.light-theme .btn:focus {
+  background-color: #ffffff !important; /* putih */
+  color: #000000 !important;            /* teks tetap hitam */
+  box-shadow: 0 0 5px rgba(0,0,0,0.15); /* efek lembut */
+}
+</style><style>
+/* === Remove default grey tap highlight (#DDDEE0) === */
+.btn {
+  -webkit-tap-highlight-color: transparent; /* nonaktifkan highlight Android/iOS */
+}
+
+.light-theme .btn:active,
+.light-theme .btn:focus {
+  background-color: #ffffff !important; /* tetap putih */
+  color: #000000 !important;
+  box-shadow: 0 0 5px rgba(0,0,0,0.15);
+}
+</style><style>
+
+/* === Custom Header Colors Updated === */
+
+/* === Custom Header Colors for Rincian Tables (Light & Dark Theme) === */
+
+/* Light Theme */
+html[data-theme="light"] #rincianTable thead th {
+  background-color: #2ecc71 !important; /* hijau terang */
+  color: #fff !important;
+}
+html[data-theme="light"] #jajananTable3x10 thead th {
+  background-color: #f1c40f !important; /* kuning */
+  color: #000 !important;
+}
+html[data-theme="light"] #jasaTable2x5 thead th {
+  background-color: #e74c3c !important; /* merah terang */
+  color: #fff !important;
+}
+html[data-theme="light"] #sewaTable3x10 thead th {
+  background-color: #2980b9 !important; /* biru terang */
+  color: #fff !important;
+}
+
+/* Dark Theme */
+html:not([data-theme="light"]) #rincianTable thead th {
+  background-color: #145a32 !important; /* hijau gelap */
+  color: #ecf0f1 !important;
+}
+html:not([data-theme="light"]) #jajananTable3x10 thead th {
+  background-color: #b7950b !important; /* emas tua */
+  color: #fff !important;
+}
+html:not([data-theme="light"]) #jasaTable2x5 thead th {
+  background-color: #922b21 !important; /* merah gelap */
+  color: #fff !important;
+}
+html:not([data-theme="light"]) #sewaTable3x10 thead th {
+  background-color: #154360 !important; /* biru navy */
+  color: #ecf0f1 !important;
+}
+
+</style>
+<style>
+@media (max-width:600px) {
+  /* Kosongkan Rincian -> 🗑️ */
+  #rincianClear,
+  #jajanan3x10Clear,
+  #jasa2x5Clear,
+  #sewa3x10Clear {
+    font-size: 0 !important;
+  }
+  #rincianClear::after,
+  #jajanan3x10Clear::after,
+  #jasa2x5Clear::after,
+  #sewa3x10Clear::after {
+    content: "🗑️";
+    font-size: 16px;
+  }
+
+  /* Tambah Baris -> + Baris */
+  #rincianAddRow,
+  #jajanan3x10AddRow,
+  #jasa2x5AddRow,
+  #sewa3x10AddRow {
+    font-size: 0 !important;
+  }
+  #rincianAddRow::after,
+  #jajanan3x10AddRow::after,
+  #jasa2x5AddRow::after,
+  #sewa3x10AddRow::after {
+    content: "+ Baris";
+    font-size: 14px;
+  }
+
+  /* Tombol Hapus Baris -> - Baris (mobile fix) */
+@media (max-width:600px){
+  .remove-row { font-size:0 !important; }
+  .remove-row::after { content:"- Baris"; font-size:14px; }
+}
+
+  .remove-row::after,
+  
+}
+</style>
+<style>
+/* === Mobile: Rapikan tombol Tambah/Hapus Baris & keterangan total === */
+@media (max-width:600px){
+  /* Tombol Tambah & Hapus Baris lebih kecil & proporsional */
+  #rincianAddRow, #jajanan3x10AddRow,
+  #jasa2x5AddRow, #sewa3x10AddRow,
+  .remove-row {
+    flex:1;
+    font-size:12px;
+    padding:6px 8px;
+    min-width:unset;
+    max-width:100px;
+    text-align:center;
+  }
+
+  /* Baris tombol + catatan menjadi wrap */
+  .row[style*="margin-top"] {
+    flex-wrap:wrap;
+    gap:6px;
+  }
+
+  /* Keterangan total otomatis pindah ke bawah */
+  .row[style*="margin-top"] .auto-note {
+    flex:1 1 100%;
+    text-align:left;
+    font-size:11px;
+    margin-top:4px;
+  }
+}
+</style>
+<style>
+/* === Mobile: Perlebar kolom input/select kecil tanpa stack === */
+@media (max-width:600px){
+  /* Perlebar input & select di kolom kecil */
+  #rincianTable select,
+  #jajananTable3x10 select,
+  #jasaTable2x5 select,
+  #sewaTable3x10 select,
+  #rincianTable input,
+  #jajananTable3x10 input,
+  #jasaTable2x5 input,
+  #sewaTable3x10 input {
+    min-width: 120px;
+    font-size: 13px;
+  }
+
+  /* Supaya tabel bisa di-scroll kalau melebar */
+  #rincianTable, #jajananTable3x10, #jasaTable2x5, #sewaTable3x10 {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+</style>
+<style>
+/* Fix .pill agar tidak mempengaruhi lebar tabel di desktop */
+.pill {
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: max-content;
+}
+
+/* Pastikan card tidak mengecilkan tabel */
+.card {
+  width: 100%;
+  max-width: none;
+}
+
+/* Pastikan tabel tetap full width dan responsif */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table th, table td {
+  padding: 8px;
+  text-align: left;
+}
+@media (min-width: 768px) {
+  table {
+    font-size: 14px;
+  }
+}
+</style>
+<style>
+/* Enforce center alignment for first column numbers across all tables */
+#rincianTable th:first-child, #rincianTable td:first-child,
+#jajananTable3x10 th:first-child, #jajananTable3x10 td:first-child,
+#jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
+#sewaTable3x10 th:first-child, #sewaTable3x10 td:first-child {
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* In case cells use flexbox layouts */
+#rincianTable td:first-child > *, 
+#jajananTable3x10 td:first-child > *, 
+#jasaTable2x5 td:first-child > *, 
+#sewaTable3x10 td:first-child > * {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+</style>
+<style>
+/* Pastikan tulisan TOTAL pada semua tabel rincian rata kiri */
+#rincianTable tfoot .total-row td:first-child,
+#jajananTable3x10 tfoot .total-row td:first-child,
+#jasaTable2x5 tfoot .total-row td:first-child,
+#sewaTable3x10 tfoot .total-row td:first-child {
+  text-align: left !important;
+}
+</style>
+
+<style>
+/* === Konsisten spacing recap bar === */
+#recapBar {
+  margin-top: 16px !important;
+}
+</style>
+
+<style>
+/* === Frosted Glass Effect untuk Semua Modal (Dark Theme Only) === */
+html:not([data-theme="light"]) .modal > div {
+  background: rgba(25, 25, 25, 0.55) !important;
+  border-radius: 16px !important;
+  backdrop-filter: blur(14px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+}
+</style>
 </head>
 <body>
 <div class="container">
@@ -1436,39 +1940,37 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 <div class="card pad">
 <!-- Row 1: Date & Day -->
 <div class="grid g2-fixed top-form">
-  <div>
-    <label>Tanggal</label>
-    <input class="input" id="date" type="date"/>
-  </div>
-  <div>
-    <label>Hari</label>
-    <input class="input" id="day" type="text" readonly
-           style="background-color: var(--card2); color: var(--muted);"/>
-  </div>
+<div>
+<label>Tanggal</label>
+<input class="input" id="date" type="date"/>
+</div>
+<div>
+<label>Hari</label>
+<input class="input" id="day" readonly="" style="background-color: var(--card2); color: var(--muted);" type="text"/>
+</div>
 </div>
 <!-- Row 2: Absen & Ruko -->
 <!-- Row 2: Absen -->
 <div class="grid g2-fixed" style="margin-top: var(--space-2);">
-  <div>
-    <label>Absen Pagi</label>
-    <input class="input" id="absenPagi" required type="time"/>
-  </div>
-  <div>
-    <label>Absen Siang</label>
-    <input class="input" id="absenSiang" required type="time"/>
-  </div>
+<div>
+<label>Absen Pagi</label>
+<input class="input" id="absenPagi" required="" type="time"/>
 </div>
-
+<div>
+<label>Absen Siang</label>
+<input class="input" id="absenSiang" required="" type="time"/>
+</div>
+</div>
 <!-- Row 3: Ruko -->
 <div class="grid g2-fixed" style="margin-top: var(--space-2);">
-  <div>
-    <label>Ruko Buka</label>
-    <input class="input" id="rukoBuka" required type="time"/>
-  </div>
-  <div>
-    <label>Ruko Tutup</label>
-    <input class="input" id="rukoTutup" required type="time"/>
-  </div>
+<div>
+<label>Ruko Buka</label>
+<input class="input" id="rukoBuka" required="" type="time"/>
+</div>
+<div>
+<label>Ruko Tutup</label>
+<input class="input" id="rukoTutup" required="" type="time"/>
+</div>
 </div>
 <!-- Hidden fields -->
 <input id="harian" type="hidden" value="0"/>
@@ -1622,16 +2124,16 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 <button class="btn primary" id="sewa3x10AddRow" type="button">+ Tambah Baris</button>
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
 </div>
-<div class="spacer"></div>
 <!-- Recap ringkas di atas TOTAL KESELURUHAN -->
+
+</div>
+</div>
 <div class="recap" id="recapBar">
 <div class="recap-item"><div class="label">Pemasukan Harian</div><div class="value mono" id="recapHarian">Rp 0</div></div>
 <div class="recap-item"><div class="label">Pemasukan Jajanan</div><div class="value mono" id="recapJajanan">Rp 0</div></div>
 <div class="recap-item"><div class="label">Pemasukan Jasa &amp; Aksesoris</div><div class="value mono" id="recapJasa">Rp 0</div></div>
 <div class="recap-item"><div class="label">Pemasukan Sewa PS</div><div class="value mono" id="recapSewa">Rp 0</div></div>
-</div>
-<div class="spacer"></div>
-<div class="subcard">
+</div><div class="spacer"></div><div class="subcard">
 <div class="pad">
 <table style="width:100%;border-collapse:collapse">
 <tr class="total-row">
@@ -1640,10 +2142,7 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 </tr>
 </table>
 </div>
-</div>
-</div>
-</div>
-</div><!-- /card pad -->
+</div></div><!-- /card pad -->
 <div class="spacer"></div>
 <!-- Filter & Rentang (clean, square-rounded, responsive) -->
 <div class="subcard filter-card">
@@ -1728,12 +2227,11 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 </div>
 <canvas height="260" id="dailyGraph" style="width:100%;display:block"></canvas>
 <div id="graphLegend">
-  <div class="legend-item"><span class="legend-color" style="background:#e74c3c"></span> ≤ 100.000 (Merah)</div>
-  <div class="legend-item"><span class="legend-color" style="background:#f1c40f"></span> 100.001 – 150.000 (Kuning)</div>
-  <div class="legend-item"><span class="legend-color" style="background:#2980b9"></span> 150.001 – 200.000 (Biru)</div>
-  <div class="legend-item"><span class="legend-color" style="background:#2ecc71"></span> > 200.000 (Hijau)</div>
+<div class="legend-item"><span class="legend-color" style="background:#e74c3c"></span> ≤ 100.000 (Merah)</div>
+<div class="legend-item"><span class="legend-color" style="background:#f1c40f"></span> 100.001 – 150.000 (Kuning)</div>
+<div class="legend-item"><span class="legend-color" style="background:#2980b9"></span> 150.001 – 200.000 (Biru)</div>
+<div class="legend-item"><span class="legend-color" style="background:#2ecc71"></span> &gt; 200.000 (Hijau)</div>
 </div>
-
 <div class="mini subtle" id="graphCaption" style="margin-top:8px"></div>
 </div><div style="color:var(--muted);font-size:12px;text-align:center;margin:16px 0 40px">
     © <span id="year"></span> URBAN GAMING LAMPUNG
@@ -1741,7 +2239,6 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 <div class="spacer"></div>
 </div>
 <input accept=".csv" id="fileInput" style="display:none" type="file"/>
-
 <!-- === Themed Popups (Alert & Confirm) === -->
 <div class="modal-backdrop" hidden="" id="popupBackdrop"></div>
 <div class="modal" hidden="" id="themedConfirm">
@@ -1795,7 +2292,6 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 <button class="modal-close" data-close="">✕</button>
 </div>
 <div class="modal-body" style="display: flex; flex-direction: column; gap: var(--space-2);">
-
 <div class="settings-layout">
 <!-- Sidebar kiri -->
 <div class="settings-sidebar">
@@ -1835,9 +2331,6 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 <button class="btn" id="exportCSVBtn"><span class="emoji">📄</span>Ekspor CSV</button>
 </div>
 </div>
-
-
-
 <div class="settings-tab" data-tab="info" hidden="">
 <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.5;">
 <!-- Apa ini -->
@@ -1846,23 +2339,21 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 <p>Aplikasi ini digunakan untuk mencatat transaksi, pemasukan, dan pengeluaran
         <b>URBAN PlayStation Lampung</b>. Aplikasi bersifat pribadi untuk kebutuhan internal.</p>
 </div>
-
 <!-- Bagaimana cara pakai -->
 <div>
-  <h3 style="margin:0;font-size:16px;">📝 Panduan Singkat</h3>
-  <ul style="padding-left:18px; margin:6px 0;">
-    <li>Aplikasi ini sudah dilengkapi fitur <b>penjumlahan otomatis</b>, <b>grafik</b>, <b>tarik data</b>, <b>backup & restore</b>, <b>filter tanggal</b>, serta pilihan <b>tema Gelap/Terang</b>.</li>
-    <li>Untuk <b>mengganti tema</b>, tekan tombol <b>Gelap/Terang</b> di pojok kanan atas.</li>
-    <li><b>Menambah atau mengedit item rincian</b> (PS, jajanan, jasa, sewa) bisa diakses melalui menu <b>Edit Rincian</b>.</li>
-    <li><b>Backup seluruh data</b> bisa dilakukan lewat menu <b>Backup & Restore Data</b>.</li>
-    <li><b>Ekspor data ke CSV</b> dapat diakses pada menu <b>Export Data</b>.</li>
-    <li><b>Reset Setting</b> tersedia di menu <b>Reset Setting</b> untuk mengembalikan pengaturan default (data transaksi tetap aman).</li>
-  </ul>
-  <p style="margin-top:8px;color:var(--muted);font-size:13px;">
+<h3 style="margin:0;font-size:16px;">📝 Panduan Singkat</h3>
+<ul style="padding-left:18px; margin:6px 0;">
+<li>Aplikasi ini sudah dilengkapi fitur <b>penjumlahan otomatis</b>, <b>grafik</b>, <b>tarik data</b>, <b>backup &amp; restore</b>, <b>filter tanggal</b>, serta pilihan <b>tema Gelap/Terang</b>.</li>
+<li>Untuk <b>mengganti tema</b>, tekan tombol <b>Gelap/Terang</b> di pojok kanan atas.</li>
+<li><b>Menambah atau mengedit item rincian</b> (PS, jajanan, jasa, sewa) bisa diakses melalui menu <b>Edit Rincian</b>.</li>
+<li><b>Backup seluruh data</b> bisa dilakukan lewat menu <b>Backup &amp; Restore Data</b>.</li>
+<li><b>Ekspor data ke CSV</b> dapat diakses pada menu <b>Export Data</b>.</li>
+<li><b>Reset Setting</b> tersedia di menu <b>Reset Setting</b> untuk mengembalikan pengaturan default (data transaksi tetap aman).</li>
+</ul>
+<p style="margin-top:8px;color:var(--muted);font-size:13px;">
     💡 Tips: Jangan lupa lakukan backup data secara berkala agar catatan tidak hilang.
   </p>
 </div>
-
 <!-- Siapa pembuat & kontak -->
 <div>
 <h3 style="margin:0;font-size:16px;">📞 Kontak</h3>
@@ -1997,8 +2488,6 @@ html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indic
 </div>
 </div>
 </div>
-
-
 <script>
 // === Themed Jendela Muncul Helpers ===
 (function(){
@@ -3936,7 +4425,7 @@ if(state.filter === 'CUSTOM_MONTH'){
         var addBtn = document.getElementById(afterId);
         if(!addBtn) return;
         var btn = document.createElement('button');
-        btn.className = 'btn warn';
+        btn.className = 'btn warn remove-row';
         btn.textContent = '- Hapus Baris';
         btn.type = 'button';
         btn.style.marginLeft = '6px';
@@ -4670,7 +5159,6 @@ document.querySelectorAll('.modal').forEach(modal => {
 });
 
 </script>
-
 <script>
 (function(){
   function updateDayField(){
@@ -4942,7 +5430,143 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 });
 </script>
+<script>
+// === Manual Theme Toggle ===
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme(saved) {
+  if (saved === 'dark') {
+    document.body.classList.add('dark-theme');
+    themeBtn.innerHTML = '<span class="emoji">☀️</span> Terang';
+  } else {
+    document.body.classList.remove('dark-theme');
+    themeBtn.innerHTML = '<span class="emoji">🌙</span> Gelap';
+  }
+}
+// Load theme on startup
+const savedTheme = localStorage.getItem('theme');
+applyTheme(savedTheme);
 
+// Toggle on button click
+themeBtn.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark-theme');
+  const mode = isDark ? 'dark' : 'light';
+  localStorage.setItem('theme', mode);
+  applyTheme(mode);
+});
+</script>
+<script>
+function syncBodyClassToTheme() {
+  var t = getTheme();
+  document.body.classList.toggle('dark-theme', t !== 'light');
+}
 
+// Patch setTheme to auto sync body class
+(function(){
+  var origSetTheme = setTheme;
+  setTheme = function(t){
+    origSetTheme(t);
+    syncBodyClassToTheme();
+  };
+})();
+
+document.addEventListener('DOMContentLoaded', syncBodyClassToTheme);
+</script>
+<style id="header-buttons-ripple">
+/* Ripple container */
+.header .btn {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple effect */
+.header .btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-animation 600ms linear;
+  background-color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+}
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+</style>
+<script>
+// Ripple effect script
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.header .btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const circle = document.createElement("span");
+      circle.classList.add("ripple");
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      circle.style.width = circle.style.height = size + "px";
+      circle.style.left = e.clientX - rect.left - size / 2 + "px";
+      circle.style.top = e.clientY - rect.top - size / 2 + "px";
+      this.appendChild(circle);
+      setTimeout(() => circle.remove(), 600);
+    });
+  });
+});
+</script>
+<style id="header-buttons-deepblue-ripple">
+/* Dark Mode Buttons: Deeper Blue */
+html:not([data-theme="light"]) .header .btn {
+  background: #082567 !important;  /* navy deep blue */
+  border: 1px solid #0d47a1 !important;
+  color: #fff !important;
+  box-shadow: 0 0 8px rgba(13,71,161,0.5) !important;
+}
+html:not([data-theme="light"]) .header .btn:hover {
+  background: #0d47a1 !important;  /* slightly lighter */
+  box-shadow: 0 0 12px rgba(21,101,192,0.7) !important;
+}
+
+/* Ripple effect */
+.header .btn {
+  position: relative;
+  overflow: hidden;
+}
+.header .btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-animation 600ms linear;
+  pointer-events: none;
+}
+html[data-theme="light"] .header .btn .ripple {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+html:not([data-theme="light"]) .header .btn .ripple {
+  background-color: rgba(21, 101, 192, 0.6); /* blue ripple in dark mode */
+}
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+</style>
+<script>
+// Ripple effect script (re-applied for consistency)
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.header .btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const circle = document.createElement("span");
+      circle.classList.add("ripple");
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      circle.style.width = circle.style.height = size + "px";
+      circle.style.left = e.clientX - rect.left - size / 2 + "px";
+      circle.style.top = e.clientY - rect.top - size / 2 + "px";
+      this.appendChild(circle);
+      setTimeout(() => circle.remove(), 600);
+    });
+  });
+});
+</script>
 </body>
 </html>
