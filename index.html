@@ -290,8 +290,6 @@ body, .card, .subcard, .modal {
 #graphCard .mini.subtle {
   font-size: 11px !important;
 }
-#graphCard canvas { width: 100% !important; height: auto !important; aspect-ratio: 16 / 6; }
-
 /* === Fix Harga column in Jasa & Aksesoris Tabel === */
 #jasaTable2x5 td:last-child,
 #jasaTable2x5 th:last-child {
@@ -299,25 +297,7 @@ body, .card, .subcard, .modal {
   text-align: right;
 }
 
-/* === Clean & stable layout for Jasa & Aksesoris Tabel === */
-#jasaTable2x5{
-  table-layout: fixed;              /* prevent jitter */
-}
-
 /* Keep other tables unaffected */
-
-/* === Proportional layout for Jasa & Aksesoris Tabel === */
-#jasaTable2x5{
-  table-layout: fixed;
-  width: 100%;
-}
-
-/* === Match proportions to Rincian Pemasukan Jajanan === */
-#jasaTable2x5{
-  table-layout: fixed;
-  width: 100%;
-}
-
 /* === Exact proportions for Jasa & Aksesoris Tabel === */
 #jasaTable2x5{
   table-layout: fixed;
@@ -450,19 +430,7 @@ th, td { padding: var(--space-2); vertical-align: middle; }
 #graphCard canvas { width: 100% !important; height: auto !important; aspect-ratio: 16 / 6; }
 
 
-/* === Fix: Konsistensi kolom "No." di semua tabel rincian === */
-#rincianTable th:first-child, #rincianTable td:first-child,
-#jajananTable3x10 th:first-child, #jajananTable3x10 td:first-child,
-#jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
-#sewaTable3x10 th:first-child, #sewaTable3x10 td:first-child {
-  width: 32px;
-  min-width: 32px;
-  max-width: 32px;
-  text-align: center;
-}
-
-
-/* === Fix v2: Konsistensi & Simetris kolom "No." di semua tabel rincian === */
+/* === Fix: Konsistensi & Simetris kolom "No." di semua tabel rincian === */
 #rincianTable th:first-child, #rincianTable td:first-child,
 #jajananTable3x10 th:first-child, #jajananTable3x10 td:first-child,
 #jasaTable2x5 th:first-child, #jasaTable2x5 td:first-child,
@@ -562,8 +530,6 @@ body[data-quality="tinggi"] {
 
 /* Gunakan variabel animasi di elemen utama */
 
-
-
 /* === Setting rows aligned & tidy === */
 .setting-row {
   display: flex;
@@ -584,7 +550,6 @@ body[data-quality="tinggi"] {
   padding: 8px 14px;
   border-radius: 12px;
 }
-
 
 html, body {
   max-width: 100%;
@@ -816,11 +781,6 @@ html { scroll-behavior: smooth; }
     text-align: right !important;
   }
 
-  /* Label Total & Total KESELURUHAN tetap kiri */
-  .total-row td:first-child,
-  .total-row td[colspan] {
-    text-align: left !important;
-  }
 </style>
 <style>
   /* Pastikan baris Total rapih dan simetris */
@@ -1145,29 +1105,9 @@ html:not([data-theme="light"]) #settingsBtn:hover {
   transform: translateY(-2px);
   animation: neonPulse 3s infinite alternate ease-in-out;
 }
-
-@keyframes neonPulse {
-  0% {
-    box-shadow: 
-      0 0 6px rgba(255, 20, 147, 0.5),
-      0 0 12px rgba(255, 20, 147, 0.4),
-      0 0 24px rgba(255, 20, 147, 0.3);
-  }
-  100% {
-    box-shadow: 
-      0 0 10px rgba(255, 20, 147, 0.8),
-      0 0 24px rgba(255, 20, 147, 0.6),
-      0 0 40px rgba(255, 20, 147, 0.5),
-      0 0 60px rgba(255, 20, 147, 0.4);
-  }
-}
 </style>
 <style>
 /* === Neon Pink Glow untuk Input Tanggal & Absen (Dark Theme) === */
-html:not([data-theme="light"]) input[type="date"]:focus,
-html:not([data-theme="light"]) input[type="text"]:focus,
-html:not([data-theme="light"]) select:focus,
-html:not([data-theme="light"]) textarea:focus,
 html:not([data-theme="light"]) .btn.absen:focus,
 html:not([data-theme="light"]) .btn.absen:hover {
   box-shadow: 
@@ -1226,7 +1166,6 @@ html:not([data-theme="light"]) .btn.absen:hover,
 html:not([data-theme="light"]) input[type="date"]:focus,
 html:not([data-theme="light"]) input[type="time"]:focus,
 html:not([data-theme="light"]) input[type="text"]:focus,
-html:not([data-theme="light"]) select:focus,
 html:not([data-theme="light"]) textarea:focus,
 html:not([data-theme="light"]) #absenPagiBtn:focus,
 html:not([data-theme="light"]) #absenSiangBtn:focus,
@@ -1239,23 +1178,6 @@ html:not([data-theme="light"]) #rukoTutupBtn:focus {
     0 0 48px rgba(255, 20, 147, 0.3);
   transform: translateY(-2px);
   animation: neonPulse 3s infinite alternate ease-in-out;
-}
-
-/* Pulse animation */
-@keyframes neonPulse {
-  0% {
-    box-shadow: 
-      0 0 6px rgba(255, 20, 147, 0.5),
-      0 0 12px rgba(255, 20, 147, 0.4),
-      0 0 24px rgba(255, 20, 147, 0.3);
-  }
-  100% {
-    box-shadow: 
-      0 0 10px rgba(255, 20, 147, 0.8),
-      0 0 24px rgba(255, 20, 147, 0.6),
-      0 0 40px rgba(255, 20, 147, 0.5),
-      0 0 60px rgba(255, 20, 147, 0.4);
-  }
 }
 </style>
 <style>
@@ -1319,6 +1241,7 @@ html:not([data-theme="light"]) input[type="date"]::-webkit-calendar-picker-indic
 html:not([data-theme="light"]) input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   cursor: pointer;
+
 }
 </style>
 <style !important;="" (prefers-color-scheme:="" (sticky="" *="" +="" --bg-rgb="" --bg-rgb:="" -webkit-backdrop-filter:="" .35rem;="" .5rem="" .5rem;="" .75rem;="" .85;="" .btn="" .emoji="" .header="" .main,="" .subtitle="" .title="" .toolbar-row="" 0="" 0.7)="" 0;="" 1.1em;="" 1.2;="" 1000;="" 18),="" 18,="" 18;="" 1px="" 245,="" 245;="" 24px="" 6px="" 700;="" 72px;="" 999px;="" <="" @media="" add="" align-items:="" always-visible="" backdrop-filter:="" background-color:="" background:="" blur(2px);="" blur(8px)="" body="" border-bottom:="" border-radius:="" border:="" box-shadow:="" center;="" content="" cover="" dark)="" defined="" display:="" doesn't="" fallback="" flex-wrap:="" flex;="" font-weight:="" frosted="" gap:="" header="" height:="" id="topbar-frosted-overrides-OLD" if="" inline-flex;="" it="" left:="" light="" line-height:="" main="" main,="" not="" opacity:="" overrides="" padding="" padding:="" position:="" relative;="" rgb="" rgba(0,0,0,.15);="" rgba(255,255,255,.06);="" rgba(255,255,255,.08))="" rgba(255,255,255,.12));="" rgba(var(--bg-rgb,="" right:="" saturate(140%)="" scroll-padding-top:="" so="" solid="" sticky="" style="" to="" toolbar)="*/" top="" top:="" var(--ring,="" width:="" wrap;="" z-index:="" {="" }="">
@@ -1903,14 +1826,12 @@ table th, table td {
   text-align: left !important;
 }
 </style>
-
 <style>
 /* === Konsisten spacing recap bar === */
 #recapBar {
   margin-top: 16px !important;
 }
 </style>
-
 <style>
 /* === Frosted Glass Effect untuk Semua Modal (Dark Theme Only) === */
 html:not([data-theme="light"]) .modal > div {
@@ -1922,7 +1843,67 @@ html:not([data-theme="light"]) .modal > div {
   box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
 }
 </style>
-</head>
+<style>
+/* === UX Enhancements for Recap === */
+.recap-item {
+  position: relative;
+  cursor: pointer;
+}
+.recap-item:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card2);
+  color: var(--text);
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+  z-index: 20;
+}
+
+/* Highlight update */
+.recap-item.updated {
+  animation: pulseUpdate 0.8s ease;
+}
+@keyframes pulseUpdate {
+  0% { background-color: rgba(110,168,254,0.2); }
+  100% { background-color: var(--card2); }
+}
+</style><style>
+/* === UI Enhancements for Recap === */
+
+/* Highlight khusus untuk Total Semua */
+.recap-item.total {
+  background: linear-gradient(135deg, #4caf50, #81c784);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 1.1em;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Responsif Recap */
+#recapBar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  padding: 12px;
+}
+@media (max-width: 768px) {
+  #recapBar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  #recapBar {
+    grid-template-columns: 1fr;
+  }
+}
+</style></head>
 <body>
 <div class="container">
 <div class="header">
@@ -2125,24 +2106,21 @@ html:not([data-theme="light"]) .modal > div {
 <span class="mini subtle auto-note">Total otomatis → kolom <b>Sewa PS</b> di atas.</span>
 </div>
 <!-- Recap ringkas di atas TOTAL KESELURUHAN -->
-
 </div>
 </div>
-<div class="recap" id="recapBar">
-<div class="recap-item"><div class="label">Pemasukan Harian</div><div class="value mono" id="recapHarian">Rp 0</div></div>
-<div class="recap-item"><div class="label">Pemasukan Jajanan</div><div class="value mono" id="recapJajanan">Rp 0</div></div>
-<div class="recap-item"><div class="label">Pemasukan Jasa &amp; Aksesoris</div><div class="value mono" id="recapJasa">Rp 0</div></div>
-<div class="recap-item"><div class="label">Pemasukan Sewa PS</div><div class="value mono" id="recapSewa">Rp 0</div></div>
-</div><div class="spacer"></div><div class="subcard">
+<div class="subcard" id="recapBar">
 <div class="pad">
-<table style="width:100%;border-collapse:collapse">
-<tr class="total-row">
-<td class="right" colspan="3" style="text-align:left;font-weight:800;">TOTAL KESELURUHAN</td>
-<td class="mono right" id="grandTotal">Rp 0</td>
-</tr>
-</table>
+<b>Rekap Pemasukan</b>
+<div class="recap-flex">
+<div class="recap-item" data-target="#rincianTable" data-tooltip="Detail dari tabel Harian"><span>Pemasukan Harian</span><span id="recapHarian">Rp 0</span></div>
+<div class="recap-item" data-target="#jajananTable3x10" data-tooltip="Detail dari tabel Jajanan"><span>Pemasukan Jajanan</span><span id="recapJajanan">Rp 0</span></div>
+<div class="recap-item" data-target="#jasaTable2x5" data-tooltip="Detail dari tabel Jasa &amp; Aksesoris"><span>Pemasukan Jasa &amp; Aksesoris</span><span id="recapJasa">Rp 0</span></div>
+<div class="recap-item" data-target="#sewaTable3x10" data-tooltip="Detail dari tabel Sewa PS"><span>Pemasukan Sewa PS</span><span id="recapSewa">Rp 0</span></div>
+<div class="recap-item total" data-tooltip="Jumlah semua pemasukan"><span><b>TOTAL KESELURUHAN</b></span><span id="grandTotal">Rp 0</span></div>
 </div>
-</div></div><!-- /card pad -->
+</div>
+</div>
+<div class="spacer"></div></div><!-- /card pad -->
 <div class="spacer"></div>
 <!-- Filter & Rentang (clean, square-rounded, responsive) -->
 <div class="subcard filter-card">
@@ -5549,6 +5527,59 @@ html:not([data-theme="light"]) .header .btn .ripple {
     opacity: 0;
   }
 }
+
+/* Recap flex */
+.recap-flex {
+  display: flex;
+  flex-direction: column;   /* default: stack (mobile) */
+  gap: 8px;
+  margin-top: 8px;
+}
+.recap-flex .recap-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border: 1px solid var(--ring);
+  border-radius: var(--radius);
+  background: var(--card2);
+  font-size: 14px;
+}
+.recap-flex .recap-item.total {
+  background: var(--accent);
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Desktop: jadikan horizontal */
+@media (min-width: 768px) {
+  .recap-flex {
+    flex-direction: row;   /* sejajar */
+  }
+  .recap-flex .recap-item {
+    flex: 1;               /* biar rata semua */
+  }
+}
+
+
+/* Desktop: recap flex horizontal dengan total di baris kedua */
+@media (min-width: 768px) {
+  .recap-flex {
+    flex-direction: row;
+    flex-wrap: wrap;       /* bisa turun ke baris kedua */
+  }
+  .recap-flex .recap-item {
+    flex: 1;
+  }
+  .recap-flex .recap-item.total {
+    flex: 100%;            /* total full width di baris kedua */
+    text-align: right;     /* nilai rata kanan */
+    justify-content: space-between;
+  }
+  .recap-flex .recap-item span:last-child {
+    margin-left: auto;     /* paksa angka ke kanan */
+  }
+}
+
 </style>
 <script>
 // Ripple effect script (re-applied for consistency)
@@ -5568,5 +5599,34 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-</body>
+<script>
+// Scroll ke tabel saat klik recap
+document.querySelectorAll('.recap-item[data-target]').forEach(item => {
+  item.addEventListener('click', () => {
+    const targetSel = item.getAttribute('data-target');
+    const target = document.querySelector(targetSel);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Highlight update tiap kali nilai berubah
+function updateRecapHighlight(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const parent = el.closest('.recap-item');
+  if (parent) {
+    parent.classList.add('updated');
+    setTimeout(() => parent.classList.remove('updated'), 800);
+  }
+}
+
+// Override updateRecap dengan highlight
+const originalUpdateRecap = window.updateRecap;
+window.updateRecap = function(){
+  if(typeof originalUpdateRecap === 'function'){ originalUpdateRecap(); }
+  ['recapHarian','recapJajanan','recapJasa','recapSewa','grandTotal'].forEach(updateRecapHighlight);
+};
+</script></body>
 </html>
